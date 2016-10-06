@@ -34,6 +34,14 @@
   <ItemGroup>
     <Compile Include="CodeFixProvider.cs" />
     <Compile Include="DiagnosticAnalyzer.cs" />
+    <Compile Include="ExplicitThreadsChecker\ExplicitThreadsCheckerAnalyzer.cs" />
+    <Compile Include="ExplicitThreadsChecker\ExplicitThreadsCheckerCodeFixProvider.cs" />
+    <Compile Include="ExplicitThreadsChecker\ExplicitThreadsMultilineCheckerAnalyzer.cs" />
+    <Compile Include="ExplicitThreadsChecker\ExplicitThreadsMultilineCheckerCodeFixProvider.cs" />
+    <Compile Include="ExplicitThreadsChecker\SyntaxNodeExtensions.cs" />
+    <Compile Include="ExplicitThreadsChecker\TaskSyntaxHelper.cs" />
+    <Compile Include="ExplicitThreadsChecker\UsingDirectiveFactory.cs" />
+    <Compile Include="ExplicitThreadsChecker\UsingHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -45,6 +53,7 @@
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

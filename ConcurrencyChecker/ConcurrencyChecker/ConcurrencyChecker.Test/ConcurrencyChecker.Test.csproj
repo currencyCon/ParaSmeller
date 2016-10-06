@@ -102,6 +102,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ETC\ETCRemoveUnusedUsings.cs" />
+    <Compile Include="ETC\ETCUnitTests.cs" />
+    <Compile Include="ETC\ETCUnitTestsMultiline.cs" />
     <Compile Include="Verifiers\CodeFixVerifier.cs" />
     <Compile Include="Verifiers\DiagnosticVerifier.cs" />
     <Compile Include="Helpers\CodeFixVerifier.Helper.cs" />
@@ -118,6 +121,9 @@
       <Project>{40285A25-7897-4D97-9A8E-94E1B1E718DE}</Project>
       <Name>ConcurrencyChecker</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

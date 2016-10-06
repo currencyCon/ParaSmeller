@@ -129,4 +129,7 @@
     <value>Type name contains lowercase letters</value>
     <comment>The title of the diagnostic.</comment>
   </data>
+  <data name="AnalyzerMessageFormatSingleLine" xml:space="preserve">
+    <value>'new Thread' should be replaced with Task.Run</value>
+  </data>
 </root>
