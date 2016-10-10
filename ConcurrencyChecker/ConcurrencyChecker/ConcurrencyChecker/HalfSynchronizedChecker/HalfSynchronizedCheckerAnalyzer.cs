@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Linq;
+using ConcurrencyAnalyzer.RepresentationFactories;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -40,7 +41,7 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
             {
                 return;
             }
-
+            //var classRep = ClassRepresentationFactory.Create(classDeclaration);
             var halfSynchronizedClass = new HalfSynchronizedClassRepresentation(classDeclaration);
             if (!halfSynchronizedClass.SynchronizedMethods.Any() && !halfSynchronizedClass.SynchronizedProperties.Any())
             {

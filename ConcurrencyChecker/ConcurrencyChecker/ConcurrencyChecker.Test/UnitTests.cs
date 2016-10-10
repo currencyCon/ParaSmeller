@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using TestHelper;
-using ConcurrencyChecker;
 
 namespace ConcurrencyChecker.Test
 {
@@ -26,19 +25,52 @@ namespace ConcurrencyChecker.Test
         public void TestMethod2()
         {
             var test = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
+   namespace ConcurrencyAnalyzer
+{
+    public class A
     {
-        class TypeName
-        {   
+        public B B { get; set; }
+
+        public void DoAStuff()
+        {
+            var x = 2;
+            {
+                var z = 2;
+            }
+            lock (this)
+            {
+                B.DoBStuff();
+            }
         }
-    }";
+    }
+
+    public class B
+    {
+        public A A { get; set; }
+
+        public void DoBStuff()
+        {
+            lock (this)
+            {
+                A.DoAStuff();
+            }
+        }
+
+    }
+
+    public class Maiclass
+    {
+        public static void Main()
+        {
+            var a = new A();
+            var b = new B();
+            a.B = b;
+            b.A = a;
+            a.DoAStuff();
+        }
+    }
+}
+";
             var expected = new DiagnosticResult
             {
                 Id = "ConcurrencyChecker",
@@ -51,22 +83,6 @@ namespace ConcurrencyChecker.Test
             };
 
             VerifyCSharpDiagnostic(test, expected);
-
-            var fixtest = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TYPENAME
-        {   
-        }
-    }";
-            VerifyCSharpFix(test, fixtest);
         }
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()

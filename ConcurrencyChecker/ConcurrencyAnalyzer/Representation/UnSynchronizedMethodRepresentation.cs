@@ -7,11 +7,13 @@ namespace ConcurrencyAnalyzer.Representation
     {
         public MethodDeclarationSyntax MethodImplementation { get; set; }
         public ClassRepresentation ContainingClass { get; set; }
+        public ICollection<IBody> Blocks { get; set; }
         public ICollection<InvocationExpressionRepresentation> InvocationExpressions { get; set; }
         public UnSynchronizedMethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, ClassRepresentation classRepresentation)
         {
             MethodImplementation = methodDeclarationSyntax;
             InvocationExpressions = new List<InvocationExpressionRepresentation>();
+            Blocks = new List<IBody>();
             ContainingClass = classRepresentation;
         }
     }

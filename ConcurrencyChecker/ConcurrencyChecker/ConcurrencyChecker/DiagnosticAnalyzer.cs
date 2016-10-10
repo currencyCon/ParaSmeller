@@ -40,8 +40,8 @@ namespace ConcurrencyChecker
         private void Action(CompilationAnalysisContext compilationAnalysisContext)
         {
             var r = compilationAnalysisContext.Compilation;
-            SolutionRepresentationFactory.Create(r);
-            throw new NotImplementedException();
+            var s = SolutionRepresentationFactory.Create(r);
+            var c = 2;
         }
 
         private static void AnalyzeSymbol(SymbolAnalysisContext context)

@@ -3,10 +3,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Representation
 {
-    public interface IMethodRepresentation
+    public interface IMethodRepresentation: IMemberWithBody
     {
         MethodDeclarationSyntax MethodImplementation { get; set; }
-        ClassRepresentation ContainingClass { get; set; }
-        ICollection<InvocationExpressionRepresentation> InvocationExpressions { get; set; }
     }
 }

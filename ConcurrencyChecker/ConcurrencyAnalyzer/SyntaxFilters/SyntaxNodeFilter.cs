@@ -18,6 +18,10 @@ namespace ConcurrencyAnalyzer.SyntaxFilters
             return synchronizedElement.GetChildren<LockStatementSyntax>();
         }
 
+        public static IEnumerable<LockStatementSyntax> GetLockStatements<TSyntaxElement>(IEnumerable<TSyntaxElement> synchronizedElements) where TSyntaxElement : SyntaxNode
+        {
+            return synchronizedElements.SelectMany(GetLockStatements);
+        }
         public static IEnumerable<InvocationExpressionSyntax> GetSynchronizedInvocations(MethodDeclarationSyntax methodDeclarationSyntax)
         {
             var locksStatementsOfMethod = GetLockStatements(methodDeclarationSyntax);
