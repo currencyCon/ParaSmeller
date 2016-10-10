@@ -42,6 +42,14 @@
     <Compile Include="ExplicitThreadsChecker\TaskSyntaxHelper.cs" />
     <Compile Include="ExplicitThreadsChecker\UsingDirectiveFactory.cs" />
     <Compile Include="ExplicitThreadsChecker\UsingHandler.cs" />
+    <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerCodeFixProvider.cs" />
+    <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerAnalyzer.cs" />
+    <Compile Include="HalfSynchronizedChecker\HalfSynchronizedClassRepresentation.cs" />
+    <Compile Include="HalfSynchronizedChecker\LockBuilder.cs" />
+    <Compile Include="HalfSynchronizedChecker\PropertyBuilder.cs" />
+    <Compile Include="HalfSynchronizedChecker\SynchronizationInspector.cs" />
+    <Compile Include="HalfSynchronizedChecker\SyntaxFormatter.cs" />
+    <Compile Include="HalfSynchronizedChecker\SyntaxNodeFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -119,6 +127,12 @@
       <HintPath>..\..\packages\System.Reflection.Metadata.1.0.21\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
       <Private>False</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ConcurrencyAnalyzer\ConcurrencyAnalyzer.csproj">
+      <Project>{09cf3dcc-1daf-4180-a2e2-ba41bc7e1ad3}</Project>
+      <Name>ConcurrencyAnalyzer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\v4.6\Microsoft.Portable.CSharp.targets" />
   <Target Name="AfterBuild">

@@ -80,11 +80,29 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The {0} {1} is also used in another synchronized Method . Consider synchronizing also this one..
+        /// </summary>
+        internal static string AnalyzerMessageFormatHalfSynchronized {
+            get {
+                return ResourceManager.GetString("AnalyzerMessageFormatHalfSynchronized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;new Thread&apos; should be replaced with Task.Run.
         /// </summary>
         internal static string AnalyzerMessageFormatSingleLine {
             get {
                 return ResourceManager.GetString("AnalyzerMessageFormatSingleLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Property is used in a synchronized Member. Consider synchronizing it..
+        /// </summary>
+        internal static string AnalyzerMessageFormatUnsynchronizedProperty {
+            get {
+                return ResourceManager.GetString("AnalyzerMessageFormatUnsynchronizedProperty", resourceCulture);
             }
         }
         

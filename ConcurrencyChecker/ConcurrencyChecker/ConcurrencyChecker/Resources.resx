@@ -125,6 +125,15 @@
     <value>Type name '{0}' contains lowercase letters</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
+   <data name="AnalyzerMessageFormatHalfSynchronized" xml:space="preserve">
+    <value>The {0} {1} is also used in another synchronized Method . Consider synchronizing also this one.</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  
+  <data name="AnalyzerMessageFormatUnsynchronizedProperty" xml:space="preserve">
+    <value>The Property is used in a synchronized Member. Consider synchronizing it.</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
   <data name="AnalyzerTitle" xml:space="preserve">
     <value>Type name contains lowercase letters</value>
     <comment>The title of the diagnostic.</comment>
