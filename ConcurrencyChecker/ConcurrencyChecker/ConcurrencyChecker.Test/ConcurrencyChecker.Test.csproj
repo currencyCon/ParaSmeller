@@ -106,6 +106,7 @@
     <Compile Include="ETC\ETCUnitTests.cs" />
     <Compile Include="ETC\ETCUnitTestsMultiline.cs" />
     <Compile Include="HSC\HalfSynchronizedClassCheckerTests.cs" />
+    <Compile Include="NSMC\NestedSynchronizedMethodClassTests.cs" />
     <Compile Include="Verifiers\CodeFixVerifier.cs" />
     <Compile Include="Verifiers\DiagnosticVerifier.cs" />
     <Compile Include="Helpers\CodeFixVerifier.Helper.cs" />

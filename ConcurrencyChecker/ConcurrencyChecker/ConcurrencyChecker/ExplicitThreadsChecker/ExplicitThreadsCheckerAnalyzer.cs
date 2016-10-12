@@ -16,14 +16,14 @@ namespace ExplicitThreadsChecker
         private const string Category = "ParallelCorrectness";
 
         private static readonly LocalizableString Title = new LocalizableResourceString(
-            nameof(Resources.AnalyzerTitle), Resources.ResourceManager, typeof (Resources));
+            nameof(Resources.ETCAnalyzerTitle), Resources.ResourceManager, typeof (Resources));
 
         private static readonly LocalizableString MessageFormat =
-            new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormatSingleLine), Resources.ResourceManager,
+            new LocalizableResourceString(nameof(Resources.ETCAnalyzerMessageFormatSingleLine), Resources.ResourceManager,
                 typeof (Resources));
 
         private static readonly LocalizableString Description =
-            new LocalizableResourceString(nameof(Resources.AnalyzerDescription), Resources.ResourceManager,
+            new LocalizableResourceString(nameof(Resources.ETCAnalyzerDescription), Resources.ResourceManager,
                 typeof (Resources));
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat,

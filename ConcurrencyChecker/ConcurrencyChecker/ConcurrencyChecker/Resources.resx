@@ -125,11 +125,10 @@
     <value>Type name '{0}' contains lowercase letters</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
-   <data name="AnalyzerMessageFormatHalfSynchronized" xml:space="preserve">
+  <data name="AnalyzerMessageFormatHalfSynchronized" xml:space="preserve">
     <value>The {0} {1} is also used in another synchronized Method . Consider synchronizing also this one.</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
-  
   <data name="AnalyzerMessageFormatUnsynchronizedProperty" xml:space="preserve">
     <value>The Property is used in a synchronized Member. Consider synchronizing it.</value>
     <comment>The format-able message the diagnostic displays.</comment>
@@ -140,5 +139,32 @@
   </data>
   <data name="AnalyzerMessageFormatSingleLine" xml:space="preserve">
     <value>'new Thread' should be replaced with Task.Run</value>
+  </data>
+  <data name="ETCAnalyzerDescription" xml:space="preserve">
+    <value>All Thread.Start should be replaced with Task.Run</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="ETCAnalyzerMessageFormat" xml:space="preserve">
+    <value>'{0}' should be replaced with Task.Run</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="ETCAnalyzerMessageFormatSingleLine" xml:space="preserve">
+    <value>'new Thread' should be replaced with Task.Run</value>
+  </data>
+  <data name="ETCAnalyzerTitle" xml:space="preserve">
+    <value>Thread.Start shouldn't be used</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="NSMCAnalyzerDescription" xml:space="preserve">
+    <value>No Deadlocks should occur in Code</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="NSMCAnalyzerMessageFormat" xml:space="preserve">
+    <value>Possible Deadlock with double Locking</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="NSMCAnalyzerTitle" xml:space="preserve">
+    <value>NestedSynchronizedMethod Calls</value>
+    <comment>The title of the diagnostic.</comment>
   </data>
 </root>

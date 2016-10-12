@@ -114,5 +114,68 @@ namespace ConcurrencyChecker {
                 return ResourceManager.GetString("AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Thread.Start should be replaced with Task.Run.
+        /// </summary>
+        internal static string ETCAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("ETCAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be replaced with Task.Run.
+        /// </summary>
+        internal static string ETCAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("ETCAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;new Thread&apos; should be replaced with Task.Run.
+        /// </summary>
+        internal static string ETCAnalyzerMessageFormatSingleLine {
+            get {
+                return ResourceManager.GetString("ETCAnalyzerMessageFormatSingleLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thread.Start shouldn&apos;t be used.
+        /// </summary>
+        internal static string ETCAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ETCAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Deadlocks should occur in Code.
+        /// </summary>
+        internal static string NSMCAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("NSMCAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Possible Deadlock with double Locking.
+        /// </summary>
+        internal static string NSMCAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("NSMCAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NestedSynchronizedMethod Calls.
+        /// </summary>
+        internal static string NSMCAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("NSMCAnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }
