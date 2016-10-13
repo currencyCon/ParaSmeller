@@ -132,7 +132,7 @@ namespace TestHelper
             var actual = GetStringFromDocument(document);
             int index = actual.Zip(newSource, (c1, c2) => c1 == c2).TakeWhile(b => b).Count() + 1;
 
-            Assert.AreEqual(newSource, actual);
+            Assert.AreEqual(newSource.Replace("\r\n", "\n"), actual.Replace("\r\n", "\n"));
         }
     }
 }
