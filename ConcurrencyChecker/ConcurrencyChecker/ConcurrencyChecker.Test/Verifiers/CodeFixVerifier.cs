@@ -41,6 +41,7 @@ namespace TestHelper
         /// <param name="newSource">A class in the form of a string after the CodeFix was applied to it</param>
         /// <param name="codeFixIndex">Index determining which codefix to apply if there are multiple</param>
         /// <param name="allowNewCompilerDiagnostics">A bool controlling whether or not the test will fail if the CodeFix introduces other warnings after being applied</param>
+        /// <param name="warningId">The warning to which a refactoring shall be applied to</param>
         protected void VerifyCSharpFix(string oldSource, string newSource, int? codeFixIndex = null, bool allowNewCompilerDiagnostics = false, string warningId = null)
         {
             VerifyFix(LanguageNames.CSharp, GetCSharpDiagnosticAnalyzer(), GetCSharpCodeFixProvider(), oldSource, newSource, codeFixIndex, allowNewCompilerDiagnostics, warningId);
@@ -71,11 +72,12 @@ namespace TestHelper
         /// <param name="newSource">A class in the form of a string after the CodeFix was applied to it</param>
         /// <param name="codeFixIndex">Index determining which codefix to apply if there are multiple</param>
         /// <param name="allowNewCompilerDiagnostics">A bool controlling whether or not the test will fail if the CodeFix introduces other warnings after being applied</param>
-        private void VerifyFix(string language, DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, int? codeFixIndex, bool allowNewCompilerDiagnostics, string warningId = null)
+        /// <param name="warningId">The Id of the warning to which a fix shall be applied</param>
+        private static void VerifyFix(string language, DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, int? codeFixIndex, bool allowNewCompilerDiagnostics, string warningId = null)
         {
             var document = CreateDocument(oldSource, language);
             var analyzerDiagnostics = GetSortedDiagnosticsFromDocuments(analyzer, new[] { document });
-            var compilerDiagnostics = GetCompilerDiagnostics(document);
+            var compilerDiagnostics = GetCompilerDiagnostics(document).ToList();
             var attempts = warningId != null ? 1 : analyzerDiagnostics.Length;
 
             for (int i = 0; i < attempts; ++i)
@@ -116,9 +118,7 @@ namespace TestHelper
                     newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, GetCompilerDiagnostics(document));
 
                     Assert.IsTrue(false,
-                        string.Format("Fix introduced new compiler diagnostics:\r\n{0}\r\n\r\nNew document:\r\n{1}\r\n",
-                            string.Join("\r\n", newCompilerDiagnostics.Select(d => d.ToString())),
-                            document.GetSyntaxRootAsync().Result.ToFullString()));
+                        $"Fix introduced new compiler diagnostics:\r\n{string.Join("\r\n", newCompilerDiagnostics.Select(d => d.ToString()))}\r\n\r\nNew document:\r\n{document.GetSyntaxRootAsync().Result.ToFullString()}\r\n");
                 }
 
                 //check if there are analyzer diagnostics left after the code fix
@@ -130,7 +130,6 @@ namespace TestHelper
 
             //after applying all of the code fixes, compare the resulting string to the inputted one
             var actual = GetStringFromDocument(document);
-            int index = actual.Zip(newSource, (c1, c2) => c1 == c2).TakeWhile(b => b).Count() + 1;
 
             Assert.AreEqual(newSource.Replace("\r\n", "\n"), actual.Replace("\r\n", "\n"));
         }

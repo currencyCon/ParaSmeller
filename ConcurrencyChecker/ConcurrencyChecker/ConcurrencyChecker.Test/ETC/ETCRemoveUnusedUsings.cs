@@ -23,7 +23,7 @@ namespace ConcurrencyChecker.Test.ETC
 
         public static SyntaxNode RemoveUnusedImportDirectives(SemanticModel semanticModel, SyntaxNode root, CancellationToken cancellationToken)
         {
-            var oldUsings = root.DescendantNodesAndSelf().Where(s => s is UsingDirectiveSyntax);
+            var oldUsings = root.DescendantNodesAndSelf().Where(s => s is UsingDirectiveSyntax).ToList();
             var unusedUsings = GetUnusedImportDirectives(semanticModel, cancellationToken);
             var leadingTrivia = root.GetLeadingTrivia();
 
