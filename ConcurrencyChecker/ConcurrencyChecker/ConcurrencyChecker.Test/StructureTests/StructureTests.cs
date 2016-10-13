@@ -110,11 +110,11 @@ namespace ConcurrencyAnalyzer
             var expected = new DiagnosticResult
             {
                 Id = "ConcurrencyChecker",
-                Message = String.Format("Type name '{0}' contains lowercase letters", "TypeName"),
+                Message = String.Format("Type name '{0}' contains lowercase letters", "Maiclass"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
-                            new DiagnosticResultLocation("Test0.cs", 11, 15)
+                            new DiagnosticResultLocation("Test0.cs", 69, 18)
                         }
             };
 
