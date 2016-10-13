@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepresentationExtensions\ClassRepresentationExtensions.cs" />
     <Compile Include="RepresentationExtensions\MemberWithBodiesExtensions.cs" />
     <Compile Include="RepresentationFactories\BlockRepresentationFactory.cs" />
     <Compile Include="RepresentationFactories\ClassRepresentationFactory.cs" />

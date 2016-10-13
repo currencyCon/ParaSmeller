@@ -169,7 +169,7 @@ namespace ConcurrencyChecker.Test.HSC
                 new DiagnosticResult
             {
                 Id = HalfSynchronizedCheckerAnalyzer.HalfSynchronizedChildDiagnosticId,
-                Message = "The Property z is also used in another synchronized Method . Consider synchronizing also this one.",
+                Message = "The Property  is also used in another synchronized Method . Consider synchronizing also this one.",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {

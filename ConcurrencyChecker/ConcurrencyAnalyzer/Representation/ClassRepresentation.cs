@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -20,6 +22,28 @@ namespace ConcurrencyAnalyzer.Representation
             Members = new List<IMemberWithBody>();
             ClassDeclarationSyntax = classDeclarationSyntax;
             FullyQualifiedDomainName = classDeclarationSyntax.Identifier.ToFullString();
+        }
+
+        public IEnumerable<InvocationExpressionRepresentation> GetInvocationsInLocks()
+        {
+            IEnumerable<InvocationExpressionRepresentation> invocations = new List<InvocationExpressionRepresentation>();
+
+            foreach (var memberWithBody in Members)
+            {
+                invocations = invocations.Concat(SyntaxNodeFilter.GetInvocationsInLocks(memberWithBody.Blocks));
+            }
+            return invocations;
+        }
+
+        public IEnumerable<IdentifierNameSyntax> GetIdentifiersInLocks()
+        {
+            IEnumerable<IdentifierNameSyntax> identifiers = new List<IdentifierNameSyntax>();
+
+            foreach (var memberWithBody in Members)
+            {
+                identifiers = identifiers.Concat(SyntaxNodeFilter.GetIdentifiersInLocks(memberWithBody.Blocks));
+            }
+            return identifiers;
         }
     }
 }

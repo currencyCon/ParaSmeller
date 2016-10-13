@@ -1,22 +1,35 @@
 using System.Collections.Generic;
 using System.Linq;
+using ConcurrencyAnalyzer.Representation;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyChecker.HalfSynchronizedChecker
 {
     public class SynchronizationInspector
     {
-        public static IEnumerable<MethodDeclarationSyntax> GetMethodsWithHalfSynchronizedProperties(HalfSynchronizedClassRepresentation halfSynchronizedClass)
+        public static IEnumerable<MethodDeclarationSyntax> GetMethodsWithHalfSynchronizedProperties(ClassRepresentation classRepresentation)
         {
             var methodsWithHalfSynchronizedProperties = new List<MethodDeclarationSyntax>().ToList();
-            foreach (var methodDeclarationSyntax in halfSynchronizedClass.UnsynchronizedMethods)
+            var uns =
+                classRepresentation.Members.Where(e => e is MethodRepresentation && !e.IsFullySynchronized())
+                    .Select(e => e as MethodRepresentation)
+                    .Select(e => e.MethodImplementation);
+            var syn = classRepresentation.Members.Where(e => e is MethodRepresentation && e.IsFullySynchronized())
+                    .Select(e => e as MethodRepresentation);
+            var props = classRepresentation.Members.Where(e => e is PropertyRepresentation && !e.IsFullySynchronized())
+                    .Select(e => e as PropertyRepresentation)
+                    .Select(e => e.PropertyImplementation);
+            var x =
+                syn.SelectMany(e => ConcurrencyAnalyzer.SyntaxFilters.SyntaxNodeFilter.GetIdentifiersInLocks(e.Blocks)).Select(e => e.Identifier.Text);
+            var unsProp = props.Where(e => x.Contains(e.Identifier.Text)).ToList();
+            foreach (var methodDeclarationSyntax in uns)
             {
                 var identifiersInMethods =
                     methodDeclarationSyntax.DescendantNodesAndSelf()
                         .OfType<IdentifierNameSyntax>()
                         .Select(e => e.Identifier.Text);
                 if (
-                    halfSynchronizedClass.UnsynchronizedPropertiesInSynchronizedMethods.ToList()
+                    unsProp
                         .Select(e => e.Identifier.Text)
                         .Any(e => identifiersInMethods.Contains(e)))
                 {
@@ -26,59 +39,22 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
             return methodsWithHalfSynchronizedProperties;
         }
 
-        public static PropertyDeclarationSyntax GetHalSynchronizedPropertyUsed(
-            HalfSynchronizedClassRepresentation halfSynchronizedClass,
-            MethodDeclarationSyntax methodWithHalfSynchronizedProperties)
+        public static bool PropertyNeedsSynchronization(PropertyRepresentation propertyDeclaration, ClassRepresentation classRepresentation)
         {
-            var identifiersInMethods =
-                methodWithHalfSynchronizedProperties.DescendantNodesAndSelf()
-                    .OfType<IdentifierNameSyntax>()
-                    .Select(e => e.Identifier.Text);
-
-            var propUsed =
-                halfSynchronizedClass.UnsynchronizedPropertiesInSynchronizedMethods.ToList()
-                    .First(e => identifiersInMethods.Contains(e.Identifier.Text));
-            return propUsed;
-        }
-
-        public static bool PropertyNeedsSynchronization(PropertyDeclarationSyntax propertyDeclaration, HalfSynchronizedClassRepresentation halfSynchronizedClass)
-        {
-            if (PropertyIsSynchronized(propertyDeclaration))
+            if (propertyDeclaration.IsFullySynchronized())
             {
                 return false;
             }
-            var identifiersInLockStatements = halfSynchronizedClass.GetIdentifiersInLockStatements();
-            return identifiersInLockStatements.Contains(propertyDeclaration.Identifier.Text);
+
+            var identifiersInLockStatements =
+                classRepresentation.GetIdentifiersInLocks().Select(e => e.Identifier.ToString());
+            return identifiersInLockStatements.Contains(propertyDeclaration.PropertyImplementation.Identifier.Text);
             
         }
 
-        private static bool PropertyIsSynchronized(BasePropertyDeclarationSyntax propertyDeclaration)
+        public static bool MethodHasHalfSynchronizedProperties(MethodDeclarationSyntax method, ClassRepresentation classRepresentation)
         {
-            var hasNullBodies = propertyDeclaration.AccessorList.Accessors.Any(e => e.Body == null);
-            if (hasNullBodies)
-            {
-                return false;
-            }
-            return AccessorsAreSynchronized(propertyDeclaration);
-        }
-
-        private static bool AccessorsAreSynchronized(BasePropertyDeclarationSyntax propertyDeclaration)
-        {
-            var allAccessorsSynchronized = true;
-            foreach (var accessorDeclarationSyntax in propertyDeclaration.AccessorList.Accessors)
-            {
-                var childrenOfAccessor = accessorDeclarationSyntax.Body.ChildNodes().ToList();
-                if (childrenOfAccessor.Count > 1 || !(childrenOfAccessor.FirstOrDefault() is LockStatementSyntax))
-                {
-                    allAccessorsSynchronized = false;
-                }
-            }
-            return allAccessorsSynchronized;
-        }
-
-        public static bool MethodHasHalfSynchronizedProperties(MethodDeclarationSyntax method, HalfSynchronizedClassRepresentation halfSynchronizedClass)
-        {
-            var methodsWithHalfSynchronizedProperties = GetMethodsWithHalfSynchronizedProperties(halfSynchronizedClass);
+            var methodsWithHalfSynchronizedProperties = GetMethodsWithHalfSynchronizedProperties(classRepresentation);
             return methodsWithHalfSynchronizedProperties.Select(e => e.Identifier.Text).Contains(method.Identifier.Text);
         }
     }

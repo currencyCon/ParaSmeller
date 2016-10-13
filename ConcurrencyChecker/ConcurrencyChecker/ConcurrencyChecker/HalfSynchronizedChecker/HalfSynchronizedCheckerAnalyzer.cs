@@ -1,5 +1,7 @@
 using System.Collections.Immutable;
 using System.Linq;
+using ConcurrencyAnalyzer.Representation;
+using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.RepresentationFactories;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -41,44 +43,43 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
             {
                 return;
             }
-            //var classRep = ClassRepresentationFactory.Create(classDeclaration);
-            var halfSynchronizedClass = new HalfSynchronizedClassRepresentation(classDeclaration);
-            if (!halfSynchronizedClass.SynchronizedMethods.Any() && !halfSynchronizedClass.SynchronizedProperties.Any())
+            var classRep = ClassRepresentationFactory.Create(classDeclaration, context.SemanticModel);
+
+
+            if (!classRep.ClassHasSynchronizedMember())
             {
                 return;
             }
 
-            if (!halfSynchronizedClass.Properties.Any() && !halfSynchronizedClass.Methods.Any())
+            if (!classRep.Members.Any())
             {
                 return;
             }
             if (root is PropertyDeclarationSyntax)
             {
-                DiagnoseProperty(context, (PropertyDeclarationSyntax)root, halfSynchronizedClass);
+                var prop = (PropertyDeclarationSyntax) root;
+                var propInTree = classRep.GetMemberByName(prop.Identifier.ToString());
+                DiagnoseProperty(context, (PropertyRepresentation)propInTree, classRep);
             }
             else if (root is MethodDeclarationSyntax)
             {
-                DiagnoseMethod(context, (MethodDeclarationSyntax)root, halfSynchronizedClass);
+                DiagnoseMethod(context, (MethodDeclarationSyntax)root, classRep);
             }
         }
 
-        private static void DiagnoseMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method,
-            HalfSynchronizedClassRepresentation halfSynchronizedClass)
+        private static void DiagnoseMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, ClassRepresentation classRepresentation)
         {
-            if (SynchronizationInspector.MethodHasHalfSynchronizedProperties(method, halfSynchronizedClass))
+            if (SynchronizationInspector.MethodHasHalfSynchronizedProperties(method, classRepresentation))
             {
-                var propUsed = SynchronizationInspector.GetHalSynchronizedPropertyUsed(halfSynchronizedClass, method);
-                ReportHalfSynchronizationDiagnostic(context, method, "Property", propUsed.Identifier.Text);
+                ReportHalfSynchronizationDiagnostic(context, method, "Property", "");
             }
         }
 
-        private static void DiagnoseProperty(SyntaxNodeAnalysisContext context, PropertyDeclarationSyntax property,
-            HalfSynchronizedClassRepresentation halfSynchronizedClass)
+        private static void DiagnoseProperty(SyntaxNodeAnalysisContext context, PropertyRepresentation property, ClassRepresentation classRepresentation)
         {
-            if (SynchronizationInspector.PropertyNeedsSynchronization(property,
-                halfSynchronizedClass))
+            if (SynchronizationInspector.PropertyNeedsSynchronization(property, classRepresentation))
             {
-                ReportUnsynchronizationPropertyDiagnostic(context, property);
+                ReportUnsynchronizationPropertyDiagnostic(context, property.PropertyImplementation);
             }
         }
 
