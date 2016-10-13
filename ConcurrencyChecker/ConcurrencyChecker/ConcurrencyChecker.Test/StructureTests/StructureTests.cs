@@ -1,4 +1,31 @@
-﻿namespace ConcurrencyAnalyzer
+﻿using System;
+using ConcurrencyChecker.StructureTests;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TestHelper;
+
+namespace ConcurrencyChecker.Test.StructureTests
+{
+    [TestClass]
+    public class UnitTest : CodeFixVerifier
+    {
+
+        //No diagnostics expected to show up
+        [TestMethod]
+        public void TestMethod1()
+        {
+            var test = @"";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        //Diagnostic and CodeFix both triggered and checked for
+        [TestMethod]
+        public void TestMethod2()
+        {
+            var test = @"
+namespace ConcurrencyAnalyzer
 {
     public class A
     {
@@ -75,6 +102,28 @@
             b.A = a;
             var x = a.AProperty;
             a.DoAStuff();
+        }
+    }
+}
+
+";
+            var expected = new DiagnosticResult
+            {
+                Id = "ConcurrencyChecker",
+                Message = String.Format("Type name '{0}' contains lowercase letters", "TypeName"),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test0.cs", 11, 15)
+                        }
+            };
+
+            VerifyCSharpDiagnostic(test, expected);
+        }
+
+        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
+        {
+            return new ConcurrencyCheckerAnalyzer();
         }
     }
 }

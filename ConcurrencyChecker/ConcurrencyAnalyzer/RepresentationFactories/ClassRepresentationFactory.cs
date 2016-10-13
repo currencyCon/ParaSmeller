@@ -20,7 +20,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             var properties = classRepresentation.ClassDeclarationSyntax.GetChildren<PropertyDeclarationSyntax>();
             foreach (var propertyDeclarationSyntax in properties)
             {
-                classRepresentation.Properties.Add(PropertyRepresentationFactory.Create(propertyDeclarationSyntax, classRepresentation));
+                classRepresentation.Members.Add(PropertyRepresentationFactory.Create(propertyDeclarationSyntax, classRepresentation, semanticModel));
             }
         }
 
@@ -29,7 +29,6 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             var methods = classRepresentation.ClassDeclarationSyntax.GetChildren<MethodDeclarationSyntax>();
             foreach (var methodDeclarationSyntax in methods)
             {
-                //classRepresentation.Methods.Add(MethodRepresentationFactory.Create(methodDeclarationSyntax, classRepresentation));
                 classRepresentation.Members.Add(MethodRepresentationFactory.Create(methodDeclarationSyntax, classRepresentation, semanticModel));
             }
         }

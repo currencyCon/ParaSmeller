@@ -1,7 +1,4 @@
-﻿
-
-using System;
-using ConcurrencyAnalyzer.Representation;
+﻿using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -33,9 +30,8 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                         block.Blocks.Add(Create(syntaxNode, parent, semanticModel));
                     }
                 }
-                return block;
             }
-            throw new NotImplementedException();
+            return block;
         }
 
         private static IBody CreateBlock(BlockSyntax statementSyntax, IMemberWithBody parent)
@@ -53,7 +49,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         {
             foreach (var invocationExpressionSyntax in body.Implementation.GetChildren<InvocationExpressionSyntax>())
             {
-                body.InvocationExpressions.Add(InvocationExpressionRepresentationFactory.Create(invocationExpressionSyntax, semanticModel));
+                body.InvocationExpressions.Add(InvocationExpressionRepresentationFactory.Create(invocationExpressionSyntax, semanticModel, body));
             }
         } 
     }

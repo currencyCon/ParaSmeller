@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.SyntaxFilters
 {
@@ -19,6 +20,11 @@ namespace ConcurrencyAnalyzer.SyntaxFilters
         public static IEnumerable<TChildren> GetDirectChildren<TChildren>(this SyntaxNode node)
         {
             return node.ChildNodes().OfType<TChildren>();
+        }
+
+        public static bool IsSynchronized(this SyntaxNode node)
+        {
+            return node.GetChildren<LockStatementSyntax>().Any();
         }
     }
 }

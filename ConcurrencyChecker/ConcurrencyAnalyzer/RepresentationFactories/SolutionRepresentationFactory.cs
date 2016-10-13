@@ -19,18 +19,30 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
         private static void ConnectInvocations(SolutionRepresentation solution)
         {
-            var methods = solution.Classes.SelectMany(e => e.Methods).ToList();
-            var invocations = methods.SelectMany(e => e.InvocationExpressions);
+            var memberWithBodies = solution.Classes.SelectMany(e => e.Members).ToList();
+            var memberBlocks = memberWithBodies.SelectMany(a => a.Blocks).ToList();
+            var invocations = memberBlocks.SelectMany(GetInvocations).ToList();
             foreach (var invocationExpressionRepresentation in invocations)
             {
-                invocationExpressionRepresentation.MethodImplementation =
-                    methods.FirstOrDefault(
+                invocationExpressionRepresentation.InvocationImplementation =
+                    memberWithBodies.FirstOrDefault(
                         e =>
-                            e.MethodImplementation.Identifier.ToString() ==
-                            invocationExpressionRepresentation.MethodName.ToString());
+                            e.ContainingClass.Name.ToString() == invocationExpressionRepresentation.CalledClass.ToString()&&
+                            e.Name.ToString() == invocationExpressionRepresentation.InvocationTargetName.ToString()
+                            );
             }
         }
 
+        private static IEnumerable<InvocationExpressionRepresentation> GetInvocations(IBody body)
+        {
+            IEnumerable<InvocationExpressionRepresentation> l = new List<InvocationExpressionRepresentation>();
+            l = l.Concat(body.InvocationExpressions);
+            foreach (var block in body.Blocks)
+            {
+                l = l.Concat(GetInvocations(block));
+            }
+            return l;
+        }
         private static async void AddClassRepresentations(SolutionRepresentation solution, Compilation compilation)
         {
             foreach (var syntaxTree in compilation.SyntaxTrees)
