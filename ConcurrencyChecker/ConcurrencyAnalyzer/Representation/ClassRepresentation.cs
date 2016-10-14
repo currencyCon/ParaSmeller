@@ -11,6 +11,58 @@ namespace ConcurrencyAnalyzer.Representation
         public ClassDeclarationSyntax ClassDeclarationSyntax;
         public string FullyQualifiedDomainName;
         public SyntaxToken Name { get; set; }
+        private ICollection<IMethodRepresentation> _synchronizedMethods;
+
+        public ICollection<IMethodRepresentation> SynchronizedMethods
+        {
+            get
+            {
+                return _synchronizedMethods ??
+                       (_synchronizedMethods = Members.Where(e => e is MethodRepresentation && e.IsFullySynchronized())
+                           .Select(e => e as IMethodRepresentation).ToList());
+            }
+        }
+
+        private ICollection<IMethodRepresentation> _unSynchronizedMethods;
+
+        public ICollection<IMethodRepresentation> UnSynchronizedMethods
+        {
+            get
+            {
+                return _unSynchronizedMethods ??
+                       (_unSynchronizedMethods = Members.Where(e => e is MethodRepresentation && !e.IsFullySynchronized())
+                           .Select(e => e as IMethodRepresentation).ToList());
+            }
+        }
+
+
+
+
+        private ICollection<IPropertyRepresentation> _synchronizedProperties;
+
+        public ICollection<IPropertyRepresentation> SynchronizedProperties
+        {
+            get
+            {
+                return _synchronizedProperties ??
+                       (_synchronizedProperties = Members.Where(e => e is PropertyRepresentation && e.IsFullySynchronized())
+                           .Select(e => e as IPropertyRepresentation).ToList());
+            }
+        }
+
+        private ICollection<IPropertyRepresentation> _unSynchronizedProperties;
+
+        public ICollection<IPropertyRepresentation> UnSynchronizedProperties
+        {
+            get
+            {
+                return _unSynchronizedProperties ??
+                       (_unSynchronizedProperties = Members.Where(e => e is PropertyRepresentation && !e.IsFullySynchronized())
+                           .Select(e => e as IPropertyRepresentation).ToList());
+            }
+        }
+
+
         public ICollection<IMethodRepresentation> Methods { get; set; }
         public ICollection<IPropertyRepresentation> Properties { get; set; }
         public ICollection<IMemberWithBody> Members { get; set; }

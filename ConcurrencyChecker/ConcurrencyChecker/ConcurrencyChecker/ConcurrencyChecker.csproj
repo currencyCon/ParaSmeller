@@ -42,10 +42,7 @@
     <Compile Include="ExplicitThreadsChecker\UsingHandler.cs" />
     <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerCodeFixProvider.cs" />
     <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerAnalyzer.cs" />
-    <Compile Include="HalfSynchronizedChecker\LockBuilder.cs" />
-    <Compile Include="HalfSynchronizedChecker\PropertyBuilder.cs" />
     <Compile Include="HalfSynchronizedChecker\SynchronizationInspector.cs" />
-    <Compile Include="HalfSynchronizedChecker\SyntaxFormatter.cs" />
     <Compile Include="NestedSynchronizedMethodClassChecker\NestedSynchronizedMethodClassCodeFixProvider.cs" />
     <Compile Include="NestedSynchronizedMethodClassChecker\NestedSynchronizedMethodClassAnalyzer.cs" />
     <Compile Include="NestedSynchronizedMethodClassChecker\HierarchieChecker.cs" />
