@@ -43,6 +43,8 @@
     <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerCodeFixProvider.cs" />
     <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerAnalyzer.cs" />
     <Compile Include="HalfSynchronizedChecker\SynchronizationInspector.cs" />
+    <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalCodeFixProvider.cs" />
+    <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalAnalyzer.cs" />
     <Compile Include="NestedSynchronizedMethodClassChecker\NestedSynchronizedMethodClassCodeFixProvider.cs" />
     <Compile Include="NestedSynchronizedMethodClassChecker\NestedSynchronizedMethodClassAnalyzer.cs" />
     <Compile Include="NestedSynchronizedMethodClassChecker\HierarchieChecker.cs" />
@@ -133,6 +135,9 @@
       <Project>{09cf3dcc-1daf-4180-a2e2-ba41bc7e1ad3}</Project>
       <Name>ConcurrencyAnalyzer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EasterEgg\Tapir.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\v4.6\Microsoft.Portable.CSharp.targets" />
   <Target Name="AfterBuild">

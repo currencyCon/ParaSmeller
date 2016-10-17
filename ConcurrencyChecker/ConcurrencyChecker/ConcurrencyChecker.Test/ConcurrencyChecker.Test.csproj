@@ -105,6 +105,7 @@
     <Compile Include="ETC\ETCRemoveUnusedUsings.cs" />
     <Compile Include="ETC\ETCUnitTests.cs" />
     <Compile Include="ETC\ETCUnitTestsMultiline.cs" />
+    <Compile Include="MonitorWaitOrSignal\MwsUnitTests.cs" />
     <Compile Include="ReferencesForTests.cs" />
     <Compile Include="HSC\HalfSynchronizedClassCheckerTests.cs" />
     <Compile Include="NSMC\NestedSynchronizedMethodClassTests.cs" />
