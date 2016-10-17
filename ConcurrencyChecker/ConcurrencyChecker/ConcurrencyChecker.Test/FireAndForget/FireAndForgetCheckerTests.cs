@@ -37,10 +37,8 @@ namespace Test
             var x = Task.Run(() => X());
             Console.WriteLine(""Lol"");
         }
-
     }
 }
-
 ";
             var expected = new DiagnosticResult
             {

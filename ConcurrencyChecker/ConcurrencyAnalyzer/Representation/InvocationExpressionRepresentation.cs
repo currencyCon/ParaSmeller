@@ -25,6 +25,7 @@ namespace ConcurrencyAnalyzer.Representation
         public IBody ContainingBody { get; set; }
         public IMemberWithBody InvocationImplementation { get; set; }
         public SymbolKind Type { get; set; }
+        public string OriginalDefinition { get; set; }
 
     }
 }

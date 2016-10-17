@@ -20,7 +20,6 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             var methodRepresentation = new MethodRepresentation(methodDeclarationSyntax, classRepresentation);
             AddBaseBody(methodRepresentation, semanticModel);
             AddDirectInvcocations(methodRepresentation, semanticModel);
-            BuildInvocationExpressions(methodRepresentation, semanticModel);
             return methodRepresentation;
         }
 
@@ -35,17 +34,9 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         {
             foreach (var invocationExpressionSyntax in methodRepresentation.MethodImplementation.Body.Statements.Where(e => !(e is LockStatementSyntax) && ! (e is BlockSyntax)).SelectMany(e => e.GetChildren<InvocationExpressionSyntax>()))
             {
-               methodRepresentation.InvocationExpressions.Add(InvocationExpressionRepresentationFactory.Create(invocationExpressionSyntax, semanticModel, methodRepresentation.Blocks.First()));
-            }
-        }
-
-        private static void BuildInvocationExpressions(IMethodRepresentation methodRepresentation, SemanticModel semanticModel)
-        {
-            foreach (var statementSyntax in methodRepresentation.MethodImplementation.Body.Statements)
-            {
-                if (statementSyntax is LockStatementSyntax || statementSyntax is BlockSyntax)
+                if (!(invocationExpressionSyntax.Parent is ParenthesizedLambdaExpressionSyntax))
                 {
-                    //methodRepresentation.Blocks.First().Blocks.Add(BlockRepresentationFactory.Create(statementSyntax, methodRepresentation, semanticModel));
+                    methodRepresentation.InvocationExpressions.Add(InvocationExpressionRepresentationFactory.Create(invocationExpressionSyntax, semanticModel, methodRepresentation.Blocks.First()));
                 }
             }
         }
