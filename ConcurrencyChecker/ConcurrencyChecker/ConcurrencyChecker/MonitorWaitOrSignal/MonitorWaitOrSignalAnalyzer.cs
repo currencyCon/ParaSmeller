@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.RepresentationFactories;
 using ConcurrencyAnalyzer.SyntaxFilters;
-using ConcurrencyChecker.NestedSynchronizedMethodClassChecker;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -16,21 +14,38 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class MonitorWaitOrSignalAnalyzer : DiagnosticAnalyzer
     {
+        private const string Category = "Synchronization";
         public static string MonitorIfConditionDiagnosticId = "MWS001";
         public static string MonitorPulseDiagnosticId = "MWS002";
         public static string MonitorWaitDefinition = "System.Threading.Monitor.Wait(object)";
         public static string MonitorPulseDefinition = "System.Threading.Monitor.Pulse(object)";
 
-        private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.MWSAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
-        private static readonly LocalizableString MessageFormatIf = new LocalizableResourceString(nameof(Resources.MWSIfAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
-        private static readonly LocalizableString MessageFormatPulse = new LocalizableResourceString(nameof(Resources.MWSPulseAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
-        private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.MWSAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
-        private const string Category = "Synchronization";
+        private static readonly LocalizableString Title =
+            new LocalizableResourceString(nameof(Resources.MWSAnalyzerTitle), Resources.ResourceManager,
+                typeof (Resources));
 
-        private static readonly DiagnosticDescriptor MonitorIfRule = new DiagnosticDescriptor(MonitorIfConditionDiagnosticId, Title, MessageFormatIf, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: Description);
-        private static readonly DiagnosticDescriptor MonitorPulseRule = new DiagnosticDescriptor(MonitorPulseDiagnosticId, Title, MessageFormatPulse, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: Description);
+        private static readonly LocalizableString MessageFormatIf =
+            new LocalizableResourceString(nameof(Resources.MWSIfAnalyzerMessageFormat), Resources.ResourceManager,
+                typeof (Resources));
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(MonitorIfRule, MonitorPulseRule);
+        private static readonly LocalizableString MessageFormatPulse =
+            new LocalizableResourceString(nameof(Resources.MWSPulseAnalyzerMessageFormat), Resources.ResourceManager,
+                typeof (Resources));
+
+        private static readonly LocalizableString Description =
+            new LocalizableResourceString(nameof(Resources.MWSAnalyzerDescription), Resources.ResourceManager,
+                typeof (Resources));
+
+        private static readonly DiagnosticDescriptor MonitorIfRule =
+            new DiagnosticDescriptor(MonitorIfConditionDiagnosticId, Title, MessageFormatIf, Category,
+                DiagnosticSeverity.Warning, true, Description);
+
+        private static readonly DiagnosticDescriptor MonitorPulseRule =
+            new DiagnosticDescriptor(MonitorPulseDiagnosticId, Title, MessageFormatPulse, Category,
+                DiagnosticSeverity.Warning, true, Description);
+
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
+            => ImmutableArray.Create(MonitorIfRule, MonitorPulseRule);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -40,7 +55,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
         private static void CheckForWrongMonitorUsage(CompilationAnalysisContext context)
         {
             var solutionModel = SolutionRepresentationFactory.Create(context.Compilation);
-           
+
             foreach (var clazz in solutionModel.Classes)
             {
                 foreach (var method in clazz.SynchronizedMethods)
@@ -49,7 +64,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
                 }
             }
         }
-        
+
         private static void CheckMonitor(IMethodRepresentation method, CompilationAnalysisContext context)
         {
             foreach (var lockStatementSyntax in method.GetLockStatements())
@@ -70,12 +85,11 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
 
                 var diagn = Diagnostic.Create(MonitorPulseRule, monitorPulseExpression.Parent.GetLocation());
                 context.ReportDiagnostic(diagn);
-                
             }
-
         }
 
-        private static void CheckWaitingCondition(CompilationAnalysisContext context, LockStatementSyntax lockStatementSyntax)
+        private static void CheckWaitingCondition(CompilationAnalysisContext context,
+            LockStatementSyntax lockStatementSyntax)
         {
             foreach (
                 var monitorWaitExpression in

@@ -3,8 +3,6 @@ using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ConcurrencyChecker.ExplicitThreadsChecker;
-using ExplicitThreadsChecker;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,10 +14,13 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MonitorWaitOrSignalCodeFixProvider)), Shared]
     public class MonitorWaitOrSignalCodeFixProvider : CodeFixProvider
     {
-        private const string Title = "Use if instead of while";
+        private const string TitleIf = "Use if instead of while";
+        private const string TitlePulse = "Use PulseAll instead of PUlse";
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
-            => ImmutableArray.Create(MonitorWaitOrSignalAnalyzer.MonitorIfConditionDiagnosticId, MonitorWaitOrSignalAnalyzer.MonitorPulseDiagnosticId);
+            =>
+                ImmutableArray.Create(MonitorWaitOrSignalAnalyzer.MonitorIfConditionDiagnosticId,
+                    MonitorWaitOrSignalAnalyzer.MonitorPulseDiagnosticId);
 
         public sealed override FixAllProvider GetFixAllProvider()
         {
@@ -37,20 +38,22 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
             if (node is InvocationExpressionSyntax)
             {
                 context.RegisterCodeFix(
-                 CodeAction.Create(Title, c => ReplacePulseWithPulseAll(context.Document, (InvocationExpressionSyntax)node, c), Title),
-                 diagnostic);
+                    CodeAction.Create(TitlePulse,
+                        c => ReplacePulseWithPulseAll(context.Document, (InvocationExpressionSyntax) node, c),
+                        TitlePulse),
+                    diagnostic);
             }
             else if (node is IfStatementSyntax)
             {
                 context.RegisterCodeFix(
-                 CodeAction.Create(Title, c => ReplaceIfWithWhile(context.Document, (IfStatementSyntax)node, c), Title),
-                 diagnostic);
+                    CodeAction.Create(TitleIf, c => ReplaceIfWithWhile(context.Document, (IfStatementSyntax) node, c),
+                        TitleIf),
+                    diagnostic);
             }
-
-            
         }
 
-        private async Task<Document> ReplaceIfWithWhile(Document document, IfStatementSyntax node, CancellationToken cancellationToken)
+        private async Task<Document> ReplaceIfWithWhile(Document document, IfStatementSyntax node,
+            CancellationToken cancellationToken)
         {
             var root = await document.GetSyntaxRootAsync(cancellationToken);
             var whileLoop = SyntaxFactory.WhileStatement(node.Condition, node.Statement);
@@ -62,19 +65,20 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
             return newDocument;
         }
 
-        private async Task<Document> ReplacePulseWithPulseAll(Document document, InvocationExpressionSyntax node, CancellationToken cancellationToken)
+        private async Task<Document> ReplacePulseWithPulseAll(Document document, InvocationExpressionSyntax node,
+            CancellationToken cancellationToken)
         {
             var root = await document.GetSyntaxRootAsync(cancellationToken);
 
-            var identifier = node.DescendantNodes().OfType<IdentifierNameSyntax>().First(e => e.Identifier.ToString() == "Pulse");
+            var identifier =
+                node.DescendantNodes().OfType<IdentifierNameSyntax>().First(e => e.Identifier.ToString() == "Pulse");
 
             var pulseAll = SyntaxFactory.IdentifierName("PulseAll");
-            
+
             var newRoot = root.ReplaceNode(identifier, pulseAll);
             var newDocument = document.WithSyntaxRoot(newRoot);
 
             return newDocument;
         }
-        
     }
 }
