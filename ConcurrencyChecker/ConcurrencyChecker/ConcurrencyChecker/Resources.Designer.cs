@@ -161,6 +161,42 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Starvation could happen.
+        /// </summary>
+        internal static string MWSAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("MWSAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong monitor usage.
+        /// </summary>
+        internal static string MWSAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("MWSAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to if should be replaced with while.
+        /// </summary>
+        internal static string MWSIfAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("MWSIfAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pulse should be replaced with PulseAll.
+        /// </summary>
+        internal static string MWSPulseAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("MWSPulseAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In almost all cases Fire and Forget Calls should&apos;nt take place..
         /// </summary>
         internal static string FireAndForgetAnalyzerDescription {

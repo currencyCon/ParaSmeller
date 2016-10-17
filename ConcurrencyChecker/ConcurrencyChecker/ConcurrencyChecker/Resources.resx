@@ -181,4 +181,16 @@
     <value>NestedSynchronizedMethod Calls</value>
     <comment>The title of the diagnostic.</comment>
   </data>
+  <data name="MWSAnalyzerDescription" xml:space="preserve">
+    <value>Starvation could happen</value>
+  </data>
+  <data name="MWSIfAnalyzerMessageFormat" xml:space="preserve">
+    <value>if should be replaced with while</value>
+  </data>
+  <data name="MWSAnalyzerTitle" xml:space="preserve">
+    <value>Wrong monitor usage</value>
+  </data>
+  <data name="MWSPulseAnalyzerMessageFormat" xml:space="preserve">
+    <value>Pulse should be replaced with PulseAll</value>
+  </data>
 </root>

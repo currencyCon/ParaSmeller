@@ -35,5 +35,12 @@ namespace ConcurrencyAnalyzer.SyntaxFilters
         {
             return node.GetChildren<LockStatementSyntax>().Any();
         }
+
+        public static IEnumerable<MemberAccessExpressionSyntax> GetInvocationExpression(this SyntaxNode node, string clazz, string methodName)
+        {
+            return node.DescendantNodes()
+                .OfType<MemberAccessExpressionSyntax>()
+                .Where(e => e.Expression.ToString() == clazz && e.Name.ToString() == methodName);
+        } 
     }
 }
