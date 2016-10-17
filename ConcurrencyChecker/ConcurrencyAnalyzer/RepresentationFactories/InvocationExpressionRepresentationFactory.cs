@@ -14,8 +14,13 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             var className = (IdentifierNameSyntax) invocationExpression.Expression;
             var invocationTarget = invocationExpression.Name;
             var methodInfo = semanticModel.GetSymbolInfo(invocationTarget);
-            var type = methodInfo.Symbol.Kind;
-            
+
+            var type = SymbolKind.NetModule;
+            if (methodInfo.Symbol != null)
+            {
+                type = methodInfo.Symbol.Kind;
+            }
+
             var invocation = new InvocationExpressionRepresentation
             {
                 Type = type,
