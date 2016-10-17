@@ -8,7 +8,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
     public class InvocationExpressionRepresentationFactory
     {
 
-        public static InvocationExpressionRepresentation Create(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody)
+        public static InvocationExpressionRepresentation Create(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody = null)
         {
             var invocationExpression = (MemberAccessExpressionSyntax) invocationExpressionSyntax.Expression;
             var className = (IdentifierNameSyntax) invocationExpression.Expression;
@@ -21,7 +21,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 Type = type,
                 Implementation = invocationExpressionSyntax,
                 ContainingBody = containingBody,
-                Synchronized = containingBody.Implementation.IsSynchronized(),
+                Synchronized = containingBody?.Implementation.IsSynchronized() ?? false,
                 InvocationTargetName = invocationTarget,
                 CalledClass = className
             };

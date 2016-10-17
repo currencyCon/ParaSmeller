@@ -40,6 +40,7 @@
     <Compile Include="ExplicitThreadsChecker\TaskSyntaxHelper.cs" />
     <Compile Include="ExplicitThreadsChecker\UsingDirectiveFactory.cs" />
     <Compile Include="ExplicitThreadsChecker\UsingHandler.cs" />
+    <Compile Include="FireAndForgetChecker\FireAndForgetCheckerAnalyzer.cs" />
     <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerCodeFixProvider.cs" />
     <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerAnalyzer.cs" />
     <Compile Include="HalfSynchronizedChecker\SynchronizationInspector.cs" />

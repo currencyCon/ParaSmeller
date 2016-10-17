@@ -80,6 +80,15 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The result of this Computation is potentially never awaited.
+        /// </summary>
+        internal static string AnalyzerMessageFormatFireAndForget {
+            get {
+                return ResourceManager.GetString("AnalyzerMessageFormatFireAndForget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} {1} is also used in another synchronized Method . Consider synchronizing also this one..
         /// </summary>
         internal static string AnalyzerMessageFormatHalfSynchronized {
@@ -148,6 +157,24 @@ namespace ConcurrencyChecker {
         internal static string ETCAnalyzerTitle {
             get {
                 return ResourceManager.GetString("ETCAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In almost all cases Fire and Forget Calls should&apos;nt take place..
+        /// </summary>
+        internal static string FireAndForgetAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("FireAndForgetAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Computation in a seperate Thread is not awaited.
+        /// </summary>
+        internal static string FireAndForgetAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("FireAndForgetAnalyzerTitle", resourceCulture);
             }
         }
         
