@@ -29,6 +29,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
 
         private static void CheckForUnawaitedTasks(CompilationAnalysisContext context)
         {
+            var b = context.Options;
             var solutionModel = SolutionRepresentationFactory.Create(context.Compilation);
             foreach (var clazz in solutionModel.Classes)
             {

@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using ConcurrencyChecker.FireAndForgetChecker;
 using Microsoft.CodeAnalysis;
@@ -15,27 +16,32 @@ namespace ConcurrencyChecker.Test.FireAndForget
         [TestMethod]
         public void TestFindsSimpleCase()
         {
-            const string test = @"namespace Test
+            const string test = @"
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Test
 {
-    public class SimpleTest
+    public class TestCode
     {
         public static void X()
         {
-            Thread.Sleep(500000000);
-            Console.WriteLine(""Hello"");
+            Thread.Sleep(5);
+            Console.WriteLine(""Huhu"");
         }
+
         public static void Main()
         {
+            var z = 3;
             var x = Task.Run(() => X());
             Console.WriteLine(""Lol"");
         }
+
     }
 }
+
 ";
-            var x = Task.Run(() =>
-            {
-                Console.WriteLine("Hello");
-            });
             var expected = new DiagnosticResult
             {
                 Id = FireAndForgetCheckerAnalyzer.FireAndForgetCallId,

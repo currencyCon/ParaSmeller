@@ -17,6 +17,15 @@ namespace ConcurrencyAnalyzer.SyntaxFilters
             return node.DescendantNodesAndSelf().OfType<TChildren>();
         }
 
+        public static IEnumerable<TChildren> GetParents<TChildren>(this SyntaxNode node)
+        {
+            if (node == null)
+            {
+                return new List<TChildren>();
+            }
+            return node.AncestorsAndSelf().OfType<TChildren>();
+        }
+
         public static IEnumerable<TChildren> GetDirectChildren<TChildren>(this SyntaxNode node)
         {
             return node.ChildNodes().OfType<TChildren>();

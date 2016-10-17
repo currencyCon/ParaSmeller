@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using ConcurrencyAnalyzer.Representation;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -9,7 +8,21 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
     {
         public static IEnumerable<LockStatementSyntax> GetLockStatements(this IMemberWithBody member)
         {
-            return member.Blocks.Where(e => e is LockBlock).Select(a => a.Implementation as LockStatementSyntax);
+            return GetLockStatements(member.Blocks);
+        }
+
+        public static List<LockStatementSyntax> GetLockStatements(IEnumerable<IBody> bodies)
+        {
+            var lockStatementSyntaxs = new List<LockStatementSyntax>();
+            foreach (var body in bodies)
+            {
+                if (body is LockBlock)
+                {
+                    lockStatementSyntaxs.Add(body.Implementation as LockStatementSyntax);
+                }
+                lockStatementSyntaxs.AddRange(GetLockStatements(body.Blocks));
+            }
+            return lockStatementSyntaxs;
         }
 
         public static bool IsSynchronized(this IMemberWithBody member)

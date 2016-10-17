@@ -109,6 +109,7 @@
     <Compile Include="ReferencesForTests.cs" />
     <Compile Include="HSC\HalfSynchronizedClassCheckerTests.cs" />
     <Compile Include="NSMC\NestedSynchronizedMethodClassTests.cs" />
+    <Compile Include="TestCodeTester\TestCode.cs" />
     <Compile Include="Verifiers\CodeFixVerifier.cs" />
     <Compile Include="Verifiers\DiagnosticVerifier.cs" />
     <Compile Include="Helpers\CodeFixVerifier.Helper.cs" />

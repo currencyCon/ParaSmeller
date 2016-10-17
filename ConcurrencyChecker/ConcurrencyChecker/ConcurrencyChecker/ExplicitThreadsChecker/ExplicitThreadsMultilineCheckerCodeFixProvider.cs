@@ -3,6 +3,7 @@ using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ConcurrencyAnalyzer.SyntaxFilters;
 using ExplicitThreadsChecker;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -109,14 +110,10 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
         private void RemoveVariableDeclartion(string variableName, SyntaxNode block, SyntaxEditor editor)
         {
             var declaredVariables = block.GetLocalDeclaredVariables()
-                .SingleVariable(variableName)
-                .AncestorsAndSelf()
-                .OfType<LocalDeclarationStatementSyntax>().First();
+                .SingleVariable(variableName).GetParents<LocalDeclarationStatementSyntax>().First();
 
             var variableNodeToRemove =
-                declaredVariables
-                    .DescendantNodes()
-                    .OfType<VariableDeclaratorSyntax>().SingleVariable(variableName);
+                declaredVariables.GetChildren<VariableDeclaratorSyntax>().SingleVariable(variableName);
 
             var newDeclaration = declaredVariables.RemoveNode(variableNodeToRemove, SyntaxRemoveOptions.KeepEndOfLine);
             editor.ReplaceNode(declaredVariables, newDeclaration);
@@ -125,17 +122,15 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
         private void RemoveDirectInstantiation(string variableName, SyntaxNode block, SyntaxEditor editor)
         {
             var node = block.GetLocalDeclaredVariables().SingleVariable(variableName);
-            var nodeToDelete = node.AncestorsAndSelf().OfType<LocalDeclarationStatementSyntax>().First();
+            var nodeToDelete = node.GetParents<LocalDeclarationStatementSyntax>().First();
             editor.RemoveNode(nodeToDelete);
         }
 
         private void RemoveSeparateInstantiation(string variableName, SyntaxNode block, SyntaxEditor editor)
         {
-            var node = block
-                .DescendantNodes()
-                .OfType<AssignmentExpressionSyntax>()
+            var node = block.GetChildren<AssignmentExpressionSyntax>()
                 .First(a => a.Left.ToString() == variableName).Parent;
-            var nodeToDelete = node.AncestorsAndSelf().OfType<ExpressionStatementSyntax>().First();
+            var nodeToDelete = node.GetParents<ExpressionStatementSyntax>().First();
             editor.RemoveNode(nodeToDelete);
         }
 
@@ -144,41 +139,38 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
         {
             return
                 block.GetLocalDeclaredVariables()
-                .SingleVariable(variableName).Parent
-                    .DescendantNodes()
-                    .OfType<VariableDeclaratorSyntax>()
+                .SingleVariable(variableName).Parent.GetChildren<VariableDeclaratorSyntax>()
                     .Count() == 1;
         }
 
-        private bool IsThreadDeclaredSeparatly(string variableName, SyntaxNode block)
+        private static bool IsThreadDeclaredSeparatly(string variableName, SyntaxNode block)
         {
             return !
-                block.DescendantNodes()
-                    .OfType<VariableDeclaratorSyntax>()
+                block.GetChildren<VariableDeclaratorSyntax>()
                     .Where(a => a.Identifier.ToString() == variableName)
-                    .SelectMany(b => b.DescendantNodes().OfType<EqualsValueClauseSyntax>())
+                    .SelectMany(b => b.GetChildren<EqualsValueClauseSyntax>())
                     .Any();
         }
 
         private ArgumentSyntax FindThreadArgument(string variableName, BlockSyntax block)
         {
-            var creationNodes = block.DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
+            var creationNodes = block.GetChildren<ObjectCreationExpressionSyntax>();
             foreach (var creation in creationNodes)
             {
-                if (creation.AncestorsAndSelf().OfType<VariableDeclaratorSyntax>().Any())
+                if (creation.GetParents<VariableDeclaratorSyntax>().Any())
                 {
-                    if (creation.AncestorsAndSelf().OfType<VariableDeclaratorSyntax>().First().Identifier.ToString() ==
+                    if (creation.GetParents<VariableDeclaratorSyntax>().First().Identifier.ToString() ==
                         variableName)
                     {
-                        return creation.DescendantNodes().OfType<ArgumentSyntax>().First();
+                        return creation.GetChildren<ArgumentSyntax>().First();
                     }
                 }
                 else if (creation.AncestorsAndSelf().OfType<AssignmentExpressionSyntax>().Any())
                 {
-                    if (creation.AncestorsAndSelf().OfType<AssignmentExpressionSyntax>().First().Left.ToString() ==
+                    if (creation.GetParents<AssignmentExpressionSyntax>().First().Left.ToString() ==
                         variableName)
                     {
-                        return creation.DescendantNodes().OfType<ArgumentSyntax>().First();
+                        return creation.GetChildren<ArgumentSyntax>().First();
                     }
                 }
             }

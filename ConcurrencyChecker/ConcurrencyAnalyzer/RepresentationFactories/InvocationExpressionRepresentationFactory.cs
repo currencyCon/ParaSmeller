@@ -10,28 +10,38 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
         public static InvocationExpressionRepresentation Create(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody = null)
         {
-            var invocationExpression = (MemberAccessExpressionSyntax) invocationExpressionSyntax.Expression;
-            var className = (IdentifierNameSyntax) invocationExpression.Expression;
-            var invocationTarget = invocationExpression.Name;
-            var methodInfo = semanticModel.GetSymbolInfo(invocationTarget);
-
-            var type = SymbolKind.NetModule;
-            if (methodInfo.Symbol != null)
+            if (invocationExpressionSyntax.Expression is MemberAccessExpressionSyntax)
             {
-                type = methodInfo.Symbol.Kind;
+                var invocationExpression = (MemberAccessExpressionSyntax)invocationExpressionSyntax.Expression;
+                var className = (IdentifierNameSyntax)invocationExpression.Expression;
+                var invocationTarget = invocationExpression.Name;
+                var methodInfo = semanticModel.GetSymbolInfo(invocationTarget);
+
+                var type = SymbolKind.NetModule;
+                if (methodInfo.Symbol != null)
+                {
+                    type = methodInfo.Symbol.Kind;
+                }
+
+                var invocation = new InvocationExpressionRepresentation
+                {
+                    Type = type,
+                    Implementation = invocationExpressionSyntax,
+                    ContainingBody = containingBody,
+                    Synchronized = containingBody?.Implementation.IsSynchronized() ?? false,
+                    InvocationTargetName = invocationTarget,
+                    CalledClass = className
+                };
+
+                return invocation;
+            } else if (invocationExpressionSyntax.Parent is ParenthesizedLambdaExpressionSyntax)
+            {
+                //var expression = invocationExpressionSyntax a
+                //var c = 2;
+                return null;
             }
+            return null;
 
-            var invocation = new InvocationExpressionRepresentation
-            {
-                Type = type,
-                Implementation = invocationExpressionSyntax,
-                ContainingBody = containingBody,
-                Synchronized = containingBody?.Implementation.IsSynchronized() ?? false,
-                InvocationTargetName = invocationTarget,
-                CalledClass = className
-            };
-
-            return invocation;
         }
     }
 }

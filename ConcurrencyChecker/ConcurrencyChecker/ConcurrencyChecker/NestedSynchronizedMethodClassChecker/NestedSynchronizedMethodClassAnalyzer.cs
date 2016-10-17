@@ -34,7 +34,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
         private static void CheckForNestedLocks(CompilationAnalysisContext context)
         {
             var solutionModel = SolutionRepresentationFactory.Create(context.Compilation);
-            var methods = solutionModel.Classes.SelectMany(e => e.Members.Where(a => a.Blocks.Any(c => c is LockBlock)));
+            var methods = solutionModel.Classes.SelectMany(e => e.SynchronizedMethods);
             foreach (var memberWithBody in methods)
             {
                 CheckForLockingOnSameType(context, memberWithBody);

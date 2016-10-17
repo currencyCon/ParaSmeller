@@ -13,7 +13,12 @@ namespace ConcurrencyAnalyzer.Representation
         public SyntaxToken Name { get; set; }
         public bool IsFullySynchronized()
         {
-            return Blocks.Count == 1 && Blocks.First() is LockBlock;
+            if (Blocks.Count == 1 && Blocks.First() is NormalBlock)
+            {
+                var methodBody = Blocks.First();
+                return methodBody.Blocks.Any() && methodBody.Blocks.All(e => e is LockBlock);
+            }
+            return false;
         }
 
         public MethodDeclarationSyntax MethodImplementation { get; set; }
