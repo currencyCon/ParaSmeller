@@ -161,6 +161,24 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In almost all cases Fire and Forget Calls should&apos;nt take place..
+        /// </summary>
+        internal static string FireAndForgetAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("FireAndForgetAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Computation in a seperate Thread is not awaited.
+        /// </summary>
+        internal static string FireAndForgetAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("FireAndForgetAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Starvation could happen.
         /// </summary>
         internal static string MWSAnalyzerDescription {
@@ -197,24 +215,6 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In almost all cases Fire and Forget Calls should&apos;nt take place..
-        /// </summary>
-        internal static string FireAndForgetAnalyzerDescription {
-            get {
-                return ResourceManager.GetString("FireAndForgetAnalyzerDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A Computation in a seperate Thread is not awaited.
-        /// </summary>
-        internal static string FireAndForgetAnalyzerTitle {
-            get {
-                return ResourceManager.GetString("FireAndForgetAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No Deadlocks should occur in Code.
         /// </summary>
         internal static string NSMCAnalyzerDescription {
@@ -238,6 +238,33 @@ namespace ConcurrencyChecker {
         internal static string NSMCAnalyzerTitle {
             get {
                 return ResourceManager.GetString("NSMCAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tapirs shouldn&apos;t be alone.
+        /// </summary>
+        internal static string TapirAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("TapirAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tapir Class is lonely.
+        /// </summary>
+        internal static string TapirAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("TapirAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tapir :).
+        /// </summary>
+        internal static string TapirAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("TapirAnalyzerTitle", resourceCulture);
             }
         }
     }

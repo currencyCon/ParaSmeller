@@ -121,7 +121,7 @@
     <value>Type names should be all uppercase.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
-    <data name="FireAndForgetAnalyzerDescription" xml:space="preserve">
+  <data name="FireAndForgetAnalyzerDescription" xml:space="preserve">
     <value>In almost all cases Fire and Forget Calls should'nt take place.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
@@ -133,12 +133,10 @@
     <value>The {0} {1} is also used in another synchronized Method . Consider synchronizing also this one.</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
-    <data name="AnalyzerMessageFormatFireAndForget" xml:space="preserve">
+  <data name="AnalyzerMessageFormatFireAndForget" xml:space="preserve">
     <value>The result of this Computation is potentially never awaited</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
-  
-    
   <data name="AnalyzerMessageFormatUnsynchronizedProperty" xml:space="preserve">
     <value>The Property is used in a synchronized Member. Consider synchronizing it.</value>
     <comment>The format-able message the diagnostic displays.</comment>
@@ -147,7 +145,7 @@
     <value>Type name contains lowercase letters</value>
     <comment>The title of the diagnostic.</comment>
   </data>
-    <data name="FireAndForgetAnalyzerTitle" xml:space="preserve">
+  <data name="FireAndForgetAnalyzerTitle" xml:space="preserve">
     <value>A Computation in a seperate Thread is not awaited</value>
     <comment>The title of the diagnostic.</comment>
   </data>
@@ -192,5 +190,14 @@
   </data>
   <data name="MWSPulseAnalyzerMessageFormat" xml:space="preserve">
     <value>Pulse should be replaced with PulseAll</value>
+  </data>
+  <data name="TapirAnalyzerDescription" xml:space="preserve">
+    <value>Tapirs shouldn't be alone</value>
+  </data>
+  <data name="TapirAnalyzerMessageFormat" xml:space="preserve">
+    <value>Tapir Class is lonely</value>
+  </data>
+  <data name="TapirAnalyzerTitle" xml:space="preserve">
+    <value>Tapir :)</value>
   </data>
 </root>

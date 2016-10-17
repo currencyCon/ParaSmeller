@@ -32,6 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="EasterEgg\TapirAnalyzer.cs" />
+    <Compile Include="EasterEgg\TapirCodeFixProvider.cs" />
     <Compile Include="ExplicitThreadsChecker\ExplicitThreadsCheckerAnalyzer.cs" />
     <Compile Include="ExplicitThreadsChecker\ExplicitThreadsCheckerCodeFixProvider.cs" />
     <Compile Include="ExplicitThreadsChecker\ExplicitThreadsMultilineCheckerAnalyzer.cs" />
