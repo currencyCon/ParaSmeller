@@ -50,7 +50,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
         {
             context.RegisterCompilationAction(CheckForWrongMonitorUsage);
         }
-
+        
         private static void CheckForWrongMonitorUsage(CompilationAnalysisContext context)
         {
             var solutionModel = SolutionRepresentationFactory.Create(context.Compilation);
