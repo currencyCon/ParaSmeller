@@ -34,13 +34,13 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             return block;
         }
 
-        private static IBody CreateBlock(BlockSyntax statementSyntax, IMemberWithBody parent)
+        private static IBody CreateBlock(SyntaxNode statementSyntax, IMemberWithBody parent)
         {
             return new NormalBlock(parent, statementSyntax);
 
         }
 
-        private static IBody CreateLockBlock(LockStatementSyntax statementSyntax, IMemberWithBody parent)
+        private static IBody CreateLockBlock(SyntaxNode statementSyntax, IMemberWithBody parent)
         {
             return new LockBlock(parent, statementSyntax);
         }

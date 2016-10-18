@@ -50,8 +50,119 @@ namespace Test
 
         }
 
+        [TestMethod]
+        public void TestFindsLostAssignment()
+        {
+            const string test = @"
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Test
+{
+    public class TestCode
+    {
+        public static void X()
+        {
+            Thread.Sleep(5);
+            Console.WriteLine(""Huhu"");
+        }
+
+        public static void Main()
+        {
+            var z = 3;
+            var x = Task.Run(() => X());
+            Console.WriteLine(""Lol"");
+        }
+    }
+}
+";
+            var expected = new DiagnosticResult
+            {
+                Id = FireAndForgetCheckerAnalyzer.FireAndForgetCallId,
+                Message = "The result of this Computation is potentially never awaited",
+                Severity = DiagnosticSeverity.Warning,
+                Locations = new[] {
+                    new DiagnosticResultLocation("Test0.cs", 19, 21)
+                }
+            };
+
+            VerifyCSharpDiagnostic(test, expected);
+
+        }
+
+        [TestMethod]
+        public void TestDoesNotReportResolvedAssignment()
+        {
+            const string test = @"
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Test
+{
+    public class TestCode
+    {
+        public static void X()
+        {
+            Thread.Sleep(5);
+            Console.WriteLine(""Huhu"");
+        }
+
+        public static void Main()
+        {
+            var z = 3;
+            var x = Task.Run(() => X());
+            x.Wait();
+            Console.WriteLine(""Lol"");
+        }
+    }
+}
+";
 
 
+            VerifyCSharpDiagnostic(test);
+
+        }
+
+        [TestMethod]
+        public void TestDoesNotReportResolvedAssignmentOverMethods()
+        {
+            const string test = @"
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Test
+{
+    public class TestCode
+    {
+        public static void X()
+        {
+            Thread.Sleep(5);
+            Console.WriteLine(""Huhu"");
+        }
+
+        public static void Main()
+        {
+            var z = 3;
+            var x = Task.Run(() => X());
+            DoWait(x);
+            Console.WriteLine(""Lol"");
+        }
+
+        private static void DoWait(Task task)
+        {
+            task.Wait();
+        }
+    }
+}
+";
+
+
+            VerifyCSharpDiagnostic(test);
+
+        }
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new FireAndForgetCheckerAnalyzer();

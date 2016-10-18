@@ -27,7 +27,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 invocationExpressionRepresentation.InvocationImplementation =
                     memberWithBodies.FirstOrDefault(
                         e =>
-                            e.ContainingClass.Name.ToString() == invocationExpressionRepresentation.CalledClass.ToString()&&
+                            e.ContainingClass.Name.ToString() == invocationExpressionRepresentation.CalledClass&&
                             e.Name.ToString() == invocationExpressionRepresentation.InvocationTargetName.ToString()
                             );
             }

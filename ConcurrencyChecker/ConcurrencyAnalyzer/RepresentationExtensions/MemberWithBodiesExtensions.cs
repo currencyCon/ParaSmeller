@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ConcurrencyAnalyzer.Representation;
+using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.RepresentationExtensions
@@ -46,6 +48,35 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
         private static bool IsSynchronized(IBody body)
         {
             return body is LockBlock;
+        }
+
+        public static TChild GetFirstChild<TChild>(this IMemberWithBody memberWithBody)
+        {
+            return memberWithBody.GetChildren<TChild>().FirstOrDefault();
+        }
+        public static IEnumerable<TChildren> GetChildren<TChildren>(this IMemberWithBody memberWithBody)
+        {
+            return memberWithBody.Blocks.SelectMany(e => e.Implementation.GetChildren<TChildren>());
+        }
+
+        public static TParent GetFirstParent<TParent>(this IMemberWithBody memberWithBody)
+        {
+            var body = memberWithBody.Blocks.FirstOrDefault();
+            if (body?.Implementation != null)
+            {
+                return body.Implementation.GetFirstParent<TParent>();
+            }
+            return default(TParent);
+        }
+
+        public static IEnumerable<TParents> GetParents<TParents>(this IMemberWithBody memberWithBody)
+        {
+            var body = memberWithBody.Blocks.FirstOrDefault();
+            if (body?.Implementation != null)
+            {
+                return body.Implementation.GetParents<TParents>();
+            }
+            return new List<TParents>();
         }
     }
 }

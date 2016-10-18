@@ -8,6 +8,10 @@ namespace ConcurrencyAnalyzer.SyntaxFilters
 {
     public static class SyntaxNodeExtensions
     {
+        public static TChild GetFirstChild<TChild>(this SyntaxNode node)
+        {
+            return GetChildren<TChild>(node).FirstOrDefault();
+        }
         public static IEnumerable<TChildren> GetChildren<TChildren>(this SyntaxNode node)
         {
             if (node == null)
@@ -17,13 +21,18 @@ namespace ConcurrencyAnalyzer.SyntaxFilters
             return node.DescendantNodesAndSelf().OfType<TChildren>();
         }
 
-        public static IEnumerable<TChildren> GetParents<TChildren>(this SyntaxNode node)
+        public static TParent GetFirstParent<TParent>(this SyntaxNode node)
+        {
+            return GetParents<TParent>(node).FirstOrDefault();
+        }
+
+        public static IEnumerable<TParents> GetParents<TParents>(this SyntaxNode node)
         {
             if (node == null)
             {
-                return new List<TChildren>();
+                return new List<TParents>();
             }
-            return node.AncestorsAndSelf().OfType<TChildren>();
+            return node.AncestorsAndSelf().OfType<TParents>();
         }
 
         public static IEnumerable<TChildren> GetDirectChildren<TChildren>(this SyntaxNode node)

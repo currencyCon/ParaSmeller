@@ -22,10 +22,12 @@ namespace ConcurrencyAnalyzer.Representation
         }
 
         public MethodDeclarationSyntax MethodImplementation { get; set; }
+        public ICollection<ParameterSyntax> Parameters { get; set; }
 
         public MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, ClassRepresentation classRepresentation)
         {
             Name = methodDeclarationSyntax.Identifier;
+            Parameters = methodDeclarationSyntax.ParameterList.Parameters.ToList();
             InvocationExpressions = new List<InvocationExpressionRepresentation>();
             MethodImplementation = methodDeclarationSyntax;
             Blocks = new List<IBody>();

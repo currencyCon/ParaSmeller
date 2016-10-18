@@ -3,9 +3,6 @@ using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
-using ConcurrencyChecker.ExplicitThreadsChecker;
-using ExplicitThreadsChecker;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -45,11 +42,11 @@ namespace ConcurrencyChecker.EasterEgg
                 diagnostic);
         }
 
-        private async Task<Document> AddTapir(Document document, ClassDeclarationSyntax node, CancellationToken cancellationToken)
+        private static async Task<Document> AddTapir(Document document, ClassDeclarationSyntax node, CancellationToken cancellationToken)
         {
             var root = await document.GetSyntaxRootAsync(cancellationToken);
 
-            string commentTapir = @"
+            const string commentTapir = @"
 /*              `++-      `-::`                                   
                 osso`````/+/::.                                   
               `-ssssooooo+----.............`````                  
