@@ -1,8 +1,4 @@
-﻿
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using ConcurrencyChecker.FireAndForgetChecker;
+﻿using ConcurrencyChecker.FireAndForgetChecker;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -34,7 +30,7 @@ namespace Test
         public static void Main()
         {
             var z = 3;
-            var x = Task.Run(() => X());
+            Task.Run(() => X());
             Console.WriteLine(""Lol"");
         }
     }
@@ -46,7 +42,7 @@ namespace Test
                 Message = "The result of this Computation is potentially never awaited",
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {
-                    new DiagnosticResultLocation("Test0.cs", 7, 25)
+                    new DiagnosticResultLocation("Test0.cs", 19, 13)
                 }
             };
 

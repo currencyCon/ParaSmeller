@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ExplicitThreadsChecker
+namespace ConcurrencyChecker.ExplicitThreadsChecker
 {
     internal class UsingDirectiveFactory
     {

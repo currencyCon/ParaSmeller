@@ -16,11 +16,13 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             var invocationTarget = invocationExpression.Name;
             var methodInfo = semanticModel.GetSymbolInfo(invocationTarget);
             var type = SymbolKind.NetModule;
+            var originalDefinition = "";
             if (methodInfo.Symbol != null)
             {
                 type = methodInfo.Symbol.Kind;
+                originalDefinition = GetOriginalDefinition(methodInfo);
+
             }
-            string originalDefinition = GetOriginalDefinition(methodInfo);
             var invocation = new InvocationExpressionRepresentation
             {
                 Type = type,
@@ -28,9 +30,9 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 ContainingBody = containingBody,
                 Synchronized = containingBody?.Implementation.IsSynchronized() ?? false,
                 InvocationTargetName = invocationTarget,
-                CalledClass = className
+                CalledClass = className,
+                OriginalDefinition = originalDefinition
             };
-
             return invocation;
             
 
@@ -39,19 +41,16 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         private static string GetOriginalDefinition(SymbolInfo methodInfo)
         {
             var originalDefinition = "";
-            var methodSymbol = methodInfo.Symbol as IMethodSymbol;
-            if (methodSymbol != null)
+            if (methodInfo.Symbol is IMethodSymbol)
             {
-                originalDefinition = methodSymbol.OriginalDefinition.ToString();
+                var methodSymbol = (IMethodSymbol) methodInfo.Symbol;
+                originalDefinition = methodSymbol.ContainingType.OriginalDefinition + "." +
+                                     methodSymbol.Name;
             } else if (methodInfo.Symbol is IPropertySymbol)
             {
-                
+                var propertySymbol = (IPropertySymbol) methodInfo.Symbol;
+                originalDefinition = propertySymbol.OriginalDefinition.ToString();
             }
-
-            var propertySymbol = methodInfo.Symbol as IPropertySymbol;
-
-            originalDefinition = propertySymbol.OriginalDefinition.ToString();
-
             return originalDefinition;
         }
     }

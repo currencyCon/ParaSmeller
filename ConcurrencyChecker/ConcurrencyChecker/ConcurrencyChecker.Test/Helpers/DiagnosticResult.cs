@@ -20,9 +20,9 @@ namespace TestHelper
                 throw new ArgumentOutOfRangeException(nameof(column), "column must be >= -1");
             }
 
-            this.Path = path;
-            this.Line = line;
-            this.Column = column;
+            Path = path;
+            Line = line;
+            Column = column;
         }
 
         public string Path { get; }
@@ -35,22 +35,22 @@ namespace TestHelper
     /// </summary>
     public struct DiagnosticResult
     {
-        private DiagnosticResultLocation[] locations;
+        private DiagnosticResultLocation[] _locations;
 
         public DiagnosticResultLocation[] Locations
         {
             get
             {
-                if (this.locations == null)
+                if (_locations == null)
                 {
-                    this.locations = new DiagnosticResultLocation[] { };
+                    _locations = new DiagnosticResultLocation[] { };
                 }
-                return this.locations;
+                return _locations;
             }
 
             set
             {
-                this.locations = value;
+                _locations = value;
             }
         }
 
@@ -60,28 +60,10 @@ namespace TestHelper
 
         public string Message { get; set; }
 
-        public string Path
-        {
-            get
-            {
-                return this.Locations.Length > 0 ? this.Locations[0].Path : "";
-            }
-        }
+        public string Path => Locations.Length > 0 ? Locations[0].Path : "";
 
-        public int Line
-        {
-            get
-            {
-                return this.Locations.Length > 0 ? this.Locations[0].Line : -1;
-            }
-        }
+        public int Line => Locations.Length > 0 ? Locations[0].Line : -1;
 
-        public int Column
-        {
-            get
-            {
-                return this.Locations.Length > 0 ? this.Locations[0].Column : -1;
-            }
-        }
+        public int Column => Locations.Length > 0 ? Locations[0].Column : -1;
     }
 }

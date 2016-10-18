@@ -5,7 +5,6 @@ using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.RepresentationFactories;
 using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -80,9 +79,6 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
                 var monitorPulseExpression in
                     lockStatementSyntax.GetInvocationExpression("Monitor", "Pulse"))
             {
-                var test = context.Compilation.GetSemanticModel(monitorPulseExpression.SyntaxTree);
-                var symbol = test.GetSymbolInfo(monitorPulseExpression).Symbol;
-
                 var diagn = Diagnostic.Create(MonitorPulseRule, monitorPulseExpression.Parent.GetLocation());
                 context.ReportDiagnostic(diagn);
             }

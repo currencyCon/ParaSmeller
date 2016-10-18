@@ -3,7 +3,6 @@ using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ExplicitThreadsChecker;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -43,7 +42,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
                 diagnostic);
         }
 
-        private async Task<Document> ReplaceThreadWithTask(Document document, SyntaxNode node,
+        private static async Task<Document> ReplaceThreadWithTask(Document document, SyntaxNode node,
             CancellationToken cancellationToken)
         {
             var root = await document.GetSyntaxRootAsync(cancellationToken);
@@ -57,11 +56,6 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
             var newDocument = document.WithSyntaxRoot(newRoot);
 
             return newDocument;
-        }
-
-        private static bool IsThreadWithMethodArgument(ArgumentSyntax argument)
-        {
-            return argument.ChildNodes().OfType<IdentifierNameSyntax>().Any();
         }
     }
 }

@@ -43,7 +43,7 @@ namespace ConcurrencyChecker.Test.ETC
             var root = model.SyntaxTree.GetRoot(cancellationToken);
             foreach (var diagnostic in model.GetDiagnostics(null, cancellationToken).Where(d => d.Id == "CS8019" || d.Id == "CS0105"))
             {
-                var usingDirectiveSyntax = root.FindNode(diagnostic.Location.SourceSpan, false, false) as UsingDirectiveSyntax;
+                var usingDirectiveSyntax = root.FindNode(diagnostic.Location.SourceSpan) as UsingDirectiveSyntax;
                 if (usingDirectiveSyntax != null)
                 {
                     unusedImportDirectives.Add(usingDirectiveSyntax);

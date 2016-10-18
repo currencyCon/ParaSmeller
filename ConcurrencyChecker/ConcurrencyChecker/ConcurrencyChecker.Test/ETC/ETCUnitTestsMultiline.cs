@@ -1,6 +1,4 @@
-﻿using System;
-using ConcurrencyChecker.ExplicitThreadsChecker;
-using ExplicitThreadsChecker;
+﻿using ConcurrencyChecker.ExplicitThreadsChecker;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -36,7 +34,7 @@ namespace ExplicitThreadsSmell
             var expected = new DiagnosticResult
             {
                 Id = "ETC002",
-                Message = String.Format("'{0}' should be replaced with Task.Run", "t"),
+                Message = "\'t\' should be replaced with Task.Run",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -51,7 +49,7 @@ namespace ExplicitThreadsSmell
         [TestMethod]
         public void TestMultilineCodeSmellDirectAssignment()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace ExplicitThreadsSmell
@@ -68,7 +66,7 @@ namespace ExplicitThreadsSmell
             var expected = new DiagnosticResult
             {
                 Id = "ETC002",
-                Message = String.Format("'{0}' should be replaced with Task.Run", "t"),
+                Message = "\'t\' should be replaced with Task.Run",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -83,7 +81,7 @@ namespace ExplicitThreadsSmell
         [TestMethod]
         public void TestMultilineNoSmell()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace ExplicitThreadsSmell
@@ -101,13 +99,12 @@ namespace ExplicitThreadsSmell
 }";
 
             VerifyCSharpDiagnostic(test);
-
         }
 
         [TestMethod]
         public void TestMultilineNoSmellMethod()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace ExplicitThreadsSmell
@@ -129,9 +126,7 @@ namespace ExplicitThreadsSmell
 }";
 
             VerifyCSharpDiagnostic(test);
-
         }
-
 
 
         [TestMethod]
@@ -157,7 +152,7 @@ namespace ExplicitThreadsSmell
             var expected1 = new DiagnosticResult
             {
                 Id = "ETC002",
-                Message = String.Format("'{0}' should be replaced with Task.Run", "t"),
+                Message = "\'t\' should be replaced with Task.Run",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -168,7 +163,7 @@ namespace ExplicitThreadsSmell
             var expected2 = new DiagnosticResult
             {
                 Id = "ETC002",
-                Message = String.Format("'{0}' should be replaced with Task.Run", "j"),
+                Message = "\'j\' should be replaced with Task.Run",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {

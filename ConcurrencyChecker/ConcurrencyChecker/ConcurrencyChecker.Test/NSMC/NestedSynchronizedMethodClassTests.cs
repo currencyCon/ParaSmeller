@@ -236,7 +236,7 @@ namespace ConcurrencyChecker.Test.NSMC
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
-            return new NestedSynchronizedMethodCalssCodeFixProvider();
+            return new NestedSynchronizedMethodClassCodeFixProvider();
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()

@@ -4,6 +4,8 @@ using System.Collections.Immutable;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationFactories;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ConcurrencyChecker.FireAndForgetChecker
@@ -12,15 +14,16 @@ namespace ConcurrencyChecker.FireAndForgetChecker
     public class FireAndForgetCheckerAnalyzer: DiagnosticAnalyzer
     {
         public const string FireAndForgetCallId = "FaF001";
+        private const string ThreadStartDefintion = "System.Threading.Tasks.Task.Run";
 
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString MessageFormatFireAndForghet = new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormatFireAndForget), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         private const string Category = "Synchronization";
 
-        private static readonly DiagnosticDescriptor RuleFireAndForgetCallRule = new DiagnosticDescriptor(FireAndForgetCallId, Title, MessageFormatFireAndForghet, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
+        private static readonly DiagnosticDescriptor RuleFireAndForgetCall = new DiagnosticDescriptor(FireAndForgetCallId, Title, MessageFormatFireAndForghet, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(RuleFireAndForgetCallRule);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(RuleFireAndForgetCall);
         public override void Initialize(AnalysisContext context)
         {
             context.RegisterCompilationAction(CheckForUnawaitedTasks);
@@ -29,26 +32,41 @@ namespace ConcurrencyChecker.FireAndForgetChecker
 
         private static void CheckForUnawaitedTasks(CompilationAnalysisContext context)
         {
-            var b = context.Options;
             var solutionModel = SolutionRepresentationFactory.Create(context.Compilation);
             foreach (var clazz in solutionModel.Classes)
             {
-                InspectClassForUnawaitedTasks(clazz);
+                InspectClassForUnawaitedTasks(clazz, context);
             }
         }
 
-        private static void InspectClassForUnawaitedTasks(ClassRepresentation clazz)
+        private static void InspectClassForUnawaitedTasks(ClassRepresentation clazz, CompilationAnalysisContext context)
         {
-            foreach (var memberWithBody in clazz.UnSynchronizedMethods)
+            foreach (var memberWithBody in clazz.Members)
             {
-                InspectMemberForUnawaitedTasks(memberWithBody);
+                InspectMemberForUnawaitedTasks(memberWithBody, context);
             }
         }
 
-        private static void InspectMemberForUnawaitedTasks(IMethodRepresentation methodRepresentation)
+        private static void InspectMemberForUnawaitedTasks(IMemberWithBody methodRepresentation, CompilationAnalysisContext context)
         {
-            var x = methodRepresentation;
-            var z = 2;
+            foreach (var invocationExpressionRepresentation in methodRepresentation.InvocationExpressions)
+            {
+                if (invocationExpressionRepresentation.OriginalDefinition == ThreadStartDefintion)
+                {
+                    if (!(invocationExpressionRepresentation.Implementation.Parent is EqualsValueClauseSyntax))
+                    {
+                        ReportFireAndForget(context, invocationExpressionRepresentation.Implementation);
+                    }
+                }
+            }
+        }
+
+        private static void ReportFireAndForget(CompilationAnalysisContext context,
+CSharpSyntaxNode threadInvocation)
+        {
+
+            var diagnostic = Diagnostic.Create(RuleFireAndForgetCall, threadInvocation.GetLocation());
+            context.ReportDiagnostic(diagnostic);
         }
     }
 }

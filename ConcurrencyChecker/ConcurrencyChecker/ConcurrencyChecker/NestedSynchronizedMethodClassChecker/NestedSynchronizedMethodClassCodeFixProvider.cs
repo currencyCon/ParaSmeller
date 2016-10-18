@@ -12,15 +12,12 @@ using Microsoft.CodeAnalysis.Rename;
 
 namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(NestedSynchronizedMethodCalssCodeFixProvider)), Shared]
-    public class NestedSynchronizedMethodCalssCodeFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(NestedSynchronizedMethodClassCodeFixProvider)), Shared]
+    public class NestedSynchronizedMethodClassCodeFixProvider : CodeFixProvider
     {
-        private const string title = "Make uppercase";
+        private const string Title = "Nested Synchronization";
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds
-        {
-            get { return ImmutableArray.Create(NestedSynchronizedMethodCalssAnalyzer.NestedLockingDiagnosticId); }
-        }
+        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NestedSynchronizedMethodCalssAnalyzer.NestedLockingDiagnosticId);
 
         public sealed override FixAllProvider GetFixAllProvider()
         {
@@ -42,9 +39,9 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             // Register a code action that will invoke the fix.
             context.RegisterCodeFix(
                 CodeAction.Create(
-                    title: title,
+                    title: Title,
                     createChangedSolution: c => MakeUppercaseAsync(context.Document, declaration, c),
-                    equivalenceKey: title),
+                    equivalenceKey: Title),
                 diagnostic);
         }
 
