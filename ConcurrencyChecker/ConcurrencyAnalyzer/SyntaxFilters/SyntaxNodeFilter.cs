@@ -34,21 +34,25 @@ namespace ConcurrencyAnalyzer.SyntaxFilters
             IEnumerable<IdentifierNameSyntax> identifiers = new List<IdentifierNameSyntax>();
             foreach (var body in bodies)
             {
-                if (body is LockBlock)
+                if (body.IsSynchronized)
                 {
-                    identifiers = identifiers.Concat(body.Implementation.GetChildren<IdentifierNameSyntax>());
+                    var lockStatement = body.Implementation as LockStatementSyntax;
+                    if (lockStatement != null)
+                    {
+                        identifiers = identifiers.Concat(lockStatement.Statement.GetChildren<IdentifierNameSyntax>());
+                    }
                 }
                 identifiers = identifiers.Concat(GetIdentifiersInLocks(body.Blocks));
             }
             return identifiers;
         }
 
-        public static IEnumerable<InvocationExpressionRepresentation> GetInvocationsInLocks(IEnumerable<IBody> bodies)
+        public static IEnumerable<IInvocationExpressionRepresentation> GetInvocationsInLocks(IEnumerable<IBody> bodies)
         {
-            IEnumerable<InvocationExpressionRepresentation> invocations = new List<InvocationExpressionRepresentation>();
+            IEnumerable<IInvocationExpressionRepresentation> invocations = new List<IInvocationExpressionRepresentation>();
             foreach (var body in bodies)
             {
-                if (body is LockBlock)
+                if (body.IsSynchronized)
                 {
                     invocations = invocations.Concat(body.InvocationExpressions);
                 }

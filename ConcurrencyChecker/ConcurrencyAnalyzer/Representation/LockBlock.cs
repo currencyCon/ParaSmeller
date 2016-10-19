@@ -10,13 +10,14 @@ namespace ConcurrencyAnalyzer.Representation
         {
             Implementation = implementation;
             ContainingMember = member;
-            InvocationExpressions = new List<InvocationExpressionRepresentation>();
+            InvocationExpressions = new List<IInvocationExpressionRepresentation>();
             Blocks = new List<IBody>();
         }
 
         public SyntaxNode Implementation { get; set; }
         public IMemberWithBody ContainingMember { get; set; }
-        public ICollection<InvocationExpressionRepresentation> InvocationExpressions { get; set; }
+        public ICollection<IInvocationExpressionRepresentation> InvocationExpressions { get; set; }
         public ICollection<IBody> Blocks { get; set; }
+        public bool IsSynchronized => true;
     }
 }

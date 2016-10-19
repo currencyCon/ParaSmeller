@@ -7,23 +7,23 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
 {
     public static class InvocationExpressionRepresentationExtensions
     {
-        public static TChild GetFirstChild<TChild>(this IInvocationExpression invocationExpression)
+        public static TChild GetFirstChild<TChild>(this IInvocationExpressionRepresentation invocationExpressionRepresentation)
         {
-            return invocationExpression.Implementation.GetFirstChild<TChild>();
+            return invocationExpressionRepresentation.Implementation.GetFirstChild<TChild>();
         }
-        public static IEnumerable<TChildren> GetChildren<TChildren>(this IInvocationExpression invocationExpression)
+        public static IEnumerable<TChildren> GetChildren<TChildren>(this IInvocationExpressionRepresentation invocationExpressionRepresentation)
         {
-            return invocationExpression.Implementation.GetChildren<TChildren>();
-        }
-
-        public static TParent GetFirstParent<TParent>(this IInvocationExpression invocationExpression)
-        {
-            return invocationExpression.Implementation.GetFirstParent<TParent>();
+            return invocationExpressionRepresentation.Implementation.GetChildren<TChildren>();
         }
 
-        public static IEnumerable<TParents> GetParents<TParents>(this IInvocationExpression invocationExpression)
+        public static TParent GetFirstParent<TParent>(this IInvocationExpressionRepresentation invocationExpressionRepresentation)
         {
-            return invocationExpression.Implementation.GetParents<TParents>();
+            return invocationExpressionRepresentation.Implementation.GetFirstParent<TParent>();
+        }
+
+        public static IEnumerable<TParents> GetParents<TParents>(this IInvocationExpressionRepresentation invocationExpressionRepresentation)
+        {
+            return invocationExpressionRepresentation.Implementation.GetParents<TParents>();
         }
     }
 }

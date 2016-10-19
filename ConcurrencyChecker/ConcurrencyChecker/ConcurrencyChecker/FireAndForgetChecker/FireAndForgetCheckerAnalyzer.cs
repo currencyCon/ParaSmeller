@@ -59,7 +59,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
             }
         }
 
-        private static void CheckForLostAssignment(CompilationAnalysisContext context, IInvocationExpression invocationExpressionRepresentation, IMemberWithBody member)
+        private static void CheckForLostAssignment(CompilationAnalysisContext context, IInvocationExpressionRepresentation invocationExpressionRepresentation, IMemberWithBody member)
         {
             if (invocationExpressionRepresentation.GetFirstParent<EqualsValueClauseSyntax>() != null)
             {
@@ -70,7 +70,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
             }
         }
 
-        private static bool AssignmentIsAwaited(IInvocationExpression invocationExpressionRepresentation, IMemberWithBody member)
+        private static bool AssignmentIsAwaited(IInvocationExpressionRepresentation invocationExpressionRepresentation, IMemberWithBody member)
         {
             var assignment = invocationExpressionRepresentation.GetFirstParent<VariableDeclaratorSyntax>();
             if (assignment == null)
@@ -125,7 +125,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
             return AssignmentIsAwaitedInInvocatedMember(member, variableName);
         }
 
-        private static void CheckForSingleInvocation(CompilationAnalysisContext context, IInvocationExpression invocationExpressionRepresentation)
+        private static void CheckForSingleInvocation(CompilationAnalysisContext context, IInvocationExpressionRepresentation invocationExpressionRepresentation)
         {
             if (invocationExpressionRepresentation.GetFirstParent<ExpressionStatementSyntax>() != null)
             {

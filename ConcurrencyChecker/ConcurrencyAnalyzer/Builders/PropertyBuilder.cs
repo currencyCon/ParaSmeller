@@ -6,6 +6,8 @@ namespace ConcurrencyAnalyzer.Builders
 {
     public class PropertyBuilder
     {
+        private const string ValueKeyWord = "value";
+
         public static FieldDeclarationSyntax BuildBackingField(PropertyDeclarationSyntax property)
         {
             var fieldName = "_" + property.Identifier.Text;
@@ -15,18 +17,18 @@ namespace ConcurrencyAnalyzer.Builders
             return backingField.WithLeadingTrivia(property.GetLeadingTrivia());
         }
 
-        private static AccessorDeclarationSyntax GetDefaultSetter(BaseFieldDeclarationSyntax backingField)
+        private static AccessorDeclarationSyntax GetDefaultSetter(BaseFieldDeclarationSyntax backingField, ExpressionSyntax defaultLockObject = null)
         {
             var ident = SyntaxFactory.IdentifierName(backingField.Declaration.Variables.First().Identifier.ToString());
             var assignment = SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, ident,
-                SyntaxFactory.IdentifierName("value"));
+                SyntaxFactory.IdentifierName(ValueKeyWord));
             var expressionStatement = SyntaxFactory.ExpressionStatement(assignment);
             var block = SyntaxFactory.Block(expressionStatement);
-            var setter = SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration, LockBuilder.BuildLockBlock(block));
+            var setter = SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration, LockBuilder.BuildLockBlock(block, defaultLockObject));
             return setter;
         }
         
-        private static AccessorDeclarationSyntax GetDefaultGetter(BaseFieldDeclarationSyntax backingField)
+        private static AccessorDeclarationSyntax GetDefaultGetter(BaseFieldDeclarationSyntax backingField, ExpressionSyntax defaultLockObject = null)
         {
             var body = SyntaxFactory.Block(
                 SyntaxFactory.List(new[]
@@ -36,16 +38,16 @@ namespace ConcurrencyAnalyzer.Builders
                             .WithLeadingTrivia(SyntaxTriviaList.Create(SyntaxFactory.Space)))
                 })
                 );
-            var getter = SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration, LockBuilder.BuildLockBlock(body));
+            var getter = SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration, LockBuilder.BuildLockBlock(body, defaultLockObject));
             return getter;
         }
 
-        public static PropertyDeclarationSyntax BuildPropertyWithSynchronizedBackingField(PropertyDeclarationSyntax property, BaseFieldDeclarationSyntax backingField)
+        public static PropertyDeclarationSyntax BuildPropertyWithSynchronizedBackingField(PropertyDeclarationSyntax property, BaseFieldDeclarationSyntax backingField, ExpressionSyntax defaultLockObject = null)
         {
             var synchronizedProperty  =
                 SyntaxFactory.PropertyDeclaration(property.Type, property.Identifier.Text)
                     .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword).WithTrailingTrivia(SyntaxTriviaList.Create(SyntaxFactory.Space)))
-                    .AddAccessorListAccessors(GetDefaultGetter(backingField), GetDefaultSetter(backingField)
+                    .AddAccessorListAccessors(GetDefaultGetter(backingField, defaultLockObject), GetDefaultSetter(backingField, defaultLockObject)
                     );
             return synchronizedProperty;
         }

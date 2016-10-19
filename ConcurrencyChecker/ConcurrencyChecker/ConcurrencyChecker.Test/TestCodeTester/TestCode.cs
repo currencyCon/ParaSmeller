@@ -1,37 +1,33 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Test
+﻿namespace Test
 {
-    public class TestCode
+    public class LockObject
     {
-        public static void X()
-        {
-            Thread.Sleep(5);
-            Console.WriteLine("Huhu");
-        }
-
-        public static void Main()
-        {
-            var z = 3;
-            var x = Task.Run(() => X());
-            var w = new Waiter();
-            w.Await(x);
-            Console.WriteLine("Lol");
-        }
-
-        private static void Wait(Task task)
-        {
-            task.Wait();
-        }
+        
     }
-
-    public class Waiter
+    public class TestProgram
     {
-        public void Await(Task task)
+        private LockObject LockObject { get; }
+
+        public TestProgram(LockObject lockObject)
         {
-            task.Wait();
+            LockObject = lockObject;
+        }
+        public int z { get; set; }
+
+        public void m()
+        {
+            lock (LockObject)
+            {
+                z = 2;
+            }
+        }
+
+        public void m2()
+        {
+            lock (LockObject)
+            {
+                z = 3;
+            }
         }
     }
 }

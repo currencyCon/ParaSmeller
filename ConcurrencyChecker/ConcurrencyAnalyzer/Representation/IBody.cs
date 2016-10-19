@@ -7,7 +7,9 @@ namespace ConcurrencyAnalyzer.Representation
     {
         SyntaxNode Implementation { get; set; }
         IMemberWithBody ContainingMember { get; set; }
-        ICollection<InvocationExpressionRepresentation> InvocationExpressions { get; set; }
+        ICollection<IInvocationExpressionRepresentation> InvocationExpressions { get; set; }
         ICollection<IBody> Blocks { get; set; }
+        bool IsSynchronized { get; }
+
     }
 }

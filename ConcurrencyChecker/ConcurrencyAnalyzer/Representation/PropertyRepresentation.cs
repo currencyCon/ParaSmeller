@@ -7,7 +7,10 @@ namespace ConcurrencyAnalyzer.Representation
 {
     public class PropertyRepresentation :IPropertyRepresentation
     {
-        public ICollection<InvocationExpressionRepresentation> InvocationExpressions { get; set; }
+        private const string GetKeyWord = "get";
+        private const string SetKeyWord = "set";
+
+        public ICollection<IInvocationExpressionRepresentation> InvocationExpressions { get; set; }
         public ClassRepresentation ContainingClass { get; set; }
         public ICollection<IBody> Blocks { get; set; }
         public SyntaxToken Name { get; set; }
@@ -25,7 +28,7 @@ namespace ConcurrencyAnalyzer.Representation
             var isFullySynchronized = true;
             foreach (var block in Blocks)
             {
-                if (!(block.Blocks.Count == 1 && block.Blocks.First() is LockBlock))
+                if (!(block.Blocks.Count == 1 && block.Blocks.First().IsSynchronized))
                 {
                     isFullySynchronized = false;
                 }
@@ -40,17 +43,17 @@ namespace ConcurrencyAnalyzer.Representation
 
         public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation)
         {
-            InvocationExpressions = new List<InvocationExpressionRepresentation>();
+            InvocationExpressions = new List<IInvocationExpressionRepresentation>();
             Blocks = new List<IBody>();
             PropertyImplementation = propertyDeclarationSyntax;
             Name = PropertyImplementation.Identifier;
             ContainingClass = classRepresentation;
             Getter =
                 propertyDeclarationSyntax.AccessorList.Accessors.FirstOrDefault(
-                    e => e.Keyword.ToString() == "get").Body;
+                    e => e.Keyword.ToString() == GetKeyWord)?.Body;
             Setter =
             propertyDeclarationSyntax.AccessorList.Accessors.FirstOrDefault(
-                e => e.Keyword.ToString() == "set").Body;
-                }
+                e => e.Keyword.ToString() == SetKeyWord)?.Body;
+        }
     }
 }

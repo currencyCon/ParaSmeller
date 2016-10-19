@@ -10,7 +10,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
     public class InvocationExpressionRepresentationFactory
     {
 
-        public static InvocationExpressionRepresentation Create(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody = null)
+        public static IInvocationExpressionRepresentation Create(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody = null)
         {
             if (invocationExpressionSyntax.Expression is IdentifierNameSyntax)
             {
@@ -24,27 +24,25 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             throw new NotImplementedException($"An unexpected Type of invocationExpression was encountered: {invocationExpressionSyntax.ToFullString()}");
         }
 
-        private static InvocationExpressionRepresentation CreateSelfInvocation(
+        private static IInvocationExpressionRepresentation CreateSelfInvocation(
             InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody)
         {
             var invocationExpression = (IdentifierNameSyntax)invocationExpressionSyntax.Expression;
-            var className = invocationExpressionSyntax.GetFirstParent<ClassDeclarationSyntax>().Identifier.ToString();
             var invocationTarget = invocationExpression;
-            return CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget, className);
+            return CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget);
         }
 
 
 
-        private static InvocationExpressionRepresentation CreateRemoteInvocation(
+        private static IInvocationExpressionRepresentation CreateRemoteInvocation(
             InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody)
         {
             var invocationExpression = (MemberAccessExpressionSyntax) invocationExpressionSyntax.Expression;
-            var className = ((IdentifierNameSyntax) invocationExpression.Expression).ToString();
             var invocationTarget = invocationExpression.Name;
-            return CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget, className);
+            return CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget);
         }
 
-        private static InvocationExpressionRepresentation CreateInvocation(
+        private static IInvocationExpressionRepresentation CreateInvocation(
             InvocationExpressionSyntax invocationExpressionSyntax, IBody containingBody, SymbolKind type,
             SimpleNameSyntax invocationTarget, string className, string originalDefinition)
         {
@@ -62,23 +60,14 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             return invocation;
         }
 
-        private static InvocationExpressionRepresentation CreateInvocationWithSymbolInfo(
+        private static IInvocationExpressionRepresentation CreateInvocationWithSymbolInfo(
             InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody,
-            SimpleNameSyntax invocationTarget, string className)
+            SimpleNameSyntax invocationTarget)
         {
             var symbolInfo = semanticModel.GetSymbolInfo(invocationTarget);
-            var type = SymbolKind.NetModule;
-            var originalDefinition = "";
-            if (symbolInfo.Symbol != null)
-            {
-                type = symbolInfo.Symbol.Kind;
-                originalDefinition = GetOriginalDefinition(symbolInfo);
-                var symbol = GetSymbol(symbolInfo);
-                if (symbol != null)
-                {
-                    className = symbol.ContainingType.Name;
-                }
-            }
+            var type = GetType(symbolInfo);
+            var originalDefinition = GetOriginalDefinition(symbolInfo);
+            var className = GetClassName(symbolInfo);
             return CreateInvocation(invocationExpressionSyntax, containingBody, type, invocationTarget, className,
                 originalDefinition);
         }
@@ -96,18 +85,35 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             return null;
         }
 
+        private static SymbolKind GetType(SymbolInfo symbolInfo)
+        {
+            var type = SymbolKind.NetModule;
+            var symbol = GetSymbol(symbolInfo);
+            if (symbol != null)
+            {
+                type = symbolInfo.Symbol.Kind;
+            }
+            return type;
+        }
+
+        private static string GetClassName(SymbolInfo symbolInfo)
+        {
+            var className = "";
+            var symbol = GetSymbol(symbolInfo);
+            if (symbol != null)
+            {
+                className = symbol.ContainingType.Name;
+            }
+            return className;
+        }
         private static string GetOriginalDefinition(SymbolInfo methodInfo)
         {
             var originalDefinition = "";
-            if (methodInfo.Symbol is IMethodSymbol)
+            var symbol = GetSymbol(methodInfo);
+            if (symbol != null)
             {
-                var methodSymbol = (IMethodSymbol) methodInfo.Symbol;
-                originalDefinition = methodSymbol.ContainingType.OriginalDefinition + "." +
-                                     methodSymbol.Name;
-            } else if (methodInfo.Symbol is IPropertySymbol)
-            {
-                var propertySymbol = (IPropertySymbol) methodInfo.Symbol;
-                originalDefinition = propertySymbol.OriginalDefinition.ToString();
+                originalDefinition = symbol.ContainingType.OriginalDefinition + "." +
+                                     symbol.Name;
             }
             return originalDefinition;
         }

@@ -4,9 +4,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Representation
 {
-    public interface IInvocationExpression
+    public interface IInvocationExpressionRepresentation
     {
-
         string CalledClass { get; set; }
         SimpleNameSyntax InvocationTargetName { get; set; }
         bool Synchronized { get; set; }
@@ -15,5 +14,7 @@ namespace ConcurrencyAnalyzer.Representation
         IBody ContainingBody { get; set; }
         Microsoft.CodeAnalysis.SymbolKind Type { get; set; }
         ICollection<IdentifierNameSyntax> Arguments { get; set; }
+        string OriginalDefinition { get; set; }
+
     }
 }

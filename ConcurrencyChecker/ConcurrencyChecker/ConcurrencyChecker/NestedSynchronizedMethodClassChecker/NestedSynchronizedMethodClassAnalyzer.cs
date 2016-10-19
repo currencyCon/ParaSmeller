@@ -4,6 +4,7 @@ using System.Linq;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.RepresentationFactories;
+using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -62,7 +63,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             {
                 var lockObject = lockStatementSyntax.Expression;
                 var memberAccessExpression =
-                    lockStatementSyntax.DescendantNodes().OfType<MemberAccessExpressionSyntax>();
+                    lockStatementSyntax.GetChildren<MemberAccessExpressionSyntax>();
                 foreach (var memberAccessExpressionSyntax in memberAccessExpression)
                 {
                     foreach (var parameter in parametersOfOwnKind)
@@ -82,12 +83,10 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
 
         private static bool CheckIfAquiresSameLock(ExpressionSyntax lockObject, SimpleNameSyntax methodName, SyntaxNode root)
         {
-            var clazz = root.AncestorsAndSelf().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            var clazz = root.GetFirstParent<ClassDeclarationSyntax>();
             var calledMethod =
-                clazz
-                    .DescendantNodes()
-                    .OfType<MethodDeclarationSyntax>().FirstOrDefault(e => e.Identifier.Text == methodName.ToString());
-            var lockStatements = GetLockStatements(calledMethod);
+                clazz.GetChildren<MethodDeclarationSyntax>().FirstOrDefault(e => e.Identifier.Text == methodName.ToString());
+            var lockStatements = calledMethod.GetChildren<LockStatementSyntax>();
             foreach (var lockStatementSyntax in lockStatements)
             {
                 if (lockStatementSyntax.Expression.ToString() == lockObject.ToString())
@@ -98,20 +97,15 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             return false;
         }
 
-        private static IEnumerable<LockStatementSyntax> GetLockStatements(SyntaxNode node)
+        private static List<SyntaxToken> ParametersOfOwnType(IMethodRepresentation node, CompilationAnalysisContext context)
         {
-            return node.DescendantNodesAndSelf().OfType<LockStatementSyntax>();
-        }
-
-        private static List<SyntaxToken> ParametersOfOwnType(MethodRepresentation node, CompilationAnalysisContext context)
-        {
-            var clazz = GetClass(node.MethodImplementation);
+            var clazz = node.GetFirstParent<ClassDeclarationSyntax>();
             var model = context.Compilation.GetSemanticModel(node.ContainingClass.ClassDeclarationSyntax.SyntaxTree);
             var classTypeSymbol = model.GetDeclaredSymbol(clazz);
             var parametersOfOwnType = new List<SyntaxToken>();
-            HierarchieChecker hierarchieChecker = new HierarchieChecker(classTypeSymbol);
+            var hierarchieChecker = new HierarchieChecker(classTypeSymbol);
 
-            foreach (var parameterSyntax in node.MethodImplementation.ParameterList.Parameters)
+            foreach (var parameterSyntax in node.Parameters)
             {
                 var baseTypeSymbol = model.GetDeclaredSymbol(parameterSyntax).Type;
                 if (hierarchieChecker.IsSubClass(baseTypeSymbol))
@@ -122,12 +116,5 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             return parametersOfOwnType;
         }
 
-
-        private static ClassDeclarationSyntax GetClass(SyntaxNode method)
-        {
-            var classDeclarations = method.AncestorsAndSelf().OfType<ClassDeclarationSyntax>();
-            var classDeclaration = classDeclarations.FirstOrDefault();
-            return classDeclaration;
-        }
     }
 }

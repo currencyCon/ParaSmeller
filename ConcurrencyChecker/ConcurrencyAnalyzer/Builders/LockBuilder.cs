@@ -5,18 +5,18 @@ namespace ConcurrencyAnalyzer.Builders
 {
     public class LockBuilder
     {
-        public static BlockSyntax BuildLockBlock(StatementSyntax body)
+        public static ExpressionSyntax DefaultLockObject()
         {
-            return BuildLockBlock(body, SyntaxFactory.ThisExpression());
+            return SyntaxFactory.ThisExpression();
         }
-
-        public static BlockSyntax BuildLockBlock(StatementSyntax body, ExpressionSyntax lockObject)
+        public static BlockSyntax BuildLockBlock(StatementSyntax body, ExpressionSyntax lockObject = null)
         {
+            var lockObj = lockObject ?? DefaultLockObject();
             var openParans = SyntaxFactory.Token(SyntaxKind.OpenParenToken);
             var closingParans = SyntaxFactory.Token(SyntaxKind.CloseParenToken);
             var lockStatement = SyntaxFactory.LockStatement(SyntaxFactory.Token(SyntaxKind.LockKeyword),
                 openParans,
-                lockObject,
+                lockObj,
                 closingParans, body);
             var lockStatementBlock =
                 SyntaxFactory.Block(lockStatement);

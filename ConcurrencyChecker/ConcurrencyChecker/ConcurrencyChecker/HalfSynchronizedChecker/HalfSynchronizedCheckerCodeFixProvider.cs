@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Builders;
+using ConcurrencyAnalyzer.RepresentationFactories;
+using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -47,9 +49,12 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
         private static async Task<Document> SynchronizeProperty(Document document, PropertyDeclarationSyntax property,
     CancellationToken cancellationToken)
         {
-
+            var classRepresentation =
+                ClassRepresentationFactory.Create(property.GetFirstParent<ClassDeclarationSyntax>(),
+                    await document.GetSemanticModelAsync(cancellationToken));
+            var defaultLockObject = classRepresentation.GetDefaultLockObject();
             var backingField = PropertyBuilder.BuildBackingField(property);
-            var newProperty = PropertyBuilder.BuildPropertyWithSynchronizedBackingField(property, backingField);
+            var newProperty = PropertyBuilder.BuildPropertyWithSynchronizedBackingField(property, backingField, defaultLockObject);
             var documentEditor = await DocumentEditor.CreateAsync(document, cancellationToken);
             documentEditor.InsertBefore(property, backingField);
             documentEditor.ReplaceNode(property, newProperty);
@@ -59,23 +64,14 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
         private static async Task<Document> SynchronizeMethod(Document document, MethodDeclarationSyntax method,
             CancellationToken cancellationToken)
         {
+            var classRepresentation =
+                ClassRepresentationFactory.Create(method.GetFirstParent<ClassDeclarationSyntax>(),
+                    await document.GetSemanticModelAsync(cancellationToken));
+            var defaultLockObject = classRepresentation.GetDefaultLockObject();
+            var newMeth = MethodBuilder.BuildLockedMethod(method, defaultLockObject);
             var root = await document.GetSyntaxRootAsync(cancellationToken);
-            var newMeth = BuildLockedMethod(method);
             return document.WithSyntaxRoot(root.ReplaceNode(method, newMeth));
 
-        }
-
-        private static MethodDeclarationSyntax BuildLockedMethod(MethodDeclarationSyntax method)
-        {
-            var body = method.Body;
-            foreach (var statementSyntax in body.Statements)
-            {
-                body = body.ReplaceNode(statementSyntax, SyntaxFormatter.AddIndention(statementSyntax, 1));
-            }
-            body = body.ReplaceToken(body.CloseBraceToken, SyntaxFormatter.AddIndention(body.CloseBraceToken, 1));
-            var lockStatementBlock = LockBuilder.BuildLockBlock(body);
-            var newMeth = method.ReplaceNode(method, method.WithBody(lockStatementBlock));
-            return newMeth;
         }
     }
 }

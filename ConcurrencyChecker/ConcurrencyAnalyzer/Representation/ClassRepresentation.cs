@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ConcurrencyAnalyzer.Builders;
 using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -18,7 +19,7 @@ namespace ConcurrencyAnalyzer.Representation
             get
             {
                 return _synchronizedMethods ??
-                       (_synchronizedMethods = Members.Where(e => e is MethodRepresentation && e.IsFullySynchronized())
+                       (_synchronizedMethods = Members.Where(e => e is IMethodRepresentation && e.IsFullySynchronized())
                            .Select(e => e as IMethodRepresentation).ToList());
             }
         }
@@ -30,7 +31,7 @@ namespace ConcurrencyAnalyzer.Representation
             get
             {
                 return _unSynchronizedMethods ??
-                       (_unSynchronizedMethods = Members.Where(e => e is MethodRepresentation && !e.IsFullySynchronized())
+                       (_unSynchronizedMethods = Members.Where(e => e is IMethodRepresentation && !e.IsFullySynchronized())
                            .Select(e => e as IMethodRepresentation).ToList());
             }
         }
@@ -45,7 +46,7 @@ namespace ConcurrencyAnalyzer.Representation
             get
             {
                 return _synchronizedProperties ??
-                       (_synchronizedProperties = Members.Where(e => e is PropertyRepresentation && e.IsFullySynchronized())
+                       (_synchronizedProperties = Members.Where(e => e is IPropertyRepresentation && e.IsFullySynchronized())
                            .Select(e => e as IPropertyRepresentation).ToList());
             }
         }
@@ -57,7 +58,7 @@ namespace ConcurrencyAnalyzer.Representation
             get
             {
                 return _unSynchronizedProperties ??
-                       (_unSynchronizedProperties = Members.Where(e => e is PropertyRepresentation && !e.IsFullySynchronized())
+                       (_unSynchronizedProperties = Members.Where(e => e is IPropertyRepresentation && !e.IsFullySynchronized())
                            .Select(e => e as IPropertyRepresentation).ToList());
             }
         }
@@ -76,17 +77,6 @@ namespace ConcurrencyAnalyzer.Representation
             FullyQualifiedDomainName = classDeclarationSyntax.Identifier.ToFullString();
         }
 
-        public IEnumerable<InvocationExpressionRepresentation> GetInvocationsInLocks()
-        {
-            IEnumerable<InvocationExpressionRepresentation> invocations = new List<InvocationExpressionRepresentation>();
-
-            foreach (var memberWithBody in Members)
-            {
-                invocations = invocations.Concat(SyntaxNodeFilter.GetInvocationsInLocks(memberWithBody.Blocks));
-            }
-            return invocations;
-        }
-
         public IEnumerable<IdentifierNameSyntax> GetIdentifiersInLocks()
         {
             IEnumerable<IdentifierNameSyntax> identifiers = new List<IdentifierNameSyntax>();
@@ -96,6 +86,16 @@ namespace ConcurrencyAnalyzer.Representation
                 identifiers = identifiers.Concat(SyntaxNodeFilter.GetIdentifiersInLocks(memberWithBody.Blocks));
             }
             return identifiers;
+        }
+
+        public ExpressionSyntax GetDefaultLockObject()
+        {
+            var lockExpressions = SyntaxNodeFilter.GetLockStatements(ClassDeclarationSyntax).Select(e => e.Expression).ToList();
+            if (lockExpressions == null || !lockExpressions.Any())
+            {
+                return LockBuilder.DefaultLockObject();
+            }
+            return lockExpressions.GroupBy(i => i).OrderByDescending(group => group.Count()).Select(group => group.Key).First();
         }
     }
 }

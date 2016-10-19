@@ -1,4 +1,5 @@
-﻿using ConcurrencyAnalyzer.Representation;
+﻿using System;
+using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,40 +10,31 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
     {
         public static IBody Create(StatementSyntax statementSyntax, IMemberWithBody parent, SemanticModel semanticModel)
         {
-            IBody block = null;
             if (statementSyntax is LockStatementSyntax)
             {
-                block = CreateLockBlock((LockStatementSyntax) statementSyntax, parent);
-                
+                var block = new LockBlock(parent, statementSyntax);
+                return WithChildBodies(parent, semanticModel, block);
             }
 
             if (statementSyntax is BlockSyntax)
             {
-                block = CreateBlock((BlockSyntax) statementSyntax, parent);
+                var block = new NormalBlock(parent, statementSyntax);
+                return WithChildBodies(parent, semanticModel, block);
             }
-            if (block != null)
+            throw new NotImplementedException($"Unknow Blocktype: {statementSyntax.ToFullString()}");
+        }
+
+        private static IBody WithChildBodies(IMemberWithBody parent, SemanticModel semanticModel, IBody block)
+        {
+            AddInvocations(block, semanticModel);
+            foreach (var syntaxNode in block.Implementation.GetDirectChildren<StatementSyntax>())
             {
-                AddInvocations(block, semanticModel);
-                foreach (var syntaxNode in block.Implementation.GetDirectChildren<StatementSyntax>())
+                if (syntaxNode is LockStatementSyntax || syntaxNode is BlockSyntax)
                 {
-                    if (syntaxNode is LockStatementSyntax || syntaxNode is BlockSyntax)
-                    {
-                        block.Blocks.Add(Create(syntaxNode, parent, semanticModel));
-                    }
+                    block.Blocks.Add(Create(syntaxNode, parent, semanticModel));
                 }
             }
             return block;
-        }
-
-        private static IBody CreateBlock(SyntaxNode statementSyntax, IMemberWithBody parent)
-        {
-            return new NormalBlock(parent, statementSyntax);
-
-        }
-
-        private static IBody CreateLockBlock(SyntaxNode statementSyntax, IMemberWithBody parent)
-        {
-            return new LockBlock(parent, statementSyntax);
         }
 
         private static void  AddInvocations(IBody body, SemanticModel semanticModel)

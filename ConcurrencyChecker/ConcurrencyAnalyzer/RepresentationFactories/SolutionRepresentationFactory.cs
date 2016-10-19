@@ -33,9 +33,9 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             }
         }
 
-        private static IEnumerable<InvocationExpressionRepresentation> GetInvocations(IBody body)
+        private static IEnumerable<IInvocationExpressionRepresentation> GetInvocations(IBody body)
         {
-            IEnumerable<InvocationExpressionRepresentation> l = new List<InvocationExpressionRepresentation>();
+            IEnumerable<IInvocationExpressionRepresentation> l = new List<IInvocationExpressionRepresentation>();
             l = l.Concat(body.InvocationExpressions);
             foreach (var block in body.Blocks)
             {

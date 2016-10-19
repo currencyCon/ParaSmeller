@@ -18,7 +18,7 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
             var lockStatementSyntaxs = new List<LockStatementSyntax>();
             foreach (var body in bodies)
             {
-                if (body is LockBlock)
+                if (body.IsSynchronized)
                 {
                     lockStatementSyntaxs.Add(body.Implementation as LockStatementSyntax);
                 }
@@ -37,17 +37,12 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
             var isSynchronized = false;
             foreach (var body in bodies)
             {
-                if (IsSynchronized(body) || IsSynchronized(body.Blocks))
+                if (body.IsSynchronized || IsSynchronized(body.Blocks))
                 {
                     isSynchronized = true;
                 }
             }
             return isSynchronized;
-        }
-
-        private static bool IsSynchronized(IBody body)
-        {
-            return body is LockBlock;
         }
 
         public static TChild GetFirstChild<TChild>(this IMemberWithBody memberWithBody)

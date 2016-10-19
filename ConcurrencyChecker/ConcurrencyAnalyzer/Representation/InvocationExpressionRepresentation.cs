@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Representation
 {
-    public class InvocationExpressionRepresentation: IInvocationExpression
+    public class InvocationExpressionRepresentation: IInvocationExpressionRepresentation
     {
         public string CalledClass { get; set; }
         public SimpleNameSyntax InvocationTargetName { get; set; }
@@ -16,6 +16,5 @@ namespace ConcurrencyAnalyzer.Representation
         public SymbolKind Type { get; set; }
         public ICollection<IdentifierNameSyntax> Arguments { get; set; }
         public string OriginalDefinition { get; set; }
-
     }
 }

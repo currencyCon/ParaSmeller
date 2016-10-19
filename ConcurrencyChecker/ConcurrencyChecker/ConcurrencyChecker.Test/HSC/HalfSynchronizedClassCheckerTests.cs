@@ -132,6 +132,50 @@ namespace ConcurrencyChecker.Test.HSC
             VerifyCSharpDiagnostic(test, expected);
         }
 
+
+        [TestMethod]
+        public void TestDetectsUnsynchronizedPropertyWithLockObject()
+        {
+            const string test = @"
+                namespace Test
+                {
+                    public class LockClass
+                    {
+        
+                    }
+                    public class TestProgram
+                    {
+                        public TestProgram(LockClass lockClass)
+                        {
+                            LockObject = lockClass;
+                        }
+                        private LockClass LockObject { get;}
+
+                        public int z {get; set;}
+
+                        public void M()
+                        {
+                            lock (LockObject)
+                            {
+                                z = 2;
+                            }
+                        }
+                    }
+                }
+            ";
+            var expected = new DiagnosticResult
+            {
+                Id = HalfSynchronizedCheckerAnalyzer.UnsynchronizedPropertyId,
+                Message = "The Property is used in a synchronized Member. Consider synchronizing it.",
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test0.cs", 16, 25)
+                        }
+            };
+
+            VerifyCSharpDiagnostic(test, expected);
+        }
         [TestMethod]
         public void TestDetectsHalfSynchronizedProperty()
         {
@@ -235,6 +279,80 @@ namespace Test
             VerifyCSharpFix(test, fixTest, warningId:HalfSynchronizedCheckerAnalyzer.HalfSynchronizedChildDiagnosticId);
         }
 
+        [TestMethod]
+        public void TestProvidesHalfSynchronizedWithDefaultLockObjectFix()
+        {
+            const string test =
+@"
+namespace Test
+{
+    public class LockObject
+    {
+        
+    }
+    public class TestProgram
+    {
+        private LockObject LockObject { get; }
+
+        public TestProgram(LockObject lockObject)
+        {
+            LockObject = lockObject;
+        }
+        public int z { get; set; }
+
+        public void m()
+        {
+            lock (LockObject)
+            {
+                z = 2;
+            }
+        }
+
+        public void m2()
+        {
+            z = 3;
+        }
+    }
+}
+";
+            const string fixTest =
+@"
+namespace Test
+{
+    public class LockObject
+    {
+        
+    }
+    public class TestProgram
+    {
+        private LockObject LockObject { get; }
+
+        public TestProgram(LockObject lockObject)
+        {
+            LockObject = lockObject;
+        }
+        public int z { get; set; }
+
+        public void m()
+        {
+            lock (LockObject)
+            {
+                z = 2;
+            }
+        }
+
+        public void m2()
+        {
+            lock (LockObject)
+            {
+                z = 3;
+            }
+        }
+    }
+}
+";
+            VerifyCSharpFix(test, fixTest, warningId: HalfSynchronizedCheckerAnalyzer.HalfSynchronizedChildDiagnosticId);
+        }
 
         [TestMethod]
         public void TestProvidesSimpleUnsynchronizedPropertyFix()
@@ -287,6 +405,88 @@ namespace Test
         public void m()
         {
             lock (this)
+            {
+                z = 2;
+            }
+        }
+    }
+}
+";
+            VerifyCSharpFix(test, fixTest, warningId: HalfSynchronizedCheckerAnalyzer.UnsynchronizedPropertyId);
+        }
+
+
+        [TestMethod]
+        public void TestProvidesSimpleUnsynchronizedPropertyFixWithCorrectLockObject()
+        {
+            const string test =
+@"
+namespace Test
+{
+    public class LockClass
+    {
+        
+    }
+    public class TestProgram
+    {
+        public TestProgram(LockClass lockClass)
+        {
+            LockObject = lockClass;
+        }
+        private LockClass LockObject { get;}
+
+        public int z {get; set;}
+
+        public void M()
+        {
+            lock (LockObject)
+            {
+                z = 2;
+            }
+        }
+    }
+}
+";
+            const string fixTest =
+@"
+namespace Test
+{
+    public class LockClass
+    {
+        
+    }
+    public class TestProgram
+    {
+        public TestProgram(LockClass lockClass)
+        {
+            LockObject = lockClass;
+        }
+        private LockClass LockObject { get;}
+
+        private int _z;
+
+        public int z
+        {
+            get
+            {
+                lock (LockObject)
+                {
+                    return _z;
+                }
+            }
+
+            set
+            {
+                lock (LockObject)
+                {
+                    _z = value;
+                }
+            }
+        }
+
+        public void M()
+        {
+            lock (LockObject)
             {
                 z = 2;
             }
