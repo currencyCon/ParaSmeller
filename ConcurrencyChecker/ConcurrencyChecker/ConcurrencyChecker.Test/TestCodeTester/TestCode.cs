@@ -16,11 +16,20 @@ namespace Test
         {
             var z = 3;
             var x = Task.Run(() => X());
-            Wait(x);
+            var w = new Waiter();
+            w.Await(x);
             Console.WriteLine("Lol");
         }
 
         private static void Wait(Task task)
+        {
+            task.Wait();
+        }
+    }
+
+    public class Waiter
+    {
+        public void Await(Task task)
         {
             task.Wait();
         }

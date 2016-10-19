@@ -66,16 +66,34 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody,
             SimpleNameSyntax invocationTarget, string className)
         {
-            var methodInfo = semanticModel.GetSymbolInfo(invocationTarget);
+            var symbolInfo = semanticModel.GetSymbolInfo(invocationTarget);
             var type = SymbolKind.NetModule;
             var originalDefinition = "";
-            if (methodInfo.Symbol != null)
+            if (symbolInfo.Symbol != null)
             {
-                type = methodInfo.Symbol.Kind;
-                originalDefinition = GetOriginalDefinition(methodInfo);
+                type = symbolInfo.Symbol.Kind;
+                originalDefinition = GetOriginalDefinition(symbolInfo);
+                var symbol = GetSymbol(symbolInfo);
+                if (symbol != null)
+                {
+                    className = symbol.ContainingType.Name;
+                }
             }
             return CreateInvocation(invocationExpressionSyntax, containingBody, type, invocationTarget, className,
                 originalDefinition);
+        }
+
+        private static ISymbol GetSymbol(SymbolInfo symbolInfo)
+        {
+            if (symbolInfo.Symbol is IMethodSymbol)
+            {
+                return (IMethodSymbol)symbolInfo.Symbol;
+            }
+            if (symbolInfo.Symbol is IPropertySymbol)
+            {
+                return (IPropertySymbol)symbolInfo.Symbol;
+            }
+            return null;
         }
 
         private static string GetOriginalDefinition(SymbolInfo methodInfo)

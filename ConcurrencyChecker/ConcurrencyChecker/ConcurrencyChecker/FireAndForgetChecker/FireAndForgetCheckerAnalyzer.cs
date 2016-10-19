@@ -81,21 +81,6 @@ namespace ConcurrencyChecker.FireAndForgetChecker
             return TaskIsAwaited(member, variableName);
         }
 
-        private static bool TaskIsAwaited(IMemberWithBody member, string variableName)
-        {
-            var simpleMemberAccesses = member.GetChildren<MemberAccessExpressionSyntax>();
-            foreach (var memberAccessExpressionSyntax in simpleMemberAccesses)
-            {
-                var operationName = memberAccessExpressionSyntax.Name.ToString();
-                var variable = memberAccessExpressionSyntax.Expression.ToString();
-                if (operationName == TaskWaitMethodName && variable == variableName)
-                {
-                    return true;
-                }
-            }
-            return AssignmentIsAwaitedInInvocatedMember(member, variableName);
-        }
-
         private static bool AssignmentIsAwaitedInInvocatedMember(IMemberWithBody member, string variableName)
         {
             var invocationExpressions = member.Blocks.FirstOrDefault().InvocationExpressions;
@@ -110,7 +95,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
                     if (calledMethod != null)
                     {
                         var paramsOfCorrectType = calledMethod.Parameters.Where(e => e.Type.ToString() == "Task");
-                        bool taskIsWaited = false;
+                        var taskIsWaited = false;
                         foreach (var parameterSyntax in paramsOfCorrectType)
                         {
                             if (TaskIsAwaited(calledMethod, parameterSyntax.Identifier.Text))
@@ -123,6 +108,21 @@ namespace ConcurrencyChecker.FireAndForgetChecker
                 }
             }
             return false;
+        }
+
+        private static bool TaskIsAwaited(IMemberWithBody member, string variableName)
+        {
+            var simpleMemberAccesses = member.GetChildren<MemberAccessExpressionSyntax>();
+            foreach (var memberAccessExpressionSyntax in simpleMemberAccesses)
+            {
+                var operationName = memberAccessExpressionSyntax.Name.ToString();
+                var variable = memberAccessExpressionSyntax.Expression.ToString();
+                if (operationName == TaskWaitMethodName && variable == variableName)
+                {
+                    return true;
+                }
+            }
+            return AssignmentIsAwaitedInInvocatedMember(member, variableName);
         }
 
         private static void CheckForSingleInvocation(CompilationAnalysisContext context, IInvocationExpression invocationExpressionRepresentation)

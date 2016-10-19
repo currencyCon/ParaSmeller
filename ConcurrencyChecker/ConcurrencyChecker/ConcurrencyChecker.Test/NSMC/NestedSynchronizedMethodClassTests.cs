@@ -50,7 +50,7 @@ namespace ConcurrencyChecker.Test.NSMC
         [TestMethod]
         public void AnalyzerFindMultiParameters()
         {
-            var test = @"
+            const string test = @"
     class BankAccount
     {
         private int balance;
