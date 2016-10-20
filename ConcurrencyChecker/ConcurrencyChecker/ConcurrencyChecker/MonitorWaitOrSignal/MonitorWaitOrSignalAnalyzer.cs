@@ -92,7 +92,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
                     lockStatementSyntax.GetInvocationExpression("Monitor", "Wait"))
             {
                 var block = monitorWaitExpression.AncestorsAndSelf().OfType<BlockSyntax>().First();
-                if (!(block.Parent is WhileStatementSyntax))
+                if (!(block.Parent is WhileStatementSyntax) && !(block.Parent is DoStatementSyntax))
                 {
                     var diagn = Diagnostic.Create(MonitorIfRule, block.Parent.GetLocation());
                     context.ReportDiagnostic(diagn);

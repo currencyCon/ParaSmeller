@@ -108,6 +108,48 @@ namespace MonitorWaitOrSignalSmell
         }
 
         [TestMethod]
+        public void TestDoWhileNoDiagnostics()
+        {
+            var test = @"
+using System.Threading;
+
+namespace MonitorWaitOrSignalSmell
+{
+    class BoundedBuffer<T>
+    {
+        private Queue<T> queue = new Queue<T>();
+        private const int Limit = 2;
+        public void Put(T x)
+        {
+            lock (this)
+            {
+                do 
+                {
+                    Monitor.Wait(this);
+                } while (queue.Count == Limit);
+                queue.Enqueue(x);
+                Monitor.PulseAll(this); // signal non-free
+            }
+        }
+        public T Get()
+        {
+            lock (this)
+            {
+                do 
+                {
+                    Monitor.Wait(this);
+                } while (queue.Count == 0);
+                T x = queue.Dequeue();
+                Monitor.PulseAll(this); // signal non-full
+                return x;
+            }
+        }
+    }
+}";
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
         public void TestSimplePulseDiagnostics()
         {
             var test = @"
