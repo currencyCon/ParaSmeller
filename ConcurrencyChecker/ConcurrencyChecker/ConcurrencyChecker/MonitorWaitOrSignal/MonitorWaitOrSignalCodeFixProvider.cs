@@ -3,6 +3,7 @@ using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,7 +17,8 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
     {
         private const string TitleIf = "Use if instead of while";
         private const string TitlePulse = "Use PulseAll instead of PUlse";
-
+        private const string MonitorPulseAllMethod = "PulseAll";
+        private const string MonitorPulseMethod = "Pulse";
         public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(MonitorWaitOrSignalAnalyzer.MonitorIfConditionDiagnosticId, MonitorWaitOrSignalAnalyzer.MonitorPulseDiagnosticId);
 
         public sealed override FixAllProvider GetFixAllProvider()
@@ -49,7 +51,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
             }
         }
 
-        private async Task<Document> ReplaceIfWithWhile(Document document, IfStatementSyntax node,
+        private static async Task<Document> ReplaceIfWithWhile(Document document, IfStatementSyntax node,
             CancellationToken cancellationToken)
         {
             var root = await document.GetSyntaxRootAsync(cancellationToken);
@@ -62,15 +64,14 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
             return newDocument;
         }
 
-        private async Task<Document> ReplacePulseWithPulseAll(Document document, InvocationExpressionSyntax node,
+        private async Task<Document> ReplacePulseWithPulseAll(Document document, SyntaxNode node,
             CancellationToken cancellationToken)
         {
             var root = await document.GetSyntaxRootAsync(cancellationToken);
 
-            var identifier =
-                node.DescendantNodes().OfType<IdentifierNameSyntax>().First(e => e.Identifier.ToString() == "Pulse");
+            var identifier = node.GetChildren<IdentifierNameSyntax>().First(e => e.Identifier.ToString() == MonitorPulseMethod);
 
-            var pulseAll = SyntaxFactory.IdentifierName("PulseAll");
+            var pulseAll = SyntaxFactory.IdentifierName(MonitorPulseAllMethod);
 
             var newRoot = root.ReplaceNode(identifier, pulseAll);
             var newDocument = document.WithSyntaxRoot(newRoot);

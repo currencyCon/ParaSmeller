@@ -16,17 +16,16 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
         private const string Category = "Synchronization";
         public static string MonitorIfConditionDiagnosticId = "MWS001";
         public static string MonitorPulseDiagnosticId = "MWS002";
-
+        public static string MonitorWaitDefinition = "System.Threading.Monitor.Wait(object)";
+        public static string MonitorPulseDefinition = "System.Threading.Monitor.Pulse(object)";
+        private const string MonitorClass = "Monitor";
+        private const string MonitorPulseMethod = "Pulse";
+        private const string MonitorWaitMethod = "Wait";
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.MWSAnalyzerTitle), Resources.ResourceManager, typeof (Resources));
-
         private static readonly LocalizableString MessageFormatIf = new LocalizableResourceString(nameof(Resources.MWSIfAnalyzerMessageFormat), Resources.ResourceManager, typeof (Resources));
-
         private static readonly LocalizableString MessageFormatPulse = new LocalizableResourceString(nameof(Resources.MWSPulseAnalyzerMessageFormat), Resources.ResourceManager, typeof (Resources));
-
         private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.MWSAnalyzerDescription), Resources.ResourceManager, typeof (Resources));
-
         private static readonly DiagnosticDescriptor MonitorIfRule = new DiagnosticDescriptor(MonitorIfConditionDiagnosticId, Title, MessageFormatIf, Category, DiagnosticSeverity.Warning, true, Description);
-
         private static readonly DiagnosticDescriptor MonitorPulseRule = new DiagnosticDescriptor(MonitorPulseDiagnosticId, Title, MessageFormatPulse, Category, DiagnosticSeverity.Warning, true, Description);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(MonitorIfRule, MonitorPulseRule);

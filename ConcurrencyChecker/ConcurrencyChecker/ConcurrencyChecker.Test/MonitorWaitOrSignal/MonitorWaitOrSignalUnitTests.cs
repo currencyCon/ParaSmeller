@@ -13,7 +13,7 @@ namespace ConcurrencyChecker.Test.MonitorWaitOrSignal
         [TestMethod]
         public void TestNoDiagnostics()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace MonitorWaitOrSignalSmell
@@ -43,7 +43,7 @@ namespace MonitorWaitOrSignalSmell
         [TestMethod]
         public void TestSimpleIfDiagnostics()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace MonitorWaitOrSignalSmell
@@ -110,7 +110,7 @@ namespace MonitorWaitOrSignalSmell
         [TestMethod]
         public void TestDoWhileNoDiagnostics()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace MonitorWaitOrSignalSmell
@@ -152,7 +152,7 @@ namespace MonitorWaitOrSignalSmell
         [TestMethod]
         public void TestSimplePulseDiagnostics()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace MonitorWaitOrSignalSmell
@@ -220,7 +220,7 @@ namespace MonitorWaitOrSignalSmell
         [TestMethod]
         public void TestPulseReplacement()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace MonitorWaitOrSignalSmell
@@ -257,7 +257,7 @@ namespace MonitorWaitOrSignalSmell
     }
 }";
 
-            var fixtest = @"
+            const string fixtest = @"
 using System.Threading;
 
 namespace MonitorWaitOrSignalSmell
@@ -300,7 +300,7 @@ namespace MonitorWaitOrSignalSmell
         [TestMethod]
         public void TestIfReplacement()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace MonitorWaitOrSignalSmell
@@ -337,7 +337,7 @@ namespace MonitorWaitOrSignalSmell
     }
 }";
 
-            var fixtest = @"
+            const string fixtest = @"
 using System.Threading;
 
 namespace MonitorWaitOrSignalSmell
@@ -379,7 +379,7 @@ namespace MonitorWaitOrSignalSmell
         [TestMethod]
         public void TestsReplacements()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace MonitorWaitOrSignalSmell
@@ -416,7 +416,7 @@ namespace MonitorWaitOrSignalSmell
     }
 }";
 
-            var fixtest = @"
+            const string fixtest = @"
 using System.Threading;
 
 namespace MonitorWaitOrSignalSmell
