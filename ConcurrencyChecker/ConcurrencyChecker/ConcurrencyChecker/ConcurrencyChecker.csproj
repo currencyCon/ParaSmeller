@@ -38,7 +38,6 @@
     <Compile Include="ExplicitThreadsChecker\ExplicitThreadsCheckerCodeFixProvider.cs" />
     <Compile Include="ExplicitThreadsChecker\ExplicitThreadsMultilineCheckerAnalyzer.cs" />
     <Compile Include="ExplicitThreadsChecker\ExplicitThreadsMultilineCheckerCodeFixProvider.cs" />
-    <Compile Include="ExplicitThreadsChecker\SyntaxNodeExtensions.cs" />
     <Compile Include="ExplicitThreadsChecker\TaskSyntaxHelper.cs" />
     <Compile Include="ExplicitThreadsChecker\UsingDirectiveFactory.cs" />
     <Compile Include="ExplicitThreadsChecker\UsingHandler.cs" />
@@ -138,9 +137,6 @@
       <Project>{09cf3dcc-1daf-4180-a2e2-ba41bc7e1ad3}</Project>
       <Name>ConcurrencyAnalyzer</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="EasterEgg\Tapir.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\v4.6\Microsoft.Portable.CSharp.targets" />
   <Target Name="AfterBuild">

@@ -94,20 +94,25 @@ namespace ConcurrencyChecker.FireAndForgetChecker
                         invocationExpressionRepresentation.InvocationImplementation as IMethodRepresentation;
                     if (calledMethod != null)
                     {
-                        var paramsOfCorrectType = calledMethod.Parameters.Where(e => e.Type.ToString() == "Task");
-                        var taskIsWaited = false;
-                        foreach (var parameterSyntax in paramsOfCorrectType)
-                        {
-                            if (TaskIsAwaited(calledMethod, parameterSyntax.Identifier.Text))
-                            {
-                                taskIsWaited = true;
-                            }
-                        }
-                        return taskIsWaited;
+                        return IsAwaitedInMethod(calledMethod);
                     }
                 }
             }
             return false;
+        }
+
+        private static bool IsAwaitedInMethod(IMethodRepresentation calledMethod)
+        {
+            var paramsOfCorrectType = calledMethod.Parameters.Where(e => e.Type.ToString() == "Task");
+            var taskIsWaited = false;
+            foreach (var parameterSyntax in paramsOfCorrectType)
+            {
+                if (TaskIsAwaited(calledMethod, parameterSyntax.Identifier.Text))
+                {
+                    taskIsWaited = true;
+                }
+            }
+            return taskIsWaited;
         }
 
         private static bool TaskIsAwaited(IMemberWithBody member, string variableName)

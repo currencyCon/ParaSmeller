@@ -8,6 +8,36 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
 {
     public static class MemberWithBodiesExtensions
     {
+        
+        public static List<string> GetAllLockPossibilities(this IMemberWithBody memberWithBody)
+        {
+            var lockObjects = new List<string>();
+
+            foreach (var block in memberWithBody.Blocks)
+            {
+                if (block is LockBlock)
+                {
+                    lockObjects.Add(((LockStatementSyntax)block.Implementation).Expression.ToString());
+                }
+                GetLockArgument(block, lockObjects);
+            }
+            
+            return lockObjects;
+        }
+
+        
+        private static void GetLockArgument(IBody block, List<string> lockObjects)
+        {
+            if (block is LockBlock)
+            {
+                lockObjects.Add(((LockStatementSyntax) block.Implementation).Expression.ToString());
+            }
+            foreach (var subLockBlock in block.Blocks)
+            {
+                GetLockArgument(subLockBlock, lockObjects);
+            }
+        }
+
         public static IEnumerable<LockStatementSyntax> GetLockStatements(this IMemberWithBody member)
         {
             return GetLockStatements(member.Blocks);
@@ -49,6 +79,7 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
         {
             return memberWithBody.GetChildren<TChild>().FirstOrDefault();
         }
+
         public static IEnumerable<TChildren> GetChildren<TChildren>(this IMemberWithBody memberWithBody)
         {
             return memberWithBody.Blocks.SelectMany(e => e.Implementation.GetChildren<TChildren>());
