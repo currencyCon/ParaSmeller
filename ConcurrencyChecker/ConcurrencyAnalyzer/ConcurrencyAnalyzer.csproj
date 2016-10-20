@@ -60,6 +60,9 @@
     <Compile Include="Representation\NormalBlock.cs" />
     <Compile Include="Representation\PropertyRepresentation.cs" />
     <Compile Include="Representation\SolutionRepresentation.cs" />
+    <Compile Include="SemanticAnalyzation\DefaultSymbolValues.cs" />
+    <Compile Include="SemanticAnalyzation\SymbolInformationBuilder.cs" />
+    <Compile Include="SemanticAnalyzation\SymbolInformation.cs" />
     <Compile Include="SyntaxFilters\SyntaxNodeExtensions.cs" />
     <Compile Include="SyntaxFilters\SyntaxNodeFilter.cs" />
   </ItemGroup>
