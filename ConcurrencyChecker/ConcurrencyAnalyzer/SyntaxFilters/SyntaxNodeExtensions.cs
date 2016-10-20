@@ -26,6 +26,11 @@ namespace ConcurrencyAnalyzer.SyntaxFilters
             return GetParents<TParent>(node).FirstOrDefault();
         }
 
+        public static bool IsInTopLevelBlock(this SyntaxNode node)
+        {
+            return node.GetFirstParent<BlockSyntax>().Parent is MethodDeclarationSyntax;
+        }
+
         public static IEnumerable<TParents> GetParents<TParents>(this SyntaxNode node)
         {
             if (node == null)

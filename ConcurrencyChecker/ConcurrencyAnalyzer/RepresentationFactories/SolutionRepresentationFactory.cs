@@ -14,7 +14,29 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             var solution = new SolutionRepresentation(compilation.AssemblyName.Trim());
             AddClassRepresentations(solution, compilation);
             ConnectInvocations(solution);
+            ConnectReverseInvocations(solution);
             return solution;
+        }
+
+        private static void ConnectReverseInvocations(SolutionRepresentation solution)
+        {
+            foreach (var clazz in solution.Classes)
+            {
+                var memberWithBodies = clazz.Members;
+                var memberBlocks = memberWithBodies.SelectMany(a => a.Blocks).ToList();
+                var invocations = memberBlocks.SelectMany(GetInvocations).ToList();
+                foreach (var invocationExpressionRepresentation in invocations)
+                { 
+                    foreach (var memberWithBody in memberWithBodies)
+                    {
+                        if (invocationExpressionRepresentation.InvocationTargetName.ToString() ==
+                            memberWithBody.Name.ToString())
+                        {
+                            memberWithBody.Callers.Add(invocationExpressionRepresentation);
+                        }
+                    }
+                }
+            }
         }
 
         private static void ConnectInvocations(SolutionRepresentation solution)

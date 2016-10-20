@@ -455,6 +455,54 @@ namespace MonitorWaitOrSignalSmell
             VerifyCSharpFix(test, fixtest, allowNewCompilerDiagnostics: true);
         }
 
+        [TestMethod]
+        public void TestFunctionReferencesDiagnostics()
+        {
+            var test = @"
+using System.Threading;
+
+namespace MonitorWaitOrSignalSmell
+{
+    class BoundedBuffer<T>
+    {
+        private Queue<T> queue = new Queue<T>();
+        private const int Limit = 2;
+        public void Put(T x)
+        {
+            lock (this)
+            {
+                if (queue.Count == Limit) 
+                {
+                    DoSomeWaiting()
+                } 
+                queue.Enqueue(x);
+                Monitor.PulseAll(this); // signal non-free
+            }
+        }
+        
+        private void DoSomeWaiting() 
+        {
+            int i = 0;
+            Monitor.Wait(this);    
+        }
+    }
+}";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "MWS001",
+                Message = "if should be replaced with while",
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 14, 17)
+                    }
+            };
+            
+            VerifyCSharpDiagnostic(test, expected);
+        }
+
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
             return new MonitorWaitOrSignalCodeFixProvider();

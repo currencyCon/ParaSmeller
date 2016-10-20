@@ -64,14 +64,12 @@ namespace ConcurrencyAnalyzer.Representation
         }
 
 
-        public ICollection<IMethodRepresentation> Methods { get; set; }
-        public ICollection<IPropertyRepresentation> Properties { get; set; }
+        public ICollection<IMethodRepresentation> Methods => Members.OfType<IMethodRepresentation>().ToList();
+        public ICollection<IPropertyRepresentation> Properties => Members.OfType<IPropertyRepresentation>().ToList();
         public ICollection<IMemberWithBody> Members { get; set; }
         public ClassRepresentation(ClassDeclarationSyntax classDeclarationSyntax)
         {
             Name = classDeclarationSyntax.Identifier;
-            Methods = new List<IMethodRepresentation>();
-            Properties = new List<IPropertyRepresentation>();
             Members = new List<IMemberWithBody>();
             ClassDeclarationSyntax = classDeclarationSyntax;
             FullyQualifiedDomainName = classDeclarationSyntax.Identifier.ToFullString();
