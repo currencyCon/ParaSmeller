@@ -44,19 +44,18 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         }
 
         private static IInvocationExpressionRepresentation CreateInvocation(
-            InvocationExpressionSyntax invocationExpressionSyntax, IBody containingBody, SymbolKind type,
-            SimpleNameSyntax invocationTarget, string className, string originalDefinition)
+            InvocationExpressionSyntax invocationExpressionSyntax, IBody containingBody, SimpleNameSyntax invocationTarget, SymbolInformation symbolInfo)
         {
             var invocation = new InvocationExpressionRepresentation
             {
-                Type = type,
+                Type = symbolInfo.Type,
                 Arguments = invocationExpressionSyntax.ArgumentList.Arguments.SelectMany(e => e.GetChildren<IdentifierNameSyntax>()).ToList(),
                 Implementation = invocationExpressionSyntax,
                 ContainingBody = containingBody,
                 Synchronized = containingBody?.Implementation.IsSynchronized() ?? false,
                 InvocationTargetName = invocationTarget,
-                CalledClass = className,
-                OriginalDefinition = originalDefinition
+                CalledClass = symbolInfo.ClassName,
+                OriginalDefinition = symbolInfo.OriginalDefinition
             };
             return invocation;
         }
@@ -65,11 +64,8 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody,
             SimpleNameSyntax invocationTarget)
         {
-
             var symbolInfo = SymbolInformationBuilder.Create(invocationTarget, semanticModel);
-
-            return CreateInvocation(invocationExpressionSyntax, containingBody, symbolInfo.Type, invocationTarget, symbolInfo.ClassName,
-                symbolInfo.OriginalDefinition);
+            return CreateInvocation(invocationExpressionSyntax, containingBody, invocationTarget, symbolInfo);
         }
     }
 }
