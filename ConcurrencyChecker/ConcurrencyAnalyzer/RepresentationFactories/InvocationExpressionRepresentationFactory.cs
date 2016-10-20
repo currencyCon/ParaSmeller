@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ConcurrencyAnalyzer.Representation;
+using ConcurrencyAnalyzer.SemanticAnalyzation;
 using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -64,58 +65,11 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody,
             SimpleNameSyntax invocationTarget)
         {
-            var symbolInfo = semanticModel.GetSymbolInfo(invocationTarget);
-            var type = GetType(symbolInfo);
-            var originalDefinition = GetOriginalDefinition(symbolInfo);
-            var className = GetClassName(symbolInfo);
-            return CreateInvocation(invocationExpressionSyntax, containingBody, type, invocationTarget, className,
-                originalDefinition);
-        }
 
-        private static ISymbol GetSymbol(SymbolInfo symbolInfo)
-        {
-            if (symbolInfo.Symbol is IMethodSymbol)
-            {
-                return (IMethodSymbol)symbolInfo.Symbol;
-            }
-            if (symbolInfo.Symbol is IPropertySymbol)
-            {
-                return (IPropertySymbol)symbolInfo.Symbol;
-            }
-            return null;
-        }
+            var symbolInfo = SymbolInformationBuilder.Create(invocationTarget, semanticModel);
 
-        private static SymbolKind GetType(SymbolInfo symbolInfo)
-        {
-            var type = SymbolKind.NetModule;
-            var symbol = GetSymbol(symbolInfo);
-            if (symbol != null)
-            {
-                type = symbolInfo.Symbol.Kind;
-            }
-            return type;
-        }
-
-        private static string GetClassName(SymbolInfo symbolInfo)
-        {
-            var className = "";
-            var symbol = GetSymbol(symbolInfo);
-            if (symbol != null)
-            {
-                className = symbol.ContainingType.Name;
-            }
-            return className;
-        }
-        private static string GetOriginalDefinition(SymbolInfo methodInfo)
-        {
-            var originalDefinition = "";
-            var symbol = GetSymbol(methodInfo);
-            if (symbol != null)
-            {
-                originalDefinition = symbol.ContainingType.OriginalDefinition + "." +
-                                     symbol.Name;
-            }
-            return originalDefinition;
+            return CreateInvocation(invocationExpressionSyntax, containingBody, symbolInfo.Type, invocationTarget, symbolInfo.ClassName,
+                symbolInfo.OriginalDefinition);
         }
     }
 }
