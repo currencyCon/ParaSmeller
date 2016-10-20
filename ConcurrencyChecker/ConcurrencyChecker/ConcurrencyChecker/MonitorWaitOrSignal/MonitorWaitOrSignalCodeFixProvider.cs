@@ -17,10 +17,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
         private const string TitleIf = "Use if instead of while";
         private const string TitlePulse = "Use PulseAll instead of PUlse";
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds
-            =>
-                ImmutableArray.Create(MonitorWaitOrSignalAnalyzer.MonitorIfConditionDiagnosticId,
-                    MonitorWaitOrSignalAnalyzer.MonitorPulseDiagnosticId);
+        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(MonitorWaitOrSignalAnalyzer.MonitorIfConditionDiagnosticId, MonitorWaitOrSignalAnalyzer.MonitorPulseDiagnosticId);
 
         public sealed override FixAllProvider GetFixAllProvider()
         {
