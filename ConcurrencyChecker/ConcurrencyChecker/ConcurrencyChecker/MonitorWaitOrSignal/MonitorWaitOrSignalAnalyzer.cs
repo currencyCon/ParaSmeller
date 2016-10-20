@@ -16,9 +16,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
         private const string Category = "Synchronization";
         public static string MonitorIfConditionDiagnosticId = "MWS001";
         public static string MonitorPulseDiagnosticId = "MWS002";
-        public static string MonitorWaitDefinition = "System.Threading.Monitor.Wait(object)";
-        public static string MonitorPulseDefinition = "System.Threading.Monitor.Pulse(object)";
-
+        
         private static readonly LocalizableString Title =
             new LocalizableResourceString(nameof(Resources.MWSAnalyzerTitle), Resources.ResourceManager,
                 typeof (Resources));
@@ -57,46 +55,66 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
 
             foreach (var clazz in solutionModel.Classes)
             {
-                foreach (var method in clazz.SynchronizedMethods)
+                foreach (var method in clazz.Methods)
                 {
-                    CheckMonitor(method, context);
+                    CheckWaitInsideLock(method, context);
+                    CheckWaitOutsideLock(clazz, method, context);
+                }
+
+                CheckPulse(context, clazz.ClassDeclarationSyntax);
+            }
+        }
+        
+        private static void CheckWaitOutsideLock(ClassRepresentation clazz, IMethodRepresentation method,
+            CompilationAnalysisContext context)
+        {
+            foreach (
+                var expressionSyntax in
+                    method.MethodImplementation.GetInvocationExpression("Monitor", "Wait")
+                        .Where(e => e.IsSynchronized() == false))
+            {
+                if (expressionSyntax.IsInTopLevelBlock())
+                {
+                    CheckFunctionCallers(clazz, method, context);
                 }
             }
         }
 
-        private static void CheckMonitor(IMethodRepresentation method, CompilationAnalysisContext context)
+        private static void CheckWaitInsideLock(IMethodRepresentation method, CompilationAnalysisContext context)
         {
-            foreach (var lockStatementSyntax in method.GetLockStatements())
+            foreach (var monitorWaitExpression in method.GetLockStatements().SelectMany(e => e.GetInvocationExpression("Monitor", "Wait")))
             {
-                CheckWaitingCondition(context, lockStatementSyntax);
-                CheckPulse(context, lockStatementSyntax);
+               CheckCondition(context, monitorWaitExpression);   
             }
         }
 
-        private static void CheckPulse(CompilationAnalysisContext context, LockStatementSyntax lockStatementSyntax)
+        private static void CheckFunctionCallers(ClassRepresentation clazz, IMethodRepresentation method, CompilationAnalysisContext context)
+        {
+            foreach (var invocationExpression in clazz.ClassDeclarationSyntax.DescendantNodesAndSelf().OfType<InvocationExpressionSyntax>().Where(i => i.Expression.ToString() == method.Name.ToString()))
+            {
+                CheckCondition(context, invocationExpression);
+            }
+        }
+
+        private static void CheckPulse(CompilationAnalysisContext context, SyntaxNode syntaxNode)
         {
             foreach (
                 var monitorPulseExpression in
-                    lockStatementSyntax.GetInvocationExpression("Monitor", "Pulse"))
+                    syntaxNode.GetInvocationExpression("Monitor", "Pulse"))
             {
                 var diagn = Diagnostic.Create(MonitorPulseRule, monitorPulseExpression.Parent.GetLocation());
                 context.ReportDiagnostic(diagn);
             }
         }
-
-        private static void CheckWaitingCondition(CompilationAnalysisContext context,
-            LockStatementSyntax lockStatementSyntax)
+        
+        private static void CheckCondition(CompilationAnalysisContext context,
+            SyntaxNode monitorWaitExpression)
         {
-            foreach (
-                var monitorWaitExpression in
-                    lockStatementSyntax.GetInvocationExpression("Monitor", "Wait"))
+            var block = monitorWaitExpression.GetFirstParent<BlockSyntax>();
+            if (!(block.Parent is WhileStatementSyntax) && !(block.Parent is DoStatementSyntax))
             {
-                var block = monitorWaitExpression.AncestorsAndSelf().OfType<BlockSyntax>().First();
-                if (!(block.Parent is WhileStatementSyntax) && !(block.Parent is DoStatementSyntax))
-                {
-                    var diagn = Diagnostic.Create(MonitorIfRule, block.Parent.GetLocation());
-                    context.ReportDiagnostic(diagn);
-                }
+                var diagn = Diagnostic.Create(MonitorIfRule, block.Parent.GetLocation());
+                context.ReportDiagnostic(diagn);
             }
         }
     }

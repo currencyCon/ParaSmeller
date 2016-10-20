@@ -19,6 +19,8 @@ namespace ConcurrencyAnalyzer.Representation
             return AllAccessorsAreSynchronized();
         }
 
+        public ICollection<IInvocationExpressionRepresentation> Callers { get; set; }
+
         private bool AllAccessorsAreSynchronized()
         {
             if (Blocks.Count != 2)
@@ -54,6 +56,7 @@ namespace ConcurrencyAnalyzer.Representation
             Setter =
             propertyDeclarationSyntax.AccessorList.Accessors.FirstOrDefault(
                 e => e.Keyword.ToString() == SetKeyWord)?.Body;
+            Callers = new List<IInvocationExpressionRepresentation>();
         }
     }
 }

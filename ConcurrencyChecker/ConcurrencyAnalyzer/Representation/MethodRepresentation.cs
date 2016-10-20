@@ -21,6 +21,8 @@ namespace ConcurrencyAnalyzer.Representation
             return false;
         }
 
+        public ICollection<IInvocationExpressionRepresentation> Callers { get; set; }
+
         public MethodDeclarationSyntax MethodImplementation { get; set; }
         public ICollection<ParameterSyntax> Parameters { get; set; }
 
@@ -32,6 +34,7 @@ namespace ConcurrencyAnalyzer.Representation
             MethodImplementation = methodDeclarationSyntax;
             Blocks = new List<IBody>();
             ContainingClass = classRepresentation;
+            Callers = new List<IInvocationExpressionRepresentation>();
         }
     }
 }

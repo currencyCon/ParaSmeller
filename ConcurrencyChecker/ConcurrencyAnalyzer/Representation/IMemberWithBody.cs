@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using Microsoft.CodeAnalysis;
 
 namespace ConcurrencyAnalyzer.Representation
@@ -10,5 +11,8 @@ namespace ConcurrencyAnalyzer.Representation
         ICollection<IBody> Blocks { get; set; }
         SyntaxToken Name { get; set; }
         bool IsFullySynchronized();
+        ICollection<IInvocationExpressionRepresentation> Callers { get; set; }
+
+        
     }
 }
