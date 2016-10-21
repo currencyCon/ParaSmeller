@@ -47,6 +47,7 @@
     <Compile Include="HalfSynchronizedChecker\SynchronizationInspector.cs" />
     <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalCodeFixProvider.cs" />
     <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalAnalyzer.cs" />
+    <Compile Include="NestedSynchronizedMethodClassChecker\LockChecker.cs" />
     <Compile Include="NestedSynchronizedMethodClassChecker\NestedSynchronizedMethodClassCodeFixProvider.cs" />
     <Compile Include="NestedSynchronizedMethodClassChecker\NestedSynchronizedMethodClassAnalyzer.cs" />
     <Compile Include="NestedSynchronizedMethodClassChecker\HierarchieChecker.cs" />

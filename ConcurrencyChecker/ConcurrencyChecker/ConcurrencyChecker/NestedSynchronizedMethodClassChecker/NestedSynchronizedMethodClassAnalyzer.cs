@@ -56,8 +56,8 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
                     lockObjects.Add(memberWithBody.GetAllLockPossibilities());
                 }
 
-                bool result = CheckAquireList(lockObjects);
-                if (result)
+                bool correct = LockChecker.IsCorrectAquired(lockObjects);
+                if (!correct)
                 {
                     foreach (var memberWithBody in clazz.GetMembersWithMultipleLocks())
                     {
@@ -67,55 +67,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
                 }
             }
         }
-
-        private static bool CheckAquireList(List<List<string>> lockObjects)
-        {
-            foreach(var l1 in lockObjects)
-            {
-                foreach (var l2 in lockObjects)
-                {
-                    if(l1 == l2) continue;
-
-                    if (DifferentLocking(l1, l2))
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool DifferentLocking(List<string> l1, List<string> l2)
-        {
-            if (l1.Count < 2 || l2.Count < 2) return false;
-
-            if (CheckDifferentLockingOnList(l1, l2)) return true;
-            if (CheckDifferentLockingOnList(l2, l1)) return true;
-
-
-            return false;
-        }
-
-        private static bool CheckDifferentLockingOnList(List<string> l1, List<string> l2)
-        {
-            for (int i = 0; i < l1.Count; i++)
-            {
-                for (int j = i; j < l1.Count; j++)
-                {
-                    if (i == j) continue;
-
-                    string item1_list1 = l1[i];
-                    string item2_list1 = l1[j];
-
-                    int index1_list2 = l2.IndexOf(l2.Find(s => s == item1_list1));
-                    int index2_list2 = l2.IndexOf(l2.Find(s => s == item2_list1));
-
-                    if(index1_list2 == -1 || index2_list2 == -1) continue;
-                    if (index1_list2 > index2_list2) return true;
-                }
-            }
-            return false;
-        }
-
+        
         private static void CheckForLockingOnSameType(CompilationAnalysisContext context, IMemberWithBody memberWithBody)
         {
             var lockStatements = memberWithBody.GetLockStatements().ToList();
@@ -188,6 +140,5 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             }
             return parametersOfOwnType;
         }
-
     }
 }
