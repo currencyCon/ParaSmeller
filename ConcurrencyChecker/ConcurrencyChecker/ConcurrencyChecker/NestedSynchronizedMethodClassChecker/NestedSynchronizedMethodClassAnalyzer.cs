@@ -32,9 +32,9 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             context.RegisterCompilationAction(CheckForNestedLocks);
         }
 
-        private static void CheckForNestedLocks(CompilationAnalysisContext context)
+        private static async void CheckForNestedLocks(CompilationAnalysisContext context)
         {
-            var solutionModel = SolutionRepresentationFactory.Create(context.Compilation);
+            var solutionModel = await SolutionRepresentationFactory.Create(context.Compilation);
             var methods = solutionModel.Classes.SelectMany(e => e.SynchronizedMethods);
             foreach (var memberWithBody in methods)
             {

@@ -35,9 +35,9 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
             context.RegisterCompilationAction(CheckForWrongMonitorUsage);
         }
 
-        private static void CheckForWrongMonitorUsage(CompilationAnalysisContext context)
+        private static async void CheckForWrongMonitorUsage(CompilationAnalysisContext context)
         {
-            var solutionModel = SolutionRepresentationFactory.Create(context.Compilation);
+            var solutionModel = await SolutionRepresentationFactory.Create(context.Compilation);
 
             foreach (var clazz in solutionModel.Classes)
             {

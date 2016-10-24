@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Linq;
+using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.RepresentationFactories;
@@ -30,9 +31,9 @@ namespace ConcurrencyChecker.FireAndForgetChecker
 
         }
 
-        private static void CheckForUnawaitedTasks(CompilationAnalysisContext context)
+        private static async void CheckForUnawaitedTasks(CompilationAnalysisContext context)
         {
-            var solutionModel = SolutionRepresentationFactory.Create(context.Compilation);
+            var solutionModel = await SolutionRepresentationFactory.Create(context.Compilation);
             foreach (var clazz in solutionModel.Classes)
             {
                 InspectClassForUnawaitedTasks(clazz, context);
