@@ -1,6 +1,5 @@
 ﻿using ConcurrencyChecker.NestedSynchronizedMethodClassChecker;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
@@ -449,12 +448,6 @@ namespace ConcurrencyChecker.Test.NSMC
         }
     }";
             VerifyCSharpDiagnostic(test);
-        }
-
-
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return new NestedSynchronizedMethodClassCodeFixProvider();
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
