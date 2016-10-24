@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
 {
@@ -34,11 +30,11 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             return true;
         }
 
-        private static bool IsAquireSequenceCorrect(List<string> baseList, List<string> secondList)
+        private static bool IsAquireSequenceCorrect(IReadOnlyList<string> baseList, List<string> secondList)
         {
-            for (int i = 0; i < baseList.Count; i++)
+            for (var i = 0; i < baseList.Count; i++)
             {
-                for (int j = i; j < baseList.Count; j++)
+                for (var j = i; j < baseList.Count; j++)
                 {
                     if (i == j) continue;
 
