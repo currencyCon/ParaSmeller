@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Builders
 {
-    public class LockBuilder
+    public static class LockBuilder
     {
         public static ExpressionSyntax DefaultLockObject()
         {

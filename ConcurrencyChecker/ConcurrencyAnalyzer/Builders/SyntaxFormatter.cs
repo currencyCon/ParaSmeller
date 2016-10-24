@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Builders
 {
-    public class SyntaxFormatter
+    public static class SyntaxFormatter
     {
         private static IEnumerable<SyntaxTrivia> AddIndention(int level, IEnumerable<SyntaxTrivia> indention)
         {

@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Builders
 {
-    public class MethodBuilder
+    public static class MethodBuilder
     {
         public static MethodDeclarationSyntax BuildLockedMethod(MethodDeclarationSyntax method, ExpressionSyntax defaultLockObject = null)
         {
