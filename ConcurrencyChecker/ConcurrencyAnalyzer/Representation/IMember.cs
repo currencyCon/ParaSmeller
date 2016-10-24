@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 
 namespace ConcurrencyAnalyzer.Representation
 {
-    public interface IMemberWithBody
+    public interface IMember
     {
         ICollection<IInvocationExpressionRepresentation> InvocationExpressions { get; set; }
         ClassRepresentation ContainingClass { get; set; }

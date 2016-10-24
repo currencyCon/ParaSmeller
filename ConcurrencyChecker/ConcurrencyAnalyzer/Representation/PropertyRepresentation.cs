@@ -14,30 +14,7 @@ namespace ConcurrencyAnalyzer.Representation
         public ClassRepresentation ContainingClass { get; set; }
         public ICollection<IBody> Blocks { get; set; }
         public SyntaxToken Name { get; set; }
-        public bool IsFullySynchronized()
-        {
-            return AllAccessorsAreSynchronized();
-        }
-
         public ICollection<IInvocationExpressionRepresentation> Callers { get; set; }
-
-        private bool AllAccessorsAreSynchronized()
-        {
-            if (Blocks.Count != 2)
-            {
-                return false;
-            }
-            var isFullySynchronized = true;
-            foreach (var block in Blocks)
-            {
-                if (!(block.Blocks.Count == 1 && block.Blocks.First().IsSynchronized))
-                {
-                    isFullySynchronized = false;
-                }
-            }
-            return isFullySynchronized;
-        }
-
         public PropertyDeclarationSyntax PropertyImplementation { get; set; }
         public BlockSyntax Getter { get; set; }
         public BlockSyntax Setter { get; set; }
@@ -57,6 +34,28 @@ namespace ConcurrencyAnalyzer.Representation
             propertyDeclarationSyntax.AccessorList.Accessors.FirstOrDefault(
                 e => e.Keyword.ToString() == SetKeyWord)?.Body;
             Callers = new List<IInvocationExpressionRepresentation>();
+        }
+
+        public bool IsFullySynchronized()
+        {
+            return AllAccessorsAreSynchronized();
+        }
+
+        private bool AllAccessorsAreSynchronized()
+        {
+            if (Blocks.Count != 2)
+            {
+                return false;
+            }
+            var isFullySynchronized = true;
+            foreach (var block in Blocks)
+            {
+                if (!(block.Blocks.Count == 1 && block.Blocks.First().IsSynchronized))
+                {
+                    isFullySynchronized = false;
+                }
+            }
+            return isFullySynchronized;
         }
     }
 }

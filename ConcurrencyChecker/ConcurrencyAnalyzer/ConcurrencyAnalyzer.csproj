@@ -39,7 +39,6 @@
     <Compile Include="Builders\PropertyBuilder.cs" />
     <Compile Include="Builders\SyntaxFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepresentationExtensions\ClassRepresentationExtensions.cs" />
     <Compile Include="RepresentationExtensions\InvocationExpressionRepresentationExtensions.cs" />
     <Compile Include="RepresentationExtensions\MemberWithBodiesExtensions.cs" />
     <Compile Include="RepresentationFactories\BlockRepresentationFactory.cs" />
@@ -51,7 +50,7 @@
     <Compile Include="Representation\ClassRepresentation.cs" />
     <Compile Include="Representation\IBody.cs" />
     <Compile Include="Representation\IInvocationExpressionRepresentation.cs" />
-    <Compile Include="Representation\IMemberWithBody.cs" />
+    <Compile Include="Representation\IMember.cs" />
     <Compile Include="Representation\IMethodRepresentation.cs" />
     <Compile Include="Representation\InvocationExpressionRepresentation.cs" />
     <Compile Include="Representation\IPropertyRepresentation.cs" />
@@ -60,9 +59,9 @@
     <Compile Include="Representation\NormalBlock.cs" />
     <Compile Include="Representation\PropertyRepresentation.cs" />
     <Compile Include="Representation\SolutionRepresentation.cs" />
-    <Compile Include="SemanticAnalyzation\DefaultSymbolValues.cs" />
-    <Compile Include="SemanticAnalyzation\SymbolInformationBuilder.cs" />
-    <Compile Include="SemanticAnalyzation\SymbolInformation.cs" />
+    <Compile Include="SemanticAnalysis\DefaultSymbolValues.cs" />
+    <Compile Include="SemanticAnalysis\SymbolInformationBuilder.cs" />
+    <Compile Include="SemanticAnalysis\SymbolInformation.cs" />
     <Compile Include="SyntaxFilters\SyntaxNodeExtensions.cs" />
     <Compile Include="SyntaxFilters\SyntaxNodeFilter.cs" />
   </ItemGroup>

@@ -12,7 +12,7 @@ namespace ConcurrencyAnalyzer.Representation
         public bool Synchronized { get; set; }
         public InvocationExpressionSyntax Implementation { get; set; }
         public IBody ContainingBody { get; set; }
-        public IMemberWithBody InvocationImplementation { get; set; }
+        public IMember InvocationImplementation { get; set; }
         public SymbolKind Type { get; set; }
         public ICollection<IdentifierNameSyntax> Arguments { get; set; }
         public string OriginalDefinition { get; set; }

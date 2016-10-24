@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ConcurrencyAnalyzer.Builders;
+using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,7 +10,7 @@ namespace ConcurrencyAnalyzer.Representation
 {
     public class ClassRepresentation
     {
-        public ClassDeclarationSyntax ClassDeclarationSyntax;
+        public ClassDeclarationSyntax ClassDeclarationSyntax { get; set; }
         public string FullyQualifiedDomainName { get; set; }
         public SyntaxToken Name { get; set; }
         private ICollection<IMethodRepresentation> _synchronizedMethods;
@@ -66,11 +67,13 @@ namespace ConcurrencyAnalyzer.Representation
 
         public ICollection<IMethodRepresentation> Methods => Members.OfType<IMethodRepresentation>().ToList();
         public ICollection<IPropertyRepresentation> Properties => Members.OfType<IPropertyRepresentation>().ToList();
-        public ICollection<IMemberWithBody> Members { get; set; }
+        public ICollection<IMember> Members { get; set; }
+
+
         public ClassRepresentation(ClassDeclarationSyntax classDeclarationSyntax)
         {
             Name = classDeclarationSyntax.Identifier;
-            Members = new List<IMemberWithBody>();
+            Members = new List<IMember>();
             ClassDeclarationSyntax = classDeclarationSyntax;
             FullyQualifiedDomainName = classDeclarationSyntax.Identifier.ToFullString();
         }
@@ -94,6 +97,52 @@ namespace ConcurrencyAnalyzer.Representation
                 return LockBuilder.DefaultLockObject();
             }
             return lockExpressions.GroupBy(i => i).OrderByDescending(group => group.Count()).Select(group => group.Key).First();
+        }
+
+        public bool ClassHasSynchronizedMember()
+        {
+            return Members.Any(e => e.IsSynchronized());
+        }
+
+        public IMember GetMemberByName(string memberName)
+        {
+            return Members.FirstOrDefault(e => e.Name.ToString() == memberName);
+        }
+
+        public  List<IMember> GetMembersWithMultipleLocks()
+        {
+            var members = new List<IMember>();
+            var counter = 0;
+            foreach (var memberWithBody in Members)
+            {
+                foreach (var block in memberWithBody.Blocks)
+                {
+                    if (block is LockBlock)
+                    {
+                        counter++;
+                    }
+                    GetNextDepthLock(block, members, counter, memberWithBody);
+                }
+            }
+
+            return members;
+        }
+
+        private static void GetNextDepthLock(IBody block, ICollection<IMember> members, int counter, IMember member)
+        {
+            if (counter == 2 && !members.Contains(member))
+            {
+                members.Add(member);
+            }
+
+            foreach (var subBlock in block.Blocks)
+            {
+                if (subBlock is LockBlock)
+                {
+                    counter++;
+                }
+                GetNextDepthLock(subBlock, members, counter, member);
+            }
         }
     }
 }

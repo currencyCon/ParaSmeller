@@ -48,7 +48,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
             }
         }
 
-        private static void InspectMemberForUnawaitedTasks(IMemberWithBody member, CompilationAnalysisContext context)
+        private static void InspectMemberForUnawaitedTasks(IMember member, CompilationAnalysisContext context)
         {
             foreach (var invocationExpressionRepresentation in member.InvocationExpressions)
             {
@@ -60,7 +60,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
             }
         }
 
-        private static void CheckForLostAssignment(CompilationAnalysisContext context, IInvocationExpressionRepresentation invocationExpressionRepresentation, IMemberWithBody member)
+        private static void CheckForLostAssignment(CompilationAnalysisContext context, IInvocationExpressionRepresentation invocationExpressionRepresentation, IMember member)
         {
             if (invocationExpressionRepresentation.GetFirstParent<EqualsValueClauseSyntax>() != null)
             {
@@ -71,7 +71,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
             }
         }
 
-        private static bool AssignmentIsAwaited(IInvocationExpressionRepresentation invocationExpressionRepresentation, IMemberWithBody member)
+        private static bool AssignmentIsAwaited(IInvocationExpressionRepresentation invocationExpressionRepresentation, IMember member)
         {
             var assignment = invocationExpressionRepresentation.GetFirstParent<VariableDeclaratorSyntax>();
             if (assignment == null)
@@ -82,7 +82,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
             return TaskIsAwaited(member, variableName);
         }
 
-        private static bool AssignmentIsAwaitedInInvocatedMember(IMemberWithBody member, string variableName)
+        private static bool AssignmentIsAwaitedInInvocatedMember(IMember member, string variableName)
         {
             var invocationExpressions = member.Blocks.FirstOrDefault().InvocationExpressions;
             foreach (var invocationExpressionRepresentation in invocationExpressions)
@@ -116,7 +116,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
             return taskIsWaited;
         }
 
-        private static bool TaskIsAwaited(IMemberWithBody member, string variableName)
+        private static bool TaskIsAwaited(IMember member, string variableName)
         {
             var simpleMemberAccesses = member.GetChildren<MemberAccessExpressionSyntax>();
             foreach (var memberAccessExpressionSyntax in simpleMemberAccesses)

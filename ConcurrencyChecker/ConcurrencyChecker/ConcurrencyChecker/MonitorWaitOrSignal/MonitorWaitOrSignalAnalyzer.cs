@@ -70,7 +70,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
             }
         }
 
-        private static void CheckFunctionCallers(ClassRepresentation clazz, IMemberWithBody method, CompilationAnalysisContext context)
+        private static void CheckFunctionCallers(ClassRepresentation clazz, IMember method, CompilationAnalysisContext context)
         {
             foreach (var invocationExpression in clazz.ClassDeclarationSyntax.GetChildren<InvocationExpressionSyntax>().Where(i => i.Expression.ToString() == method.Name.ToString()))
             {

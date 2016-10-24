@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.SemanticAnalyzation;
+using ConcurrencyAnalyzer.SemanticAnalysis;
 using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;

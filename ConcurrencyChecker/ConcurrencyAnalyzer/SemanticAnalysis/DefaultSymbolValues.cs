@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 
-namespace ConcurrencyAnalyzer.SemanticAnalyzation
+namespace ConcurrencyAnalyzer.SemanticAnalysis
 {
     public static class DefaultSymbolValues
     {

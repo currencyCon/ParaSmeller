@@ -2,7 +2,7 @@
 
 namespace ConcurrencyAnalyzer.Representation
 {
-    public interface IPropertyRepresentation : IMemberWithBody
+    public interface IPropertyRepresentation : IMember
     {
         PropertyDeclarationSyntax PropertyImplementation { get; set; }
         BlockSyntax Getter { set; get; }

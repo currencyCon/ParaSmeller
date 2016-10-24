@@ -68,14 +68,14 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             }
         }
         
-        private static void CheckForLockingOnSameType(CompilationAnalysisContext context, IMemberWithBody memberWithBody)
+        private static void CheckForLockingOnSameType(CompilationAnalysisContext context, IMember member)
         {
-            var lockStatements = memberWithBody.GetLockStatements().ToList();
+            var lockStatements = member.GetLockStatements().ToList();
             if (!lockStatements.Any())
             {
                 return;
             }
-            var method = memberWithBody as MethodRepresentation;
+            var method = member as MethodRepresentation;
             if (method == null)
             {
                 return;

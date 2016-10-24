@@ -6,7 +6,7 @@ namespace ConcurrencyAnalyzer.Representation
 {
     public class NormalBlock : IBody
     {
-        public NormalBlock(IMemberWithBody member, SyntaxNode implementation)
+        public NormalBlock(IMember member, SyntaxNode implementation)
         {
             ContainingMember = member;
             Implementation = implementation;
@@ -15,7 +15,7 @@ namespace ConcurrencyAnalyzer.Representation
         }
 
         public SyntaxNode Implementation { get; set; }
-        public IMemberWithBody ContainingMember { get; set; }
+        public IMember ContainingMember { get; set; }
         public ICollection<IInvocationExpressionRepresentation> InvocationExpressions { get; set; }
         public ICollection<IBody> Blocks { get; set; }
         public bool IsSynchronized => false;
