@@ -14,8 +14,8 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
     public class MonitorWaitOrSignalAnalyzer : DiagnosticAnalyzer
     {
         private const string Category = "Synchronization";
-        public static string MonitorIfConditionDiagnosticId = "MWS001";
-        public static string MonitorPulseDiagnosticId = "MWS002";
+        public const string MonitorIfConditionDiagnosticId = "MWS001";
+        public const string MonitorPulseDiagnosticId = "MWS002";
         public static string MonitorWaitDefinition = "System.Threading.Monitor.Wait(object)";
         public static string MonitorPulseDefinition = "System.Threading.Monitor.Pulse(object)";
         private const string MonitorClass = "Monitor";
@@ -53,7 +53,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
 
         private static void CheckWaitOutsideLock(ClassRepresentation clazz, MethodRepresentation method, CompilationAnalysisContext context)
         {
-            foreach (var expressionSyntax in method.MethodImplementation.GetInvocationExpression(MonitorClass, MonitorWaitMethod).Where(e => e.IsSynchronized() == false))
+            foreach (var expressionSyntax in method.MethodImplementation.GetInvocationExpression(MonitorClass, MonitorWaitMethod).Where(e => !e.IsSynchronized()))
             {
                 if (expressionSyntax.IsInTopLevelBlock())
                 {
@@ -62,7 +62,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
             }
         }
 
-        private static void CheckWaitInsideLock(MethodRepresentation method, CompilationAnalysisContext context)
+        private static void CheckWaitInsideLock(IMember method, CompilationAnalysisContext context)
         {
             foreach (var monitorWaitExpression in method.GetLockStatements().SelectMany(e => e.GetInvocationExpression(MonitorClass, MonitorWaitMethod)))
             {

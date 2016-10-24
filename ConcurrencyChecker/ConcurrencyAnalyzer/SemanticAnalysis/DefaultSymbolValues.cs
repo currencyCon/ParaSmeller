@@ -4,8 +4,8 @@ namespace ConcurrencyAnalyzer.SemanticAnalysis
 {
     public static class DefaultSymbolValues
     {
-        public static SymbolKind Type = SymbolKind.NetModule;
-        public static string ClassName = "";
-        public static string OriginalDefinition = "";
+        public const SymbolKind Type = SymbolKind.NetModule;
+        public const string ClassName = "";
+        public const string OriginalDefinition = "";
     }
 }

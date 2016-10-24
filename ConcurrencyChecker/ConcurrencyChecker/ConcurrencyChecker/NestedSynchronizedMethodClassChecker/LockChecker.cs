@@ -2,7 +2,7 @@
 
 namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
 {
-    internal class LockChecker
+    internal static class LockChecker
     {
         public static bool IsCorrectAquired(List<List<string>> lockObjects)
         {

@@ -16,7 +16,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NestedSynchronizedMethodClassAnalyzer : DiagnosticAnalyzer
     {
-        public static string NestedLockingDiagnosticId = "NSMC001";
+        public const string NestedLockingDiagnosticId = "NSMC001";
 
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.NSMCAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.NSMCAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
@@ -44,12 +44,12 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             CheckAquireMultipleLocks(context, solutionModel.Classes);
         }
 
-        private static void CheckAquireMultipleLocks(CompilationAnalysisContext context, ICollection<ClassRepresentation> classes)
+        private static void CheckAquireMultipleLocks(CompilationAnalysisContext context, IEnumerable<ClassRepresentation> classes)
         {
             
             foreach (var clazz in classes)
             {
-                List<List<string>> lockObjects = new List<List<string>>();
+                var lockObjects = new List<List<string>>();
 
                 foreach (var memberWithBody in clazz.GetMembersWithMultipleLocks())
                 {
