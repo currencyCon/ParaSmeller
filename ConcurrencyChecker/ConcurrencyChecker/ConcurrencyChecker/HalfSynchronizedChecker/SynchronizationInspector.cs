@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyChecker.HalfSynchronizedChecker
 {
-    public class SynchronizationInspector
+    public static class SynchronizationInspector
     {
         public static IEnumerable<MethodRepresentation> GetMethodsWithHalfSynchronizedProperties(ClassRepresentation classRepresentation)
         {

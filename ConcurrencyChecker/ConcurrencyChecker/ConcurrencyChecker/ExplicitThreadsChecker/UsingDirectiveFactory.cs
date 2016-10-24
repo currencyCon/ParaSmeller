@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyChecker.ExplicitThreadsChecker
 {
-    internal class UsingDirectiveFactory
+    internal static class UsingDirectiveFactory
     {
         internal static UsingDirectiveSyntax Create(string usingName)
         {

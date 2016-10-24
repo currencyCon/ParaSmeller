@@ -32,7 +32,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
 
             var node = root.FindNode(context.Span);
 
-            if (node is InvocationExpressionSyntax == false)
+            if (!(node is InvocationExpressionSyntax))
             {
                 return;
             }

@@ -34,7 +34,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
 
             var node = root.FindNode(context.Span);
 
-            if (node is MemberAccessExpressionSyntax == false)
+            if (!(node is MemberAccessExpressionSyntax))
             {
                 return;
             }

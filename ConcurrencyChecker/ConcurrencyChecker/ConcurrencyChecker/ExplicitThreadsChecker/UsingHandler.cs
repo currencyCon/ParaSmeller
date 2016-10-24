@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyChecker.ExplicitThreadsChecker
 {
-    internal class UsingHandler
+    internal static class UsingHandler
     {
         internal static SyntaxNode AddUsingIfNotExists(SyntaxNode root, string usingName)
         {
