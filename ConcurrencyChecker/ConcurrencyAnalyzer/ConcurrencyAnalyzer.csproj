@@ -49,11 +49,8 @@
     <Compile Include="RepresentationFactories\SolutionRepresentationFactory.cs" />
     <Compile Include="Representation\ClassRepresentation.cs" />
     <Compile Include="Representation\IBody.cs" />
-    <Compile Include="Representation\IInvocationExpressionRepresentation.cs" />
     <Compile Include="Representation\IMember.cs" />
-    <Compile Include="Representation\IMethodRepresentation.cs" />
     <Compile Include="Representation\InvocationExpressionRepresentation.cs" />
-    <Compile Include="Representation\IPropertyRepresentation.cs" />
     <Compile Include="Representation\LockBlock.cs" />
     <Compile Include="Representation\MethodRepresentation.cs" />
     <Compile Include="Representation\NormalBlock.cs" />

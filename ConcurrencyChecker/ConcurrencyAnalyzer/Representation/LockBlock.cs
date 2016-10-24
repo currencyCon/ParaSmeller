@@ -8,7 +8,7 @@ namespace ConcurrencyAnalyzer.Representation
     {
         public SyntaxNode Implementation { get; set; }
         public IMember ContainingMember { get; set; }
-        public ICollection<IInvocationExpressionRepresentation> InvocationExpressions { get; set; }
+        public ICollection<InvocationExpressionRepresentation> InvocationExpressions { get; set; }
         public ICollection<IBody> Blocks { get; set; }
         public bool IsSynchronized => true;
 
@@ -16,7 +16,7 @@ namespace ConcurrencyAnalyzer.Representation
         {
             Implementation = implementation;
             ContainingMember = member;
-            InvocationExpressions = new List<IInvocationExpressionRepresentation>();
+            InvocationExpressions = new List<InvocationExpressionRepresentation>();
             Blocks = new List<IBody>();
         }
     }

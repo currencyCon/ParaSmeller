@@ -10,64 +10,65 @@ namespace ConcurrencyAnalyzer.Representation
 {
     public class ClassRepresentation
     {
-        public ClassDeclarationSyntax ClassDeclarationSyntax { get; set; }
-        public string FullyQualifiedDomainName { get; set; }
-        public SyntaxToken Name { get; set; }
-        private ICollection<IMethodRepresentation> _synchronizedMethods;
+        public readonly ClassDeclarationSyntax ClassDeclarationSyntax;
+        public readonly string FullyQualifiedDomainName;
+        public readonly SyntaxToken Name;
+        public readonly ICollection<IMember> Members;
 
-        public ICollection<IMethodRepresentation> SynchronizedMethods
+        private ICollection<MethodRepresentation> _synchronizedMethods;
+
+        public ICollection<MethodRepresentation> SynchronizedMethods
         {
             get
             {
                 return _synchronizedMethods ??
-                       (_synchronizedMethods = Members.Where(e => e is IMethodRepresentation && e.IsFullySynchronized())
-                           .Select(e => e as IMethodRepresentation).ToList());
+                       (_synchronizedMethods = Members.Where(e => e is MethodRepresentation && e.IsFullySynchronized())
+                           .Select(e => e as MethodRepresentation).ToList());
             }
         }
 
-        private ICollection<IMethodRepresentation> _unSynchronizedMethods;
+        private ICollection<MethodRepresentation> _unSynchronizedMethods;
 
-        public ICollection<IMethodRepresentation> UnSynchronizedMethods
+        public ICollection<MethodRepresentation> UnSynchronizedMethods
         {
             get
             {
                 return _unSynchronizedMethods ??
-                       (_unSynchronizedMethods = Members.Where(e => e is IMethodRepresentation && !e.IsFullySynchronized())
-                           .Select(e => e as IMethodRepresentation).ToList());
+                       (_unSynchronizedMethods = Members.Where(e => e is MethodRepresentation && !e.IsFullySynchronized())
+                           .Select(e => e as MethodRepresentation).ToList());
             }
         }
 
 
 
 
-        private ICollection<IPropertyRepresentation> _synchronizedProperties;
+        private ICollection<PropertyRepresentation> _synchronizedProperties;
 
-        public ICollection<IPropertyRepresentation> SynchronizedProperties
+        public ICollection<PropertyRepresentation> SynchronizedProperties
         {
             get
             {
                 return _synchronizedProperties ??
-                       (_synchronizedProperties = Members.Where(e => e is IPropertyRepresentation && e.IsFullySynchronized())
-                           .Select(e => e as IPropertyRepresentation).ToList());
+                       (_synchronizedProperties = Members.Where(e => e is PropertyRepresentation && e.IsFullySynchronized())
+                           .Select(e => e as PropertyRepresentation).ToList());
             }
         }
 
-        private ICollection<IPropertyRepresentation> _unSynchronizedProperties;
+        private ICollection<PropertyRepresentation> _unSynchronizedProperties;
 
-        public ICollection<IPropertyRepresentation> UnSynchronizedProperties
+        public ICollection<PropertyRepresentation> UnSynchronizedProperties
         {
             get
             {
                 return _unSynchronizedProperties ??
-                       (_unSynchronizedProperties = Members.Where(e => e is IPropertyRepresentation && !e.IsFullySynchronized())
-                           .Select(e => e as IPropertyRepresentation).ToList());
+                       (_unSynchronizedProperties = Members.Where(e => e is PropertyRepresentation && !e.IsFullySynchronized())
+                           .Select(e => e as PropertyRepresentation).ToList());
             }
         }
 
 
-        public ICollection<IMethodRepresentation> Methods => Members.OfType<IMethodRepresentation>().ToList();
-        public ICollection<IPropertyRepresentation> Properties => Members.OfType<IPropertyRepresentation>().ToList();
-        public ICollection<IMember> Members { get; set; }
+        public ICollection<MethodRepresentation> Methods => Members.OfType<MethodRepresentation>().ToList();
+        public ICollection<PropertyRepresentation> Properties => Members.OfType<PropertyRepresentation>().ToList();
 
 
         public ClassRepresentation(ClassDeclarationSyntax classDeclarationSyntax)
@@ -75,7 +76,7 @@ namespace ConcurrencyAnalyzer.Representation
             Name = classDeclarationSyntax.Identifier;
             Members = new List<IMember>();
             ClassDeclarationSyntax = classDeclarationSyntax;
-            FullyQualifiedDomainName = classDeclarationSyntax.Identifier.ToFullString();
+            FullyQualifiedDomainName = classDeclarationSyntax.Identifier.ToString();
         }
 
         public IEnumerable<IdentifierNameSyntax> GetIdentifiersInLocks()

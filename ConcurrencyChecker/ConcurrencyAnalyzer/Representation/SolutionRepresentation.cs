@@ -4,8 +4,8 @@ namespace ConcurrencyAnalyzer.Representation
 {
     public class SolutionRepresentation
     {
-        public string Name { get; set; }
-        public ICollection<ClassRepresentation> Classes { get; set; }
+        public readonly string Name;
+        public readonly ICollection<ClassRepresentation> Classes;
         public SolutionRepresentation(string name)
         {
             Name = name;

@@ -122,7 +122,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             return false;
         }
 
-        private static List<SyntaxToken> ParametersOfOwnType(IMethodRepresentation node, CompilationAnalysisContext context)
+        private static List<SyntaxToken> ParametersOfOwnType(MethodRepresentation node, CompilationAnalysisContext context)
         {
             var clazz = node.GetFirstParent<ClassDeclarationSyntax>();
             var model = context.Compilation.GetSemanticModel(node.ContainingClass.ClassDeclarationSyntax.SyntaxTree);

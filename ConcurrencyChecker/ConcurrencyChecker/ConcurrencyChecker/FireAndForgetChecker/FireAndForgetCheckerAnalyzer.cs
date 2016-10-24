@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using System.Linq;
-using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.RepresentationFactories;
@@ -60,7 +59,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
             }
         }
 
-        private static void CheckForLostAssignment(CompilationAnalysisContext context, IInvocationExpressionRepresentation invocationExpressionRepresentation, IMember member)
+        private static void CheckForLostAssignment(CompilationAnalysisContext context, InvocationExpressionRepresentation invocationExpressionRepresentation, IMember member)
         {
             if (invocationExpressionRepresentation.GetFirstParent<EqualsValueClauseSyntax>() != null)
             {
@@ -71,7 +70,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
             }
         }
 
-        private static bool AssignmentIsAwaited(IInvocationExpressionRepresentation invocationExpressionRepresentation, IMember member)
+        private static bool AssignmentIsAwaited(InvocationExpressionRepresentation invocationExpressionRepresentation, IMember member)
         {
             var assignment = invocationExpressionRepresentation.GetFirstParent<VariableDeclaratorSyntax>();
             if (assignment == null)
@@ -92,7 +91,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
                         .Contains(variableName))
                 {
                     var calledMethod =
-                        invocationExpressionRepresentation.InvocationImplementation as IMethodRepresentation;
+                        invocationExpressionRepresentation.InvokedImplementation as MethodRepresentation;
                     if (calledMethod != null)
                     {
                         return IsAwaitedInMethod(calledMethod);
@@ -102,7 +101,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
             return false;
         }
 
-        private static bool IsAwaitedInMethod(IMethodRepresentation calledMethod)
+        private static bool IsAwaitedInMethod(MethodRepresentation calledMethod)
         {
             var paramsOfCorrectType = calledMethod.Parameters.Where(e => e.Type.ToString() == "Task");
             var taskIsWaited = false;
@@ -131,7 +130,7 @@ namespace ConcurrencyChecker.FireAndForgetChecker
             return AssignmentIsAwaitedInInvocatedMember(member, variableName);
         }
 
-        private static void CheckForSingleInvocation(CompilationAnalysisContext context, IInvocationExpressionRepresentation invocationExpressionRepresentation)
+        private static void CheckForSingleInvocation(CompilationAnalysisContext context, InvocationExpressionRepresentation invocationExpressionRepresentation)
         {
             if (invocationExpressionRepresentation.GetFirstParent<ExpressionStatementSyntax>() != null)
             {

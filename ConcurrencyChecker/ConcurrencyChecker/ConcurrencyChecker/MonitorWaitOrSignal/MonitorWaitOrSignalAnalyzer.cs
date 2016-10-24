@@ -51,7 +51,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
             }
         }
 
-        private static void CheckWaitOutsideLock(ClassRepresentation clazz, IMethodRepresentation method, CompilationAnalysisContext context)
+        private static void CheckWaitOutsideLock(ClassRepresentation clazz, MethodRepresentation method, CompilationAnalysisContext context)
         {
             foreach (var expressionSyntax in method.MethodImplementation.GetInvocationExpression(MonitorClass, MonitorWaitMethod).Where(e => e.IsSynchronized() == false))
             {
@@ -62,7 +62,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
             }
         }
 
-        private static void CheckWaitInsideLock(IMethodRepresentation method, CompilationAnalysisContext context)
+        private static void CheckWaitInsideLock(MethodRepresentation method, CompilationAnalysisContext context)
         {
             foreach (var monitorWaitExpression in method.GetLockStatements().SelectMany(e => e.GetInvocationExpression(MonitorClass, MonitorWaitMethod)))
             {

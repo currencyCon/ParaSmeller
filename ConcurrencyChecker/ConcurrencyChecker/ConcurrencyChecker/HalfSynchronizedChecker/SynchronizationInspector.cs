@@ -9,9 +9,9 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
 {
     public class SynchronizationInspector
     {
-        public static IEnumerable<IMethodRepresentation> GetMethodsWithHalfSynchronizedProperties(ClassRepresentation classRepresentation)
+        public static IEnumerable<MethodRepresentation> GetMethodsWithHalfSynchronizedProperties(ClassRepresentation classRepresentation)
         {
-            var methodsWithHalfSynchronizedProperties = new List<IMethodRepresentation>();
+            var methodsWithHalfSynchronizedProperties = new List<MethodRepresentation>();
             var unsyncedProperties = classRepresentation.UnSynchronizedProperties.Select(e => e.PropertyImplementation);
             var identifiersInSyncedMethods = classRepresentation.SynchronizedMethods.SelectMany(e => SyntaxNodeFilter.GetIdentifiersInLocks(e.Blocks)).Select(e => e.Identifier.Text);
             var unsProp = unsyncedProperties.Where(e => identifiersInSyncedMethods.Contains(e.Identifier.Text)).ToList();
