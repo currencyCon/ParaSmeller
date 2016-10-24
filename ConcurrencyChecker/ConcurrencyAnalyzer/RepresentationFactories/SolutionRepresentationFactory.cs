@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.RepresentationFactories
 {
-    public class SolutionRepresentationFactory
+    public static class SolutionRepresentationFactory
     {
         public static async Task<SolutionRepresentation> Create(Compilation compilation)
         {
