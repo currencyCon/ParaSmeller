@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using Microsoft.CodeAnalysis;
 
 namespace ConcurrencyAnalyzer.Representation
