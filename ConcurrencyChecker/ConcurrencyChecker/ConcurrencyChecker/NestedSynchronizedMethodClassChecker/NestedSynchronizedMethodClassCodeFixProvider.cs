@@ -18,7 +18,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
     {
         private const string Title = "Nested Synchronization";
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NestedSynchronizedMethodCalssAnalyzer.NestedLockingDiagnosticId);
+        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId);
 
         public sealed override FixAllProvider GetFixAllProvider()
         {

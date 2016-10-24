@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
@@ -9,10 +10,10 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 {
     public class SolutionRepresentationFactory
     {
-        public static SolutionRepresentation Create(Compilation compilation)
+        public static async Task<SolutionRepresentation> Create(Compilation compilation)
         {
             var solution = new SolutionRepresentation(compilation.AssemblyName.Trim());
-            AddClassRepresentations(solution, compilation);
+            await AddClassRepresentations(solution, compilation);
             ConnectInvocations(solution);
             ConnectReverseInvocations(solution);
             return solution;
@@ -65,7 +66,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             }
             return l;
         }
-        private static async void AddClassRepresentations(SolutionRepresentation solution, Compilation compilation)
+        private static async Task AddClassRepresentations(SolutionRepresentation solution, Compilation compilation)
         {
             foreach (var syntaxTree in compilation.SyntaxTrees)
             {

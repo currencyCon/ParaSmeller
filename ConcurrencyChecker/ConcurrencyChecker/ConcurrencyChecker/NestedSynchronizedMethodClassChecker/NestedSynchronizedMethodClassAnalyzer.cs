@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class NestedSynchronizedMethodCalssAnalyzer : DiagnosticAnalyzer
+    public class NestedSynchronizedMethodClassAnalyzer : DiagnosticAnalyzer
     {
         public static string NestedLockingDiagnosticId = "NSMC001";
 
@@ -32,16 +32,42 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             context.RegisterCompilationAction(CheckForNestedLocks);
         }
 
-        private static void CheckForNestedLocks(CompilationAnalysisContext context)
+        private static async void CheckForNestedLocks(CompilationAnalysisContext context)
         {
-            var solutionModel = SolutionRepresentationFactory.Create(context.Compilation);
+            var solutionModel = await SolutionRepresentationFactory.Create(context.Compilation);
             var methods = solutionModel.Classes.SelectMany(e => e.SynchronizedMethods);
             foreach (var memberWithBody in methods)
             {
                 CheckForLockingOnSameType(context, memberWithBody);
+                
             }
+            CheckAquireMultipleLocks(context, solutionModel.Classes);
         }
 
+        private static void CheckAquireMultipleLocks(CompilationAnalysisContext context, ICollection<ClassRepresentation> classes)
+        {
+            
+            foreach (var clazz in classes)
+            {
+                List<List<string>> lockObjects = new List<List<string>>();
+
+                foreach (var memberWithBody in clazz.GetMembersWithMultipleLocks())
+                {
+                    lockObjects.Add(memberWithBody.GetAllLockPossibilities());
+                }
+
+                bool correct = LockChecker.IsCorrectAquired(lockObjects);
+                if (!correct)
+                {
+                    foreach (var memberWithBody in clazz.GetMembersWithMultipleLocks())
+                    {
+                        var diagn = Diagnostic.Create(Rule, memberWithBody.Name.GetLocation());
+                        context.ReportDiagnostic(diagn);
+                    }
+                }
+            }
+        }
+        
         private static void CheckForLockingOnSameType(CompilationAnalysisContext context, IMemberWithBody memberWithBody)
         {
             var lockStatements = memberWithBody.GetLockStatements().ToList();
@@ -62,8 +88,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             foreach (var lockStatementSyntax in lockStatements)
             {
                 var lockObject = lockStatementSyntax.Expression;
-                var memberAccessExpression =
-                    lockStatementSyntax.GetChildren<MemberAccessExpressionSyntax>();
+                var memberAccessExpression = lockStatementSyntax.GetChildren<MemberAccessExpressionSyntax>();
                 foreach (var memberAccessExpressionSyntax in memberAccessExpression)
                 {
                     foreach (var parameter in parametersOfOwnKind)
@@ -115,6 +140,5 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             }
             return parametersOfOwnType;
         }
-
     }
 }

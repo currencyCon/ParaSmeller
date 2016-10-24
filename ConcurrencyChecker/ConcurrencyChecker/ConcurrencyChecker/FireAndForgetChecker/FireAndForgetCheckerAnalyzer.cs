@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Linq;
+using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.RepresentationFactories;
@@ -30,9 +31,9 @@ namespace ConcurrencyChecker.FireAndForgetChecker
 
         }
 
-        private static void CheckForUnawaitedTasks(CompilationAnalysisContext context)
+        private static async void CheckForUnawaitedTasks(CompilationAnalysisContext context)
         {
-            var solutionModel = SolutionRepresentationFactory.Create(context.Compilation);
+            var solutionModel = await SolutionRepresentationFactory.Create(context.Compilation);
             foreach (var clazz in solutionModel.Classes)
             {
                 InspectClassForUnawaitedTasks(clazz, context);
@@ -94,20 +95,25 @@ namespace ConcurrencyChecker.FireAndForgetChecker
                         invocationExpressionRepresentation.InvocationImplementation as IMethodRepresentation;
                     if (calledMethod != null)
                     {
-                        var paramsOfCorrectType = calledMethod.Parameters.Where(e => e.Type.ToString() == "Task");
-                        var taskIsWaited = false;
-                        foreach (var parameterSyntax in paramsOfCorrectType)
-                        {
-                            if (TaskIsAwaited(calledMethod, parameterSyntax.Identifier.Text))
-                            {
-                                taskIsWaited = true;
-                            }
-                        }
-                        return taskIsWaited;
+                        return IsAwaitedInMethod(calledMethod);
                     }
                 }
             }
             return false;
+        }
+
+        private static bool IsAwaitedInMethod(IMethodRepresentation calledMethod)
+        {
+            var paramsOfCorrectType = calledMethod.Parameters.Where(e => e.Type.ToString() == "Task");
+            var taskIsWaited = false;
+            foreach (var parameterSyntax in paramsOfCorrectType)
+            {
+                if (TaskIsAwaited(calledMethod, parameterSyntax.Identifier.Text))
+                {
+                    taskIsWaited = true;
+                }
+            }
+            return taskIsWaited;
         }
 
         private static bool TaskIsAwaited(IMemberWithBody member, string variableName)

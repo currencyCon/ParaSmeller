@@ -10,7 +10,7 @@ namespace ConcurrencyAnalyzer.Representation
     public class ClassRepresentation
     {
         public ClassDeclarationSyntax ClassDeclarationSyntax;
-        public string FullyQualifiedDomainName;
+        public string FullyQualifiedDomainName { get; set; }
         public SyntaxToken Name { get; set; }
         private ICollection<IMethodRepresentation> _synchronizedMethods;
 

@@ -52,7 +52,21 @@ namespace ConcurrencyAnalyzer.SyntaxFilters
 
         public static IEnumerable<MemberAccessExpressionSyntax> GetInvocationExpression(this SyntaxNode node, string clazz, string methodName)
         {
-            return node.GetChildren<MemberAccessExpressionSyntax>().Where(e => e.Expression.ToString() == clazz && e.Name.ToString() == methodName);
-        } 
+            return node.GetChildren<MemberAccessExpressionSyntax>()
+                .Where(e => e.Expression.ToString() == clazz && e.Name.ToString() == methodName);
+        }
+
+        public static IEnumerable<VariableDeclaratorSyntax> GetLocalDeclaredVariables(this SyntaxNode root)
+        {
+            return root.DescendantNodes()
+                .OfType<LocalDeclarationStatementSyntax>()
+                .SelectMany(b => b.DescendantNodes().OfType<VariableDeclaratorSyntax>());
+        }
+
+        public static VariableDeclaratorSyntax SingleVariable(this IEnumerable<VariableDeclaratorSyntax> variables,
+            string variableName)
+        {
+            return variables.First(c => c.Identifier.ToString() == variableName);
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace ConcurrencyChecker.Test.NSMC
     }";
             var expected = new DiagnosticResult
             {
-                Id = NestedSynchronizedMethodCalssAnalyzer.NestedLockingDiagnosticId,
+                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId,
                 Message = "Possible Deadlock with double Locking",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
@@ -70,7 +70,7 @@ namespace ConcurrencyChecker.Test.NSMC
     }";
             var expected1 = new DiagnosticResult
             {
-                Id = NestedSynchronizedMethodCalssAnalyzer.NestedLockingDiagnosticId,
+                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId,
                 Message = "Possible Deadlock with double Locking",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
@@ -81,7 +81,7 @@ namespace ConcurrencyChecker.Test.NSMC
 
             var expected2 = new DiagnosticResult
             {
-                Id = NestedSynchronizedMethodCalssAnalyzer.NestedLockingDiagnosticId,
+                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId,
                 Message = "Possible Deadlock with double Locking",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
@@ -178,7 +178,7 @@ namespace ConcurrencyChecker.Test.NSMC
 
             var expected = new DiagnosticResult
             {
-                Id = NestedSynchronizedMethodCalssAnalyzer.NestedLockingDiagnosticId,
+                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId,
                 Message = "Possible Deadlock with double Locking",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
@@ -220,7 +220,7 @@ namespace ConcurrencyChecker.Test.NSMC
     }";
             var expected = new DiagnosticResult
             {
-                Id = NestedSynchronizedMethodCalssAnalyzer.NestedLockingDiagnosticId,
+                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId,
                 Message = "Possible Deadlock with double Locking",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
@@ -234,6 +234,224 @@ namespace ConcurrencyChecker.Test.NSMC
         }
 
 
+        [TestMethod]
+        public void AnalyzerAcquireMultipleLocksTest()
+        {
+            var test = @"
+    internal interface IBankAccount
+    {
+        void Transfer(IBankAccount target, int amount);
+        void Deposit(int amount);
+    }
+
+    class BankAccount : IBankAccount
+    {
+        private object LockA = new object();
+        private object LockB = new object();
+        private object LockC = new object();
+
+        public void TransferB()
+        {
+            lock (LockB)
+            {
+                lock(LockA) 
+                {
+                    int i = 10;
+                }
+            }
+        }
+    
+        public void TransferA()
+        {
+            lock (LockA)
+            {
+                lock(LockB) 
+                {
+                    int i = 10;
+                    lock(LockC) 
+                    {
+                        int j = 20;
+                    }
+                }
+            }
+        }
+    }";
+            var expected1 = new DiagnosticResult
+            {
+                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId,
+                Message = "Possible Deadlock with double Locking",
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test0.cs", 14, 21)
+                        }
+            };
+
+            var expected2 = new DiagnosticResult
+            {
+                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId,
+                Message = "Possible Deadlock with double Locking",
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test0.cs", 25, 21)
+                        }
+            };
+
+            VerifyCSharpDiagnostic(test, expected1, expected2);
+
+        }
+
+        [TestMethod]
+        public void AnalyzerAcquireMultipleLocks2Test()
+        {
+            var test = @"
+    internal interface IBankAccount
+    {
+        void Transfer(IBankAccount target, int amount);
+        void Deposit(int amount);
+    }
+
+    class BankAccount : IBankAccount
+    {
+        private object LockA = new object();
+        private object LockB = new object();
+        private object LockC = new object();
+
+        public void TransferB()
+        {
+            lock (LockB)
+            {
+                lock(LockA) 
+                {
+                    int i = 10;
+                    lock(LockC) 
+                    {
+                        int j = 20;
+                    }
+                }
+            }
+        }
+    
+        public void TransferA()
+        {
+            lock (LockB)
+            {
+                lock(LockC) 
+                {
+                    int i = 10;
+                    lock(LockA) 
+                    {
+                        int j = 20;
+                    }
+                }
+            }
+        }
+    }";
+            var expected1 = new DiagnosticResult
+            {
+                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId,
+                Message = "Possible Deadlock with double Locking",
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test0.cs", 14, 21)
+                        }
+            };
+
+            var expected2 = new DiagnosticResult
+            {
+                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId,
+                Message = "Possible Deadlock with double Locking",
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test0.cs", 29, 21)
+                        }
+            };
+
+            VerifyCSharpDiagnostic(test, expected1, expected2);
+
+        }
+
+
+        [TestMethod]
+        public void AnalyzerAcquireMultipleLocksCorrectTest()
+        {
+            var test = @"
+    class BankAccount
+    {
+        private object LockA = new object();
+        private object LockB = new object();
+        private object LockC = new object();
+
+        public void TransferB()
+        {
+            lock (LockA)
+            {
+                lock(LockB) 
+                {
+                    int i = 10;
+                }
+            }
+        }
+    
+        public void TransferA()
+        {
+            lock (LockA)
+            {
+                lock(LockB) 
+                {
+                    int i = 10;
+                    lock(LockC) 
+                    {
+                        int j = 20;
+                    }
+                }
+            }
+        }
+    }";
+
+            VerifyCSharpDiagnostic(test);
+
+        }
+
+        [TestMethod]
+        public void AnalyzerAcquireMultipleLocksCorrect2Test()
+        {
+            var test = @"
+    class BankAccount
+    {
+        private object LockA = new object();
+        private object LockB = new object();
+        private object LockC = new object();
+
+        public void TransferB()
+        {
+            lock (LockA)
+            {
+                lock(LockB) 
+                {
+                    int i = 10;
+                }
+            }
+        }
+    
+        public void TransferA()
+        {
+            lock (LockA)
+            {
+                lock(LockC) 
+                {
+                    int i = 10;
+                }
+            }
+        }
+    }";
+            VerifyCSharpDiagnostic(test);
+        }
+
+
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
             return new NestedSynchronizedMethodClassCodeFixProvider();
@@ -241,7 +459,7 @@ namespace ConcurrencyChecker.Test.NSMC
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new NestedSynchronizedMethodCalssAnalyzer();
+            return new NestedSynchronizedMethodClassAnalyzer();
         }
     }
 }
