@@ -277,7 +277,7 @@ namespace ConcurrencyChecker.Test.NSMC
     }";
             var expected1 = new DiagnosticResult
             {
-                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId,
+                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId2,
                 Message = "Possible Deadlock with double Locking",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
@@ -288,7 +288,7 @@ namespace ConcurrencyChecker.Test.NSMC
 
             var expected2 = new DiagnosticResult
             {
-                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId,
+                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId2,
                 Message = "Possible Deadlock with double Locking",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
@@ -349,7 +349,7 @@ namespace ConcurrencyChecker.Test.NSMC
     }";
             var expected1 = new DiagnosticResult
             {
-                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId,
+                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId2,
                 Message = "Possible Deadlock with double Locking",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
@@ -360,7 +360,7 @@ namespace ConcurrencyChecker.Test.NSMC
 
             var expected2 = new DiagnosticResult
             {
-                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId,
+                Id = NestedSynchronizedMethodClassAnalyzer.NestedLockingDiagnosticId2,
                 Message = "Possible Deadlock with double Locking",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =

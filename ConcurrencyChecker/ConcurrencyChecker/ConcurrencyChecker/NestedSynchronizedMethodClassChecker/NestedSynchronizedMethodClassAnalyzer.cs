@@ -17,6 +17,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
     public class NestedSynchronizedMethodClassAnalyzer : DiagnosticAnalyzer
     {
         public const string NestedLockingDiagnosticId = "NSMC001";
+        public const string NestedLockingDiagnosticId2 = "NSMC002";
 
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.NSMCAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.NSMCAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
@@ -24,8 +25,9 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
         private const string Category = "Synchronization";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(NestedLockingDiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
+        private static readonly DiagnosticDescriptor Rule2 = new DiagnosticDescriptor(NestedLockingDiagnosticId2, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule, Rule2);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -61,7 +63,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
                 {
                     foreach (var memberWithBody in clazz.GetMembersWithMultipleLocks())
                     {
-                        var diagn = Diagnostic.Create(Rule, memberWithBody.Name.GetLocation());
+                        var diagn = Diagnostic.Create(Rule2, memberWithBody.Name.GetLocation());
                         context.ReportDiagnostic(diagn);
                     }
                 }

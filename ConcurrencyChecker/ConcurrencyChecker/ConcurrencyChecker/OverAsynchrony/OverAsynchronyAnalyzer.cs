@@ -40,7 +40,7 @@ namespace ConcurrencyChecker.OverAsynchrony
             }
         }
 
-        private static void CheckForPrivateAsync(IMethodRepresentation method, CompilationAnalysisContext context)
+        private static void CheckForPrivateAsync(MethodRepresentation method, CompilationAnalysisContext context)
         {
             var symbol = (IMethodSymbol)context.Compilation.GetSemanticModel(method.MethodImplementation.SyntaxTree).GetDeclaredSymbol(method.MethodImplementation);
 
