@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Builders
 {
-    public class PropertyBuilder
+    public static class PropertyBuilder
     {
         private const string ValueKeyWord = "value";
 

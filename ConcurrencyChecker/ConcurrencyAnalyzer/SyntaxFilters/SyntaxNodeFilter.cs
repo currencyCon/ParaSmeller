@@ -47,9 +47,9 @@ namespace ConcurrencyAnalyzer.SyntaxFilters
             return identifiers;
         }
 
-        public static IEnumerable<IInvocationExpressionRepresentation> GetInvocationsInLocks(IEnumerable<IBody> bodies)
+        public static IEnumerable<InvocationExpressionRepresentation> GetInvocationsInLocks(IEnumerable<IBody> bodies)
         {
-            IEnumerable<IInvocationExpressionRepresentation> invocations = new List<IInvocationExpressionRepresentation>();
+            IEnumerable<InvocationExpressionRepresentation> invocations = new List<InvocationExpressionRepresentation>();
             foreach (var body in bodies)
             {
                 if (body.IsSynchronized)

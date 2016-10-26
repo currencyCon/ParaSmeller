@@ -5,21 +5,41 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Representation
 {
-    public class PropertyRepresentation :IPropertyRepresentation
+    public class PropertyRepresentation : IMember
     {
         private const string GetKeyWord = "get";
         private const string SetKeyWord = "set";
 
-        public ICollection<IInvocationExpressionRepresentation> InvocationExpressions { get; set; }
+        public ICollection<InvocationExpressionRepresentation> InvocationExpressions { get; set; }
         public ClassRepresentation ContainingClass { get; set; }
         public ICollection<IBody> Blocks { get; set; }
         public SyntaxToken Name { get; set; }
+        public ICollection<InvocationExpressionRepresentation> Callers { get; set; }
+        public PropertyDeclarationSyntax PropertyImplementation { get; set; }
+        public BlockSyntax Getter { get; set; }
+        public BlockSyntax Setter { get; set; }
+
+
+        public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation)
+        {
+            InvocationExpressions = new List<InvocationExpressionRepresentation>();
+            Blocks = new List<IBody>();
+            PropertyImplementation = propertyDeclarationSyntax;
+            Name = PropertyImplementation.Identifier;
+            ContainingClass = classRepresentation;
+            Getter =
+                propertyDeclarationSyntax.AccessorList.Accessors.FirstOrDefault(
+                    e => e.Keyword.ToString() == GetKeyWord)?.Body;
+            Setter =
+            propertyDeclarationSyntax.AccessorList.Accessors.FirstOrDefault(
+                e => e.Keyword.ToString() == SetKeyWord)?.Body;
+            Callers = new List<InvocationExpressionRepresentation>();
+        }
+
         public bool IsFullySynchronized()
         {
             return AllAccessorsAreSynchronized();
         }
-
-        public ICollection<IInvocationExpressionRepresentation> Callers { get; set; }
 
         private bool AllAccessorsAreSynchronized()
         {
@@ -36,27 +56,6 @@ namespace ConcurrencyAnalyzer.Representation
                 }
             }
             return isFullySynchronized;
-        }
-
-        public PropertyDeclarationSyntax PropertyImplementation { get; set; }
-        public BlockSyntax Getter { get; set; }
-        public BlockSyntax Setter { get; set; }
-
-
-        public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation)
-        {
-            InvocationExpressions = new List<IInvocationExpressionRepresentation>();
-            Blocks = new List<IBody>();
-            PropertyImplementation = propertyDeclarationSyntax;
-            Name = PropertyImplementation.Identifier;
-            ContainingClass = classRepresentation;
-            Getter =
-                propertyDeclarationSyntax.AccessorList.Accessors.FirstOrDefault(
-                    e => e.Keyword.ToString() == GetKeyWord)?.Body;
-            Setter =
-            propertyDeclarationSyntax.AccessorList.Accessors.FirstOrDefault(
-                e => e.Keyword.ToString() == SetKeyWord)?.Body;
-            Callers = new List<IInvocationExpressionRepresentation>();
         }
     }
 }

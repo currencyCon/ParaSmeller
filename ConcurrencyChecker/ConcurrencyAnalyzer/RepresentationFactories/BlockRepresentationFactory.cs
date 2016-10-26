@@ -8,7 +8,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 {
     public static class BlockRepresentationFactory
     {
-        public static IBody Create(StatementSyntax statementSyntax, IMemberWithBody parent, SemanticModel semanticModel)
+        public static IBody Create(StatementSyntax statementSyntax, IMember parent, SemanticModel semanticModel)
         {
             if (statementSyntax is LockStatementSyntax)
             {
@@ -24,7 +24,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             throw new NotImplementedException($"Unknow Blocktype: {statementSyntax.ToFullString()}");
         }
 
-        private static IBody WithChildBodies(IMemberWithBody parent, SemanticModel semanticModel, IBody block)
+        private static IBody WithChildBodies(IMember parent, SemanticModel semanticModel, IBody block)
         {
             AddInvocations(block, semanticModel);
             foreach (var syntaxNode in block.Implementation.GetDirectChildren<StatementSyntax>())

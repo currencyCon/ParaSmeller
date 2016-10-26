@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Linq;
 using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.SemanticAnalyzation;
+using ConcurrencyAnalyzer.SemanticAnalysis;
 using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.RepresentationFactories
 {
-    public class InvocationExpressionRepresentationFactory
+    public static class InvocationExpressionRepresentationFactory
     {
 
-        public static IInvocationExpressionRepresentation Create(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody = null)
+        public static InvocationExpressionRepresentation Create(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody = null)
         {
             if (invocationExpressionSyntax.Expression is IdentifierNameSyntax)
             {
@@ -25,7 +25,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             throw new NotImplementedException($"An unexpected Type of invocationExpression was encountered: {invocationExpressionSyntax.ToFullString()}");
         }
 
-        private static IInvocationExpressionRepresentation CreateSelfInvocation(
+        private static InvocationExpressionRepresentation CreateSelfInvocation(
             InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody)
         {
             var invocationExpression = (IdentifierNameSyntax)invocationExpressionSyntax.Expression;
@@ -35,7 +35,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
 
 
-        private static IInvocationExpressionRepresentation CreateRemoteInvocation(
+        private static InvocationExpressionRepresentation CreateRemoteInvocation(
             InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody)
         {
             var invocationExpression = (MemberAccessExpressionSyntax) invocationExpressionSyntax.Expression;
@@ -43,24 +43,19 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             return CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget);
         }
 
-        private static IInvocationExpressionRepresentation CreateInvocation(
+        private static InvocationExpressionRepresentation CreateInvocation(
             InvocationExpressionSyntax invocationExpressionSyntax, IBody containingBody, SimpleNameSyntax invocationTarget, SymbolInformation symbolInfo)
         {
-            var invocation = new InvocationExpressionRepresentation
-            {
-                Type = symbolInfo.Type,
-                Arguments = invocationExpressionSyntax.ArgumentList.Arguments.SelectMany(e => e.GetChildren<IdentifierNameSyntax>()).ToList(),
-                Implementation = invocationExpressionSyntax,
-                ContainingBody = containingBody,
-                Synchronized = containingBody?.Implementation.IsSynchronized() ?? false,
-                InvocationTargetName = invocationTarget,
-                CalledClass = symbolInfo.ClassName,
-                OriginalDefinition = symbolInfo.OriginalDefinition
-            };
+            var invocationIsSynchronized = containingBody?.Implementation.IsSynchronized() ?? false;
+            var invocation = new InvocationExpressionRepresentation(invocationIsSynchronized, symbolInfo, invocationExpressionSyntax, containingBody, invocationTarget);
+            var arguments =
+                invocationExpressionSyntax.ArgumentList.Arguments.SelectMany(e => e.GetChildren<IdentifierNameSyntax>())
+                    .ToList();
+            invocation.Arguments.AddRange(arguments);
             return invocation;
         }
 
-        private static IInvocationExpressionRepresentation CreateInvocationWithSymbolInfo(
+        private static InvocationExpressionRepresentation CreateInvocationWithSymbolInfo(
             InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody,
             SimpleNameSyntax invocationTarget)
         {

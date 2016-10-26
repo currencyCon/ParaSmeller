@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
 using System.Linq;
 using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.RepresentationFactories;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;

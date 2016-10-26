@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyChecker.ExplicitThreadsChecker
 {
-    internal class TaskSyntaxHelper
+    internal static class TaskSyntaxHelper
     {
         public static InvocationExpressionSyntax CreateInvocationExpressionSyntax(
             ParenthesizedLambdaExpressionSyntax lambda)

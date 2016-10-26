@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.RepresentationFactories
 {
-    public class SolutionRepresentationFactory
+    public static class SolutionRepresentationFactory
     {
         public static async Task<SolutionRepresentation> Create(Compilation compilation)
         {
@@ -47,7 +47,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             var invocations = memberBlocks.SelectMany(GetInvocations).ToList();
             foreach (var invocationExpressionRepresentation in invocations)
             {
-                invocationExpressionRepresentation.InvocationImplementation =
+                invocationExpressionRepresentation.InvokedImplementation =
                     memberWithBodies.FirstOrDefault(
                         e =>
                             e.ContainingClass.Name.ToString() == invocationExpressionRepresentation.CalledClass&&
@@ -56,9 +56,9 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             }
         }
 
-        private static IEnumerable<IInvocationExpressionRepresentation> GetInvocations(IBody body)
+        private static IEnumerable<InvocationExpressionRepresentation> GetInvocations(IBody body)
         {
-            IEnumerable<IInvocationExpressionRepresentation> l = new List<IInvocationExpressionRepresentation>();
+            IEnumerable<InvocationExpressionRepresentation> l = new List<InvocationExpressionRepresentation>();
             l = l.Concat(body.InvocationExpressions);
             foreach (var block in body.Blocks)
             {

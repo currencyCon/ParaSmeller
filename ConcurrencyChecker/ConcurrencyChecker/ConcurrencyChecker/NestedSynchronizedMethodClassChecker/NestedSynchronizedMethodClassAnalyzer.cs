@@ -16,7 +16,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NestedSynchronizedMethodClassAnalyzer : DiagnosticAnalyzer
     {
-        public static string NestedLockingDiagnosticId = "NSMC001";
+        public const string NestedLockingDiagnosticId = "NSMC001";
 
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.NSMCAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.NSMCAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
@@ -44,12 +44,12 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             CheckAquireMultipleLocks(context, solutionModel.Classes);
         }
 
-        private static void CheckAquireMultipleLocks(CompilationAnalysisContext context, ICollection<ClassRepresentation> classes)
+        private static void CheckAquireMultipleLocks(CompilationAnalysisContext context, IEnumerable<ClassRepresentation> classes)
         {
             
             foreach (var clazz in classes)
             {
-                List<List<string>> lockObjects = new List<List<string>>();
+                var lockObjects = new List<List<string>>();
 
                 foreach (var memberWithBody in clazz.GetMembersWithMultipleLocks())
                 {
@@ -68,14 +68,14 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             }
         }
         
-        private static void CheckForLockingOnSameType(CompilationAnalysisContext context, IMemberWithBody memberWithBody)
+        private static void CheckForLockingOnSameType(CompilationAnalysisContext context, IMember member)
         {
-            var lockStatements = memberWithBody.GetLockStatements().ToList();
+            var lockStatements = member.GetLockStatements().ToList();
             if (!lockStatements.Any())
             {
                 return;
             }
-            var method = memberWithBody as MethodRepresentation;
+            var method = member as MethodRepresentation;
             if (method == null)
             {
                 return;
@@ -122,7 +122,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             return false;
         }
 
-        private static List<SyntaxToken> ParametersOfOwnType(IMethodRepresentation node, CompilationAnalysisContext context)
+        private static List<SyntaxToken> ParametersOfOwnType(MethodRepresentation node, CompilationAnalysisContext context)
         {
             var clazz = node.GetFirstParent<ClassDeclarationSyntax>();
             var model = context.Compilation.GetSemanticModel(node.ContainingClass.ClassDeclarationSyntax.SyntaxTree);
