@@ -260,6 +260,15 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Async shoudn&apos;t be nested {0} times.
+        /// </summary>
+        internal static string OAAnalyzerMessageFormatNestedAsync {
+            get {
+                return ResourceManager.GetString("OAAnalyzerMessageFormatNestedAsync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Over Async.
         /// </summary>
         internal static string OAAnalyzerTitle {

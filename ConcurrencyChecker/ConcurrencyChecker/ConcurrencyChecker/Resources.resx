@@ -209,4 +209,7 @@
   <data name="OAAnalyzerTitle" xml:space="preserve">
     <value>Over Async</value>
   </data>
+  <data name="OAAnalyzerMessageFormatNestedAsync" xml:space="preserve">
+    <value>Async shoudn't be nested {0} times</value>
+  </data>
 </root>
