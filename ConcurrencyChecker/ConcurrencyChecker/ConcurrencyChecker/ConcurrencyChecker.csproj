@@ -52,6 +52,7 @@
     <Compile Include="NestedSynchronizedMethodClassChecker\NestedSynchronizedMethodClassAnalyzer.cs" />
     <Compile Include="NestedSynchronizedMethodClassChecker\HierarchieChecker.cs" />
     <Compile Include="NestedSynchronizedMethodClassChecker\TypeExtension.cs" />
+    <Compile Include="OverAsynchrony\OverAsynchronyAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

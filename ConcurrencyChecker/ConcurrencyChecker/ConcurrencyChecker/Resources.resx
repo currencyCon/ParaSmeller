@@ -200,4 +200,13 @@
   <data name="TapirAnalyzerTitle" xml:space="preserve">
     <value>Tapir :)</value>
   </data>
+  <data name="OAAnalyzerDescription" xml:space="preserve">
+    <value>Over async desc</value>
+  </data>
+  <data name="OAAnalyzerMessageFormat" xml:space="preserve">
+    <value>async shouldn't be used in private methods</value>
+  </data>
+  <data name="OAAnalyzerTitle" xml:space="preserve">
+    <value>Over Async</value>
+  </data>
 </root>

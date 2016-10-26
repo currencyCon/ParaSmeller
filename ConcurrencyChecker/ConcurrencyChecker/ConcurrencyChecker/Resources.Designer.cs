@@ -242,6 +242,33 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Over async desc.
+        /// </summary>
+        internal static string OAAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("OAAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to async shouldn&apos;t be used in private methods.
+        /// </summary>
+        internal static string OAAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("OAAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Over Async.
+        /// </summary>
+        internal static string OAAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("OAAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tapirs shouldn&apos;t be alone.
         /// </summary>
         internal static string TapirAnalyzerDescription {
