@@ -136,6 +136,38 @@ namespace OverAsynchrony
         }
 
         [TestMethod]
+        public void TestAsyncDepthGood2()
+        {
+            const string test = @"
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace OverAsynchrony
+{
+    class Service
+    {
+        public async void Test1()
+        {
+            await Test2();
+            await Test3();
+        }
+
+        public async void Test2()
+        {
+            await Task.Run(() => { Thread.Sleep(1000); });
+        }
+
+        public async void Test3()
+        {
+            await Task.Run(() => { Thread.Sleep(1000); });
+        }
+    }
+}";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
         public void TestAsyncDepthMultiple()
         {
             const string test = @"
@@ -218,7 +250,10 @@ namespace OverAsynchrony
     {
         public async void Test1()
         {
-            await Test2();
+            if(true) 
+            {
+                await Test2();
+            }
         }
 
         public async void Test2()
@@ -242,6 +277,79 @@ namespace OverAsynchrony
             };
             
             VerifyCSharpDiagnostic(test, expected);
+        }
+
+        [TestMethod]
+        public void TestAsyncDepthRecursive()
+        {
+            const string test = @"
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace OverAsynchrony
+{
+    class Service
+    {
+        public async void Test0()
+        {
+            var service2 = new Service2();
+            await service2.Test1();
+        }
+    }
+
+    class Service2
+    {
+        public async void Test1()
+        {
+            await Test2();
+            
+        }
+
+        public async void Test2()
+        {
+            await Test1();
+        }
+    }
+    
+}";
+
+            var expected1 = new DiagnosticResult
+            {
+                Id = "OA002",
+                Message = "Async shoudn't be nested 3 times",
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 9, 9)
+                    }
+            };
+
+            var expected2 = new DiagnosticResult
+            {
+                Id = "OA002",
+                Message = "Async shoudn't be nested 3 times",
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 18, 9)
+                    }
+            };
+
+            var expected3 = new DiagnosticResult
+            {
+                Id = "OA002",
+                Message = "Async shoudn't be nested 3 times",
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 24, 9)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(test, expected1, expected2, expected3);
         }
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()

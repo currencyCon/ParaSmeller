@@ -86,9 +86,9 @@ namespace ConcurrencyChecker.OverAsynchrony
                 {
                     return true;
                 }
-                var invocations = AllInvocations(method);
                 counter++;
-                foreach (var invocation in invocations)
+                var invocations = AllInvocations(method);
+                foreach (var invocation in invocations.Where(i => i.InvokedImplementation is MethodRepresentation).Select(i => i.InvokedImplementation as MethodRepresentation))
                 {
                     if (CheckForNestedAsync(invocation, context, counter))
                     {
@@ -99,38 +99,7 @@ namespace ConcurrencyChecker.OverAsynchrony
 
             return false;
         }
-
-        private static bool CheckForNestedAsync(InvocationExpressionRepresentation invocation, CompilationAnalysisContext context, int counter)
-        {
-            if (invocation.InvokedImplementation is MethodRepresentation)
-            {
-                var method = ((MethodRepresentation) invocation.InvokedImplementation);
-                var symbol = (IMethodSymbol)context.Compilation.GetSemanticModel(method.MethodImplementation.SyntaxTree).GetDeclaredSymbol(method.MethodImplementation);
-
-                if (symbol.IsAsync)
-                {
-                    if (counter >= MAX_DEPTH_ASYNC)
-                    {
-                        return true;
-                    }
-                    counter++;
-                    var invocations = AllInvocations(method);
-                    foreach (var inv in invocations)
-                    {
-                        if (inv.InvokedImplementation is MethodRepresentation)
-                        {
-                            if (CheckForNestedAsync((MethodRepresentation) inv.InvokedImplementation, context, counter))
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
+        
         private static void CheckForPrivateAsync(MethodRepresentation method, CompilationAnalysisContext context)
         {
             var symbol = (IMethodSymbol)context.Compilation.GetSemanticModel(method.MethodImplementation.SyntaxTree).GetDeclaredSymbol(method.MethodImplementation);
