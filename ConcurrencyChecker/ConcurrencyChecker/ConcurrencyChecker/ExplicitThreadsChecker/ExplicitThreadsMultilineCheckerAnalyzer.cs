@@ -43,13 +43,9 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
             {
                 return;
             }
-            if (root.DescendantNodes().OfType<ObjectCreationExpressionSyntax>().Any())
+            if (root.DescendantNodes().OfType<ObjectCreationExpressionSyntax>().Any(e => e.Type.ToString() == "Thread"))
             {
-                if (root.DescendantNodes().OfType<ObjectCreationExpressionSyntax>().First().Type.ToString() == "Thread")
-                {
-                    //Ignore ETC001
-                    return;
-                }
+                return;
             }
 
             var callingMethod = root as MemberAccessExpressionSyntax;
