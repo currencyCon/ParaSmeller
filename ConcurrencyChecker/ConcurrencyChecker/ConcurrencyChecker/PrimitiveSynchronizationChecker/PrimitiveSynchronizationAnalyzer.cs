@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class PrimitiveSynchronizationAnalyzer: DiagnosticAnalyzer
+    public class PrimitiveSynchronizationAnalyzer : DiagnosticAnalyzer
     {
         private const string Category = "Synchronization";
         public const string PrimitiveSynchronizationDiagnosticId = "PS001";
@@ -22,6 +22,24 @@ namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
         private const string SpinLockExitOriginalDefinition = "System.Threading.SpinLock.Exit";
         private const string SpinLockEnterOriginalDefinition = "System.Threading.SpinLock.Enter";
         private const string SpinLockType = "SpinLock";
+
+        private static readonly string[] NotAllowedApIs =
+        {
+            YieldOriginalDefinition, MemoryBarrierOriginalDefinition, SpinLockEnterOriginalDefinition,
+            SpinLockExitOriginalDefinition
+        };
+        private static readonly string[] NotAllowedTypes =
+        {
+            SpinLockType
+        };
+        private static readonly string[] NotAllowedModifiers =
+        {
+            VolatileKeyWord
+        };
+        private static readonly string[] NotAllowedApiClasses =
+        {
+            InterlockedKeyword
+        };
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.PSAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormatPrimitiveSynchronization = new LocalizableResourceString(nameof(Resources.PrimitiveSynchronizationAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         
@@ -44,72 +62,34 @@ namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
                 var fieldDeclarations = clazz.ClassDeclarationSyntax.GetChildren<FieldDeclarationSyntax>();
                 foreach (var fieldDeclarationSyntax in fieldDeclarations)
                 {
-                    CheckForVolatileDeclaration(fieldDeclarationSyntax, context);
-                    CheckForSpinLockDeclaration(fieldDeclarationSyntax, context);
+                    CheckForUnallowedDeclaration(fieldDeclarationSyntax, context);
                 }
                 foreach (var member in clazz.Members)
                 {
-                    CheckForInterlockedUsage(member, context);
-                    CheckForYieldUsage(member, context);
-                    CheckForSpinLockUsage(member, context);
-                    CheckForMemoryBarrierUsage(member, context);
+                    CheckForNotAllowedApiUsages(member, context);
                 }
-
             }
         }
 
-        private static void CheckForMemoryBarrierUsage(IMember member, CompilationAnalysisContext context)
+        private static void CheckForNotAllowedApiUsages(IMember member, CompilationAnalysisContext context)
         {
-            var memoryBarrierUsages = member.InvocationExpressions.Where(e => e.OriginalDefinition == MemoryBarrierOriginalDefinition);
-            foreach (var memoryBarrierUsage in memoryBarrierUsages)
+            var invocationsToReport = member.InvocationExpressions.Where(e => NotAllowedApIs.Contains(e.OriginalDefinition));
+            foreach (var invocationToReport in invocationsToReport)
             {
-                ReportPrimitiveSynchronizationUsage(context, memoryBarrierUsage.Implementation);
+                ReportPrimitiveSynchronizationUsage(context, invocationToReport.Implementation);
             }
-        }
-
-        private static void CheckForSpinLockDeclaration(BaseFieldDeclarationSyntax fieldDeclarationSyntax, CompilationAnalysisContext context)
-        {
-            if (fieldDeclarationSyntax.Declaration.Type.ToString() == SpinLockType)
+            var accessesToReport = member.GetChildren<MemberAccessExpressionSyntax>().Where(e => NotAllowedApiClasses.Contains(e.Expression.ToString()));
+            foreach (var accessToReport in accessesToReport)
             {
-                ReportPrimitiveSynchronizationUsage(context, fieldDeclarationSyntax);
+                ReportPrimitiveSynchronizationUsage(context, accessToReport);
             }
         }
 
-        private static void CheckForSpinLockUsage(IMember method, CompilationAnalysisContext context)
+        private static void CheckForUnallowedDeclaration(BaseFieldDeclarationSyntax fieldDeclarationSyntax, CompilationAnalysisContext context)
         {
-            var spinlockUsages = method.InvocationExpressions.Where(e => e.OriginalDefinition == SpinLockEnterOriginalDefinition || e.OriginalDefinition == SpinLockExitOriginalDefinition);
-            foreach (var interlockedUsage in spinlockUsages)
-            {
-                ReportPrimitiveSynchronizationUsage(context, interlockedUsage.Implementation);
-            }
-        }
-
-        private static void CheckForYieldUsage(IMember member, CompilationAnalysisContext context)
-        {
-            var yieldUsages = member.InvocationExpressions.Where(e => e.OriginalDefinition == YieldOriginalDefinition);
-            foreach (var yieldUsage in yieldUsages)
-            {
-                ReportPrimitiveSynchronizationUsage(context, yieldUsage.Implementation);
-            }
-        }
-
-        private static void CheckForVolatileDeclaration(BaseFieldDeclarationSyntax fieldDeclarationSyntax, CompilationAnalysisContext context)
-        {
-
-            if (fieldDeclarationSyntax.Modifiers.Select(e => e.Text).Contains(VolatileKeyWord))
+            if (NotAllowedTypes.Contains(fieldDeclarationSyntax.Declaration.Type.ToString()) ||fieldDeclarationSyntax.Modifiers.Any(e => NotAllowedModifiers.Contains(e.Text)))
             {
                 ReportPrimitiveSynchronizationUsage(context, fieldDeclarationSyntax);
-            }
-        }
-
-        private static void CheckForInterlockedUsage(IMember method, CompilationAnalysisContext context)
-        {
-            var interlockedUsages =
-                method.GetChildren<MemberAccessExpressionSyntax>()
-                    .Where(e => e.Expression.ToString() == InterlockedKeyword);
-            foreach (var interlockedUsage in interlockedUsages)
-            {
-                ReportPrimitiveSynchronizationUsage(context, interlockedUsage);
             }
         }
 
