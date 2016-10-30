@@ -18,6 +18,7 @@ namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
         private const string InterlockedKeyword = "Interlocked";
         private const string VolatileKeyWord = "volatile";
         private const string YieldOriginalDefinition = "System.Threading.Thread.Yield";
+        private const string MemoryBarrierOriginalDefinition = "System.Threading.Thread.MemoryBarrier";
         private const string SpinLockExitOriginalDefinition = "System.Threading.SpinLock.Exit";
         private const string SpinLockEnterOriginalDefinition = "System.Threading.SpinLock.Enter";
         private const string SpinLockType = "SpinLock";
@@ -51,8 +52,18 @@ namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
                     CheckForInterlockedUsage(member, context);
                     CheckForYieldUsage(member, context);
                     CheckForSpinLockUsage(member, context);
+                    CheckForMemoryBarrierUsage(member, context);
                 }
 
+            }
+        }
+
+        private static void CheckForMemoryBarrierUsage(IMember member, CompilationAnalysisContext context)
+        {
+            var memoryBarrierUsages = member.InvocationExpressions.Where(e => e.OriginalDefinition == MemoryBarrierOriginalDefinition);
+            foreach (var memoryBarrierUsage in memoryBarrierUsages)
+            {
+                ReportPrimitiveSynchronizationUsage(context, memoryBarrierUsage.Implementation);
             }
         }
 
@@ -73,12 +84,12 @@ namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
             }
         }
 
-        private static void CheckForYieldUsage(IMember method, CompilationAnalysisContext context)
+        private static void CheckForYieldUsage(IMember member, CompilationAnalysisContext context)
         {
-            var yieldUsages = method.InvocationExpressions.Where(e => e.OriginalDefinition == YieldOriginalDefinition);
-            foreach (var interlockedUsage in yieldUsages)
+            var yieldUsages = member.InvocationExpressions.Where(e => e.OriginalDefinition == YieldOriginalDefinition);
+            foreach (var yieldUsage in yieldUsages)
             {
-                ReportPrimitiveSynchronizationUsage(context, interlockedUsage.Implementation);
+                ReportPrimitiveSynchronizationUsage(context, yieldUsage.Implementation);
             }
         }
 

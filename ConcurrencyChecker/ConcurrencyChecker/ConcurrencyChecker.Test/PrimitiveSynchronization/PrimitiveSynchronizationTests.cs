@@ -367,6 +367,83 @@ class SpinLockDemo2
             VerifyCSharpDiagnostic(test, expected);
 
         }
+
+        [TestMethod]
+        public void AnalyzerFindsMemoryBarrier()
+        {
+            const string test = @"
+using System;
+using System.Threading;
+
+namespace ConcurrencyChecker.Test.TestCodeTester
+{
+    public class Foo
+    {
+        int _answer;
+        bool _complete;
+
+        public void A()
+        {
+            _answer = 123;
+            Thread.MemoryBarrier();
+            _complete = true;
+            Thread.MemoryBarrier();    
+        }
+
+        public  void B()
+        {
+            Thread.MemoryBarrier();
+            if (_complete)
+            {
+                Thread.MemoryBarrier();
+                Console.WriteLine(_answer);
+            }
+        }
+    }
+}";
+            var expected = new[] {
+                new DiagnosticResult {
+                    Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
+                    Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[] {
+                                new DiagnosticResultLocation("Test0.cs", 15, 13)
+                            }
+                },
+                new DiagnosticResult {
+                    Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
+                    Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[] {
+                                new DiagnosticResultLocation("Test0.cs", 17, 13)
+                            }
+                },
+                new DiagnosticResult {
+                    Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
+                    Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[] {
+                                new DiagnosticResultLocation("Test0.cs", 22, 13)
+                            }
+                },
+                new DiagnosticResult {
+                    Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
+                    Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[] {
+                                new DiagnosticResultLocation("Test0.cs", 25, 17)
+                            }
+                }
+            }
+            ;
+
+            VerifyCSharpDiagnostic(test, expected);
+
+        }
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new PrimitiveSynchronizationAnalyzer();
