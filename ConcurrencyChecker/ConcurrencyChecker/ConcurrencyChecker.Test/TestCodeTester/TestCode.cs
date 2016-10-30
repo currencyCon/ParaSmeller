@@ -1,18 +1,14 @@
-﻿using System.Threading;
+﻿
 
 namespace Test
 {
-    public class BancAcount
+    public class VolatileTest<TVol> where TVol : class
     {
-        private int _balance;
+        public volatile TVol VolatileElement;
 
-        public void Withdraw(int amount)
+        public void Test(TVol volatileElement)
         {
-            var value = _balance;
-            if (value >= _balance)
-            {
-                Interlocked.Add(ref _balance, -amount);
-            }
+            VolatileElement = volatileElement;
         }
     }
 }

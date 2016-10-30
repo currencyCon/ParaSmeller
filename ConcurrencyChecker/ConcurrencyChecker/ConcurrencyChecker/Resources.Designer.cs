@@ -179,15 +179,6 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consider using more abstract constructs like lock if not implementing a high performant library..
-        /// </summary>
-        internal static string InterlockedUsageAnalyzerMessageFormat {
-            get {
-                return ResourceManager.GetString("InterlockedUsageAnalyzerMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Starvation could happen.
         /// </summary>
         internal static string MWSAnalyzerDescription {
@@ -283,6 +274,15 @@ namespace ConcurrencyChecker {
         internal static string OAAnalyzerTitle {
             get {
                 return ResourceManager.GetString("OAAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using more abstract constructs like lock if not implementing a high performant library..
+        /// </summary>
+        internal static string PrimitiveSynchronizationAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("PrimitiveSynchronizationAnalyzerMessageFormat", resourceCulture);
             }
         }
         

@@ -216,7 +216,7 @@
   <data name="PSAnalyzerTitle" xml:space="preserve">
     <value>Primitive Synchronization</value>
   </data>
-  <data name="InterlockedUsageAnalyzerMessageFormat" xml:space="preserve">
+  <data name="PrimitiveSynchronizationAnalyzerMessageFormat" xml:space="preserve">
     <value>Consider using more abstract constructs like lock if not implementing a high performant library.</value>
   </data>
   <data name="PSAnalyzerDescription" xml:space="preserve">
