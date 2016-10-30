@@ -95,19 +95,24 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
                 {
                     foreach (var parameter in parametersOfOwnKind)
                     {
-                        if (memberAccessExpressionSyntax.Expression.ToString() == parameter.ToString())
+                        if (UsesLockRecursive(memberAccessExpressionSyntax, parameter, lockObject,
+                            method.MethodImplementation))
                         {
-                            if (CheckIfAquiresSameLock(lockObject, memberAccessExpressionSyntax.Name, method.MethodImplementation))
-                            {
-                                var diagn = Diagnostic.Create(Rule, memberAccessExpressionSyntax.GetLocation());
-                                context.ReportDiagnostic(diagn);
-                            }
+                            var diagn = Diagnostic.Create(Rule, memberAccessExpressionSyntax.GetLocation());
+                            context.ReportDiagnostic(diagn);
                         }
                     }
                 }
             }
         }
 
+        private static bool UsesLockRecursive(MemberAccessExpressionSyntax memberAccessExpressionSyntax,
+            SyntaxToken parameter, ExpressionSyntax lockObject,
+            SyntaxNode methodDeclarationSyntax)
+        {
+            return memberAccessExpressionSyntax.Expression.ToString() == parameter.ToString() &&
+                   CheckIfAquiresSameLock(lockObject, memberAccessExpressionSyntax.Name, methodDeclarationSyntax);
+        }
         private static bool CheckIfAquiresSameLock(ExpressionSyntax lockObject, SimpleNameSyntax methodName, SyntaxNode root)
         {
             var clazz = root.GetFirstParent<ClassDeclarationSyntax>();
