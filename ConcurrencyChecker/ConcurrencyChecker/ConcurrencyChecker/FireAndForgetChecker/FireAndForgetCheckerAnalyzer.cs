@@ -61,13 +61,16 @@ namespace ConcurrencyChecker.FireAndForgetChecker
 
         private static void CheckForLostAssignment(CompilationAnalysisContext context, InvocationExpressionRepresentation invocationExpressionRepresentation, IMember member)
         {
-            if (invocationExpressionRepresentation.GetFirstParent<EqualsValueClauseSyntax>() != null)
+            if (AssignmentIsLost(invocationExpressionRepresentation, member))
             {
-                if (!AssignmentIsAwaited(invocationExpressionRepresentation, member))
-                {
-                    ReportFireAndForget(context, invocationExpressionRepresentation.Implementation);
-                }
-            }
+                ReportFireAndForget(context, invocationExpressionRepresentation.Implementation);
+            }   
+        }
+
+        private static bool AssignmentIsLost(InvocationExpressionRepresentation invocationExpressionRepresentation, IMember member)
+        {
+            return invocationExpressionRepresentation.GetFirstParent<EqualsValueClauseSyntax>() != null &&
+                   !AssignmentIsAwaited(invocationExpressionRepresentation, member);
         }
 
         private static bool AssignmentIsAwaited(InvocationExpressionRepresentation invocationExpressionRepresentation, IMember member)
