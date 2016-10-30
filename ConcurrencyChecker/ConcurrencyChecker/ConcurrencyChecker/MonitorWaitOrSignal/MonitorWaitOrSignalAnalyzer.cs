@@ -16,8 +16,8 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
         private const string Category = "Synchronization";
         public const string MonitorIfConditionDiagnosticId = "MWS001";
         public const string MonitorPulseDiagnosticId = "MWS002";
-        public static string MonitorWaitDefinition = "System.Threading.Monitor.Wait(object)";
-        public static string MonitorPulseDefinition = "System.Threading.Monitor.Pulse(object)";
+        public const string MonitorWaitDefinition = "System.Threading.Monitor.Wait(object)";
+        public const string MonitorPulseDefinition = "System.Threading.Monitor.Pulse(object)";
         private const string MonitorClass = "Monitor";
         private const string MonitorPulseMethod = "Pulse";
         private const string MonitorWaitMethod = "Wait";
