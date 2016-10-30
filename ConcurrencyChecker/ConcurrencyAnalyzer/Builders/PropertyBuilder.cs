@@ -42,7 +42,7 @@ namespace ConcurrencyAnalyzer.Builders
             return getter;
         }
 
-        public static PropertyDeclarationSyntax BuildPropertyWithSynchronizedBackingField(PropertyDeclarationSyntax property, BaseFieldDeclarationSyntax backingField, ExpressionSyntax defaultLockObject = null)
+        public static PropertyDeclarationSyntax BuildPropertyWithSynchronizedBackingField(PropertyDeclarationSyntax property, BaseFieldDeclarationSyntax backingField, ExpressionSyntax defaultLockObject)
         {
             var synchronizedProperty  =
                 SyntaxFactory.PropertyDeclaration(property.Type, property.Identifier.Text)
@@ -50,6 +50,11 @@ namespace ConcurrencyAnalyzer.Builders
                     .AddAccessorListAccessors(GetDefaultGetter(backingField, defaultLockObject), GetDefaultSetter(backingField, defaultLockObject)
                     );
             return synchronizedProperty;
+        }
+
+        public static PropertyDeclarationSyntax BuildPropertyWithSynchronizedBackingField(PropertyDeclarationSyntax property, BaseFieldDeclarationSyntax backingField)
+        {
+            return BuildPropertyWithSynchronizedBackingField(property, backingField, LockBuilder.DefaultLockObject());
         }
     }
 }
