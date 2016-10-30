@@ -32,7 +32,7 @@ namespace ConcurrencyChecker.EasterEgg
 
             var node = root.FindNode(context.Span);
 
-            if (node is ClassDeclarationSyntax == false)
+            if (!(node is ClassDeclarationSyntax))
             {
                 return;
             }
