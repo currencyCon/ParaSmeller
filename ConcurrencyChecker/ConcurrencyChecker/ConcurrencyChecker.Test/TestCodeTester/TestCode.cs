@@ -1,14 +1,30 @@
 ﻿
 
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace Test
 {
-    public class VolatileTest<TVol> where TVol : class
+    public class YieldTest
     {
-        public volatile TVol VolatileElement;
-
-        public void Test(TVol volatileElement)
+        private static void DoLongWork()
         {
-            VolatileElement = volatileElement;
+            for (var i = 0; i < 1000; i++)
+            {
+                DoHardStuff();
+                Thread.Yield();
+            }
+        }
+
+        public static void Main()
+        {
+            var x = Task.Run(() => DoLongWork());
+            x.Wait();
+        }
+
+        private static void DoHardStuff()
+        {
+            Thread.Sleep(100);
         }
     }
 }

@@ -17,6 +17,8 @@ namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
         public const string PrimitiveSynchronizationDiagnosticId = "PS001";
         private const string InterlockedKeyword = "Interlocked";
         private const string VolatileKeyWord = "volatile";
+        private const string YieldOriginalDefinition = "System.Threading.Thread.Yield";
+
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.PSAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormatPrimitiveSynchronization = new LocalizableResourceString(nameof(Resources.PrimitiveSynchronizationAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         
@@ -41,15 +43,25 @@ namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
                 {
                     CheckForVolatileDeclaration(fieldDeclarationSyntax, context);
                 }
-                foreach (var method in clazz.Methods)
+                foreach (var method in clazz.Members)
                 {
                     CheckForInterlockedUsage(method, context);
+                    CheckForYieldUsage(method, context);
                 }
 
             }
         }
 
-        private static void CheckForVolatileDeclaration(FieldDeclarationSyntax fieldDeclarationSyntax, CompilationAnalysisContext context)
+        private static void CheckForYieldUsage(IMember method, CompilationAnalysisContext context)
+        {
+            var yieldUsages = method.InvocationExpressions.Where(e => e.OriginalDefinition == YieldOriginalDefinition);
+            foreach (var interlockedUsage in yieldUsages)
+            {
+                ReportPrimitiveSynchronizationUsage(context, interlockedUsage.Implementation);
+            }
+        }
+
+        private static void CheckForVolatileDeclaration(BaseFieldDeclarationSyntax fieldDeclarationSyntax, CompilationAnalysisContext context)
         {
 
             if (fieldDeclarationSyntax.Modifiers.Select(e => e.Text).Contains(VolatileKeyWord))
