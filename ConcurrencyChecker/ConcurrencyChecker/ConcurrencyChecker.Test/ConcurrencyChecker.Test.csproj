@@ -108,6 +108,7 @@
     <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalUnitTests.cs" />
     <Compile Include="FireAndForget\FireAndForgetCheckerTests.cs" />
     <Compile Include="OverAsynchrony\OverAsynchronyUnitTests.cs" />
+    <Compile Include="PrimitiveSynchronization\PrimitiveSynchronizationTests.cs" />
     <Compile Include="ReferencesForTests.cs" />
     <Compile Include="HSC\HalfSynchronizedClassCheckerTests.cs" />
     <Compile Include="NSMC\NestedSynchronizedMethodClassTests.cs" />

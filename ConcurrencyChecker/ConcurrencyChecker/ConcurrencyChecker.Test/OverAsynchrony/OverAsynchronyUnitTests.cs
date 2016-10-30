@@ -1,5 +1,4 @@
-﻿using ConcurrencyChecker.MonitorWaitOrSignal;
-using ConcurrencyChecker.OverAsynchrony;
+﻿using ConcurrencyChecker.OverAsynchrony;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;

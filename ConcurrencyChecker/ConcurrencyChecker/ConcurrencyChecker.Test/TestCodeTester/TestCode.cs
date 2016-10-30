@@ -1,32 +1,17 @@
-﻿namespace Test
+﻿using System.Threading;
+
+namespace Test
 {
-    public class LockObject
+    public class BancAcount
     {
-        
-    }
-    public class TestProgram
-    {
-        private LockObject LockObject { get; }
+        private int _balance;
 
-        public TestProgram(LockObject lockObject)
+        public void Withdraw(int amount)
         {
-            LockObject = lockObject;
-        }
-        public int z { get; set; }
-
-        public void m()
-        {
-            lock (LockObject)
+            var value = _balance;
+            if (value >= _balance)
             {
-                z = 2;
-            }
-        }
-
-        public void m2()
-        {
-            lock (LockObject)
-            {
-                z = 3;
+                Interlocked.Add(ref _balance, -amount);
             }
         }
     }

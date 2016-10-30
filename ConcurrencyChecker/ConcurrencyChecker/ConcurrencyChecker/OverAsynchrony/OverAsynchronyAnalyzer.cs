@@ -1,13 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.RepresentationFactories;
-using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ConcurrencyChecker.OverAsynchrony
@@ -18,7 +14,7 @@ namespace ConcurrencyChecker.OverAsynchrony
         private const string Category = "Synchronization";
         public static string DiagnosticId = "OA001";
         public static string DiagnosticIdNestedAsync = "OA002";
-        public static int MAX_DEPTH_ASYNC = 2;
+        public static int MaxDepthAsync = 2;
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.OAAnalyzerTitle), Resources.ResourceManager, typeof (Resources));
         private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.OAAnalyzerMessageFormat), Resources.ResourceManager, typeof (Resources));
         private static readonly LocalizableString MessageFormatNestedAsync = new LocalizableResourceString(nameof(Resources.OAAnalyzerMessageFormatNestedAsync), Resources.ResourceManager, typeof(Resources));
@@ -44,7 +40,7 @@ namespace ConcurrencyChecker.OverAsynchrony
                     CheckForPrivateAsync(method, context);
                     if (CheckForNestedAsync(method, context, 0))
                     {
-                        var diagnostic = Diagnostic.Create(RuleNestedAsync, method.MethodImplementation.GetLocation(), MAX_DEPTH_ASYNC+1);
+                        var diagnostic = Diagnostic.Create(RuleNestedAsync, method.MethodImplementation.GetLocation(), MaxDepthAsync+1);
                         context.ReportDiagnostic(diagnostic);
                     }
                 }
@@ -82,7 +78,7 @@ namespace ConcurrencyChecker.OverAsynchrony
             
             if (symbol.IsAsync)
             {
-                if (counter >= MAX_DEPTH_ASYNC)
+                if (counter >= MaxDepthAsync)
                 {
                     return true;
                 }
