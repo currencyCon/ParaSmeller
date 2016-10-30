@@ -11,7 +11,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
     public static class InvocationExpressionRepresentationFactory
     {
 
-        public static InvocationExpressionRepresentation Create(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody = null)
+        public static InvocationExpressionRepresentation Create(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody)
         {
             if (invocationExpressionSyntax.Expression is IdentifierNameSyntax)
             {
@@ -23,6 +23,11 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 return CreateRemoteInvocation(invocationExpressionSyntax, semanticModel, containingBody);
             }
             throw new NotImplementedException($"An unexpected Type of invocationExpression was encountered: {invocationExpressionSyntax.ToFullString()}");
+        }
+
+        public static InvocationExpressionRepresentation Create(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel)
+        {
+            return Create(invocationExpressionSyntax, semanticModel, null);
         }
 
         private static InvocationExpressionRepresentation CreateSelfInvocation(
