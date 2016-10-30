@@ -151,7 +151,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
                     .Any();
         }
 
-        private ArgumentSyntax FindThreadArgument(string variableName, BlockSyntax block)
+        private static ArgumentSyntax FindThreadArgument(string variableName, SyntaxNode block)
         {
             var creationNodes = block.GetChildren<ObjectCreationExpressionSyntax>();
             foreach (var creation in creationNodes)
@@ -164,13 +164,9 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
                         return creation.GetChildren<ArgumentSyntax>().First();
                     }
                 }
-                else if (creation.AncestorsAndSelf().OfType<AssignmentExpressionSyntax>().Any())
+                else if (creation.AncestorsAndSelf().OfType<AssignmentExpressionSyntax>().Any(e => e.Left.ToString() == variableName))
                 {
-                    if (creation.GetParents<AssignmentExpressionSyntax>().First().Left.ToString() ==
-                        variableName)
-                    {
-                        return creation.GetChildren<ArgumentSyntax>().First();
-                    }
+                    return creation.GetChildren<ArgumentSyntax>().First();
                 }
             }
             return null;
