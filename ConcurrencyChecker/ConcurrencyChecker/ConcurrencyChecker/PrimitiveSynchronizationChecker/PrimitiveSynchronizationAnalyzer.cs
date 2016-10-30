@@ -18,7 +18,9 @@ namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
         private const string InterlockedKeyword = "Interlocked";
         private const string VolatileKeyWord = "volatile";
         private const string YieldOriginalDefinition = "System.Threading.Thread.Yield";
-
+        private const string SpinLockExitOriginalDefinition = "System.Threading.SpinLock.Exit";
+        private const string SpinLockEnterOriginalDefinition = "System.Threading.SpinLock.Enter";
+        private const string SpinLockType = "SpinLock";
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.PSAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormatPrimitiveSynchronization = new LocalizableResourceString(nameof(Resources.PrimitiveSynchronizationAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         
@@ -42,13 +44,32 @@ namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
                 foreach (var fieldDeclarationSyntax in fieldDeclarations)
                 {
                     CheckForVolatileDeclaration(fieldDeclarationSyntax, context);
+                    CheckForSpinLockDeclaration(fieldDeclarationSyntax, context);
                 }
-                foreach (var method in clazz.Members)
+                foreach (var member in clazz.Members)
                 {
-                    CheckForInterlockedUsage(method, context);
-                    CheckForYieldUsage(method, context);
+                    CheckForInterlockedUsage(member, context);
+                    CheckForYieldUsage(member, context);
+                    CheckForSpinLockUsage(member, context);
                 }
 
+            }
+        }
+
+        private static void CheckForSpinLockDeclaration(BaseFieldDeclarationSyntax fieldDeclarationSyntax, CompilationAnalysisContext context)
+        {
+            if (fieldDeclarationSyntax.Declaration.Type.ToString() == SpinLockType)
+            {
+                ReportPrimitiveSynchronizationUsage(context, fieldDeclarationSyntax);
+            }
+        }
+
+        private static void CheckForSpinLockUsage(IMember method, CompilationAnalysisContext context)
+        {
+            var spinlockUsages = method.InvocationExpressions.Where(e => e.OriginalDefinition == SpinLockEnterOriginalDefinition || e.OriginalDefinition == SpinLockExitOriginalDefinition);
+            foreach (var interlockedUsage in spinlockUsages)
+            {
+                ReportPrimitiveSynchronizationUsage(context, interlockedUsage.Implementation);
             }
         }
 
