@@ -9,14 +9,18 @@ namespace ConcurrencyAnalyzer.Builders
         {
             return SyntaxFactory.ThisExpression();
         }
-        public static BlockSyntax BuildLockBlock(StatementSyntax body, ExpressionSyntax lockObject = null)
+        public static BlockSyntax BuildLockBlock(StatementSyntax body)
         {
-            var lockObj = lockObject ?? DefaultLockObject();
+            return BuildLockBlock(body, DefaultLockObject());
+        }
+
+        public static BlockSyntax BuildLockBlock(StatementSyntax body, ExpressionSyntax lockObject)
+        {
             var openParans = SyntaxFactory.Token(SyntaxKind.OpenParenToken);
             var closingParans = SyntaxFactory.Token(SyntaxKind.CloseParenToken);
             var lockStatement = SyntaxFactory.LockStatement(SyntaxFactory.Token(SyntaxKind.LockKeyword),
                 openParans,
-                lockObj,
+                lockObject,
                 closingParans, body);
             var lockStatementBlock =
                 SyntaxFactory.Block(lockStatement);
