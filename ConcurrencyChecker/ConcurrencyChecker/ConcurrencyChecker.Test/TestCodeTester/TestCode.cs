@@ -1,28 +1,24 @@
-﻿using System;
-using System.Threading;
-
-namespace ConcurrencyChecker.Test.TestCodeTester
+﻿namespace ConcurrencyChecker.Test.TestCodeTester
 {
-    public class Foo
+    public class SynchronizedFinalizer
     {
-        int _answer;
-        bool _complete;
+        public static int Counter;
+        private readonly object LockObjectA = new object();
+        private readonly object LockObjectB = new object();
 
-        public void A()
+        public SynchronizedFinalizer()
         {
-            _answer = 123;
-            Thread.MemoryBarrier();
-            _complete = true;
-            Thread.MemoryBarrier();    
+            lock (LockObjectA)
+            {
+                Counter++;
+            }
         }
 
-        public  void B()
+        ~SynchronizedFinalizer()
         {
-            Thread.MemoryBarrier();
-            if (_complete)
+            lock (LockObjectB)
             {
-                Thread.MemoryBarrier();
-                Console.WriteLine(_answer);
+                Counter--;
             }
         }
     }

@@ -39,6 +39,7 @@
     <Compile Include="ExplicitThreadsChecker\ExplicitThreadsMultilineAnalyzer.cs" />
     <Compile Include="ExplicitThreadsChecker\ExplicitThreadsMultilineCodeFixProvider.cs" />
     <Compile Include="ExplicitThreadsChecker\UsingHandler.cs" />
+    <Compile Include="FinalizerChecker\FinalizerSynchronizationAnalyzer.cs" />
     <Compile Include="FireAndForgetChecker\FireAndForgetCheckerAnalyzer.cs" />
     <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerCodeFixProvider.cs" />
     <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerAnalyzer.cs" />
