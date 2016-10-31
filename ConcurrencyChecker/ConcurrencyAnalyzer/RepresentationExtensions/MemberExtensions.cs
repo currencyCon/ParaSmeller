@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.RepresentationExtensions
 {
-    public static class MemberWithBodiesExtensions
+    public static class MemberExtensions
     {
         
         public static List<string> GetAllLockPossibilities(this IMember member)
@@ -26,7 +26,7 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
         }
 
         
-        private static void GetLockArgument(IBody block, List<string> lockObjects)
+        private static void GetLockArgument(IBody block, ICollection<string> lockObjects)
         {
             if (block is LockBlock)
             {
@@ -55,24 +55,6 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
                 lockStatementSyntaxs.AddRange(GetLockStatements(body.Blocks));
             }
             return lockStatementSyntaxs;
-        }
-
-        public static bool IsSynchronized(this IMember member)
-        {
-            return IsSynchronized(member.Blocks);
-        }
-
-        private static bool IsSynchronized(IEnumerable<IBody> bodies)
-        {
-            var isSynchronized = false;
-            foreach (var body in bodies)
-            {
-                if (body.IsSynchronized || IsSynchronized(body.Blocks))
-                {
-                    isSynchronized = true;
-                }
-            }
-            return isSynchronized;
         }
 
         public static TChild GetFirstChild<TChild>(this IMember member)

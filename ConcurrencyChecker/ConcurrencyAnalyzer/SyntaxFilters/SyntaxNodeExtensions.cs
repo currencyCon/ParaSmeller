@@ -50,10 +50,10 @@ namespace ConcurrencyAnalyzer.SyntaxFilters
             return node.GetChildren<LockStatementSyntax>().Any();
         }
 
-        public static IEnumerable<MemberAccessExpressionSyntax> GetInvocationExpression(this SyntaxNode node, string clazz, string methodName)
+        public static IEnumerable<MemberAccessExpressionSyntax> GetInvocationExpression(this SyntaxNode node, string className, string methodName)
         {
             return node.GetChildren<MemberAccessExpressionSyntax>()
-                .Where(e => e.Expression.ToString() == clazz && e.Name.ToString() == methodName);
+                .Where(e => e.Expression.ToString() == className && e.Name.ToString() == methodName);
         }
 
         public static IEnumerable<VariableDeclaratorSyntax> GetLocalDeclaredVariables(this SyntaxNode root)

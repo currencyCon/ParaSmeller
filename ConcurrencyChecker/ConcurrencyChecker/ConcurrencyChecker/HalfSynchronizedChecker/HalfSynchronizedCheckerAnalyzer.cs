@@ -45,7 +45,7 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
             var classRep = ClassRepresentationFactory.Create(classDeclaration, context.SemanticModel);
 
 
-            if (!classRep.ClassHasSynchronizedMember())
+            if (!classRep.HasSynchronizedMember())
             {
                 return;
             }
@@ -78,7 +78,7 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
         {
             if (SynchronizationInspector.PropertyNeedsSynchronization(property, classRepresentation))
             {
-                ReportUnsynchronizationPropertyDiagnostic(context, property.PropertyImplementation);
+                ReportUnsynchronizationPropertyDiagnostic(context, property.Implementation);
             }
         }
 

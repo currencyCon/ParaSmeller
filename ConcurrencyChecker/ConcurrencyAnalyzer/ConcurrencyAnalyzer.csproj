@@ -40,9 +40,9 @@
     <Compile Include="Builders\SyntaxFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepresentationExtensions\InvocationExpressionRepresentationExtensions.cs" />
-    <Compile Include="RepresentationExtensions\MemberWithBodiesExtensions.cs" />
+    <Compile Include="RepresentationExtensions\MemberExtensions.cs" />
     <Compile Include="RepresentationExtensions\MethodExtensions.cs" />
-    <Compile Include="RepresentationFactories\BlockRepresentationFactory.cs" />
+	<Compile Include="RepresentationFactories\BlockRepresentationFactory.cs" />
     <Compile Include="RepresentationFactories\ClassRepresentationFactory.cs" />
     <Compile Include="RepresentationFactories\InvocationExpressionRepresentationFactory.cs" />
     <Compile Include="RepresentationFactories\MethodRepresentationFactory.cs" />

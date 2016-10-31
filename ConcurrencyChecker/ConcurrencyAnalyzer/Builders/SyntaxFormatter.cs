@@ -10,7 +10,7 @@ namespace ConcurrencyAnalyzer.Builders
     {
         private static IEnumerable<SyntaxTrivia> AddIndention(int level, IEnumerable<SyntaxTrivia> indention)
         {
-            var levelIndention = new List<SyntaxTrivia>
+            var oneTabIndention = new List<SyntaxTrivia>
             {
                 SyntaxFactory.Space,
                 SyntaxFactory.Space,
@@ -19,7 +19,7 @@ namespace ConcurrencyAnalyzer.Builders
             };
             for (var i = 0; i < level; i++)
             {
-                indention = indention.Concat(levelIndention);
+                indention = indention.Concat(oneTabIndention);
             }
             return indention;
         }
@@ -34,7 +34,7 @@ namespace ConcurrencyAnalyzer.Builders
         public static StatementSyntax AddIndention(StatementSyntax statementSyntax, int level)
         {
             IEnumerable<SyntaxTrivia> indention = statementSyntax.GetLeadingTrivia().ToList();
-            indention = AddIndention( level, indention);
+            indention = AddIndention(level, indention);
             return statementSyntax.WithLeadingTrivia(indention);
         }
     }

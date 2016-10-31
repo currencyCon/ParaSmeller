@@ -13,7 +13,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         public static async Task<SolutionRepresentation> Create(Compilation compilation)
         {
             var solution = new SolutionRepresentation(compilation.AssemblyName.Trim());
-            await AddClassRepresentations(solution, compilation);
+            await AddSyntaxTrees(solution, compilation);
             ConnectInvocations(solution);
             ConnectReverseInvocations(solution);
             return solution;
@@ -58,25 +58,26 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
         private static IEnumerable<InvocationExpressionRepresentation> GetInvocations(IBody body)
         {
-            IEnumerable<InvocationExpressionRepresentation> l = new List<InvocationExpressionRepresentation>();
-            l = l.Concat(body.InvocationExpressions);
+            IEnumerable<InvocationExpressionRepresentation> invocations = new List<InvocationExpressionRepresentation>();
+            invocations = invocations.Concat(body.InvocationExpressions);
             foreach (var block in body.Blocks)
             {
-                l = l.Concat(GetInvocations(block));
+                invocations = invocations.Concat(GetInvocations(block));
             }
-            return l;
+            return invocations;
         }
-        private static async Task AddClassRepresentations(SolutionRepresentation solution, Compilation compilation)
+
+        private static async Task AddSyntaxTrees(SolutionRepresentation solution, Compilation compilation)
         {
             foreach (var syntaxTree in compilation.SyntaxTrees)
             {
                 var semanticModel = compilation.GetSemanticModel(syntaxTree);
                 var classes = await SyntaxNodeFilter.GetClasses(syntaxTree);
-                AddClassRepresentation(solution, classes, semanticModel);
+                AddClassRepresentations(solution, classes, semanticModel);
             }
         }
 
-        private static void AddClassRepresentation(SolutionRepresentation solution, IEnumerable<ClassDeclarationSyntax> classes, SemanticModel semanticModel)
+        private static void AddClassRepresentations(SolutionRepresentation solution, IEnumerable<ClassDeclarationSyntax> classes, SemanticModel semanticModel)
         {
             foreach (var classDeclarationSyntax in classes)
             {

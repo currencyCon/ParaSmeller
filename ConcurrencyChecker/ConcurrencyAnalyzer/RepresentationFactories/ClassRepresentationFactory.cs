@@ -17,7 +17,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
         private static void AddProperties(ClassRepresentation classRepresentation, SemanticModel semanticModel)
         {
-            var properties = classRepresentation.ClassDeclarationSyntax.GetChildren<PropertyDeclarationSyntax>();
+            var properties = classRepresentation.Implementation.GetChildren<PropertyDeclarationSyntax>();
             foreach (var propertyDeclarationSyntax in properties)
             {
                 classRepresentation.Members.Add(PropertyRepresentationFactory.Create(propertyDeclarationSyntax, classRepresentation, semanticModel));
@@ -26,7 +26,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
         private static void AddMethods(ClassRepresentation classRepresentation, SemanticModel semanticModel)
         {
-            var methods = classRepresentation.ClassDeclarationSyntax.GetChildren<MethodDeclarationSyntax>();
+            var methods = classRepresentation.Implementation.GetChildren<MethodDeclarationSyntax>();
             foreach (var methodDeclarationSyntax in methods)
             {
                 classRepresentation.Members.Add(MethodRepresentationFactory.Create(methodDeclarationSyntax, classRepresentation, semanticModel));

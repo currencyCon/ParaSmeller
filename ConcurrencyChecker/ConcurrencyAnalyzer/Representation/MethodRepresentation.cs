@@ -12,14 +12,14 @@ namespace ConcurrencyAnalyzer.Representation
         public ICollection<IBody> Blocks { get; set; }
         public SyntaxToken Name { get; set; }
         public ICollection<InvocationExpressionRepresentation> Callers { get; set; }
-        public MethodDeclarationSyntax MethodImplementation { get; set; }
+        public MethodDeclarationSyntax Implementation { get; set; }
         public ICollection<ParameterSyntax> Parameters { get; set; }
         public MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, ClassRepresentation classRepresentation)
         {
             Name = methodDeclarationSyntax.Identifier;
             Parameters = methodDeclarationSyntax.ParameterList.Parameters.ToList();
             InvocationExpressions = new List<InvocationExpressionRepresentation>();
-            MethodImplementation = methodDeclarationSyntax;
+            Implementation = methodDeclarationSyntax;
             Blocks = new List<IBody>();
             ContainingClass = classRepresentation;
             Callers = new List<InvocationExpressionRepresentation>();
@@ -27,12 +27,17 @@ namespace ConcurrencyAnalyzer.Representation
 
         public bool IsFullySynchronized()
         {
-            if (Blocks.Count == 1 && !Blocks.First().IsSynchronized)
+            if (HasStandardMethodBody())
             {
                 var methodBody = Blocks.First();
                 return methodBody.Blocks.Any() && methodBody.Blocks.All(e => e.IsSynchronized);
             }
             return false;
+        }
+
+        private bool HasStandardMethodBody()
+        {
+            return Blocks.Count == 1 && !Blocks.First().IsSynchronized;
         }
     }
 }

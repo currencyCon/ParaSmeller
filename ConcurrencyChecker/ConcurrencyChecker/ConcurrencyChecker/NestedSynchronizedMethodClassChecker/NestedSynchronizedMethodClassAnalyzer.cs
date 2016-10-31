@@ -96,7 +96,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
                     foreach (var parameter in parametersOfOwnKind)
                     {
                         if (UsesLockRecursive(memberAccessExpressionSyntax, parameter, lockObject,
-                            method.MethodImplementation))
+                            method.Implementation))
                         {
                             var diagn = Diagnostic.Create(Rule, memberAccessExpressionSyntax.GetLocation());
                             context.ReportDiagnostic(diagn);
@@ -132,7 +132,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
         private static List<SyntaxToken> ParametersOfOwnType(MethodRepresentation node, CompilationAnalysisContext context)
         {
             var clazz = node.GetFirstParent<ClassDeclarationSyntax>();
-            var model = context.Compilation.GetSemanticModel(node.ContainingClass.ClassDeclarationSyntax.SyntaxTree);
+            var model = context.Compilation.GetSemanticModel(node.ContainingClass.Implementation.SyntaxTree);
             var classTypeSymbol = model.GetDeclaredSymbol(clazz);
             var parametersOfOwnType = new List<SyntaxToken>();
             var hierarchieChecker = new HierarchieChecker(classTypeSymbol);

@@ -25,11 +25,6 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             throw new NotImplementedException($"An unexpected Type of invocationExpression was encountered: {invocationExpressionSyntax.ToFullString()}");
         }
 
-        public static InvocationExpressionRepresentation Create(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel)
-        {
-            return Create(invocationExpressionSyntax, semanticModel, null);
-        }
-
         private static InvocationExpressionRepresentation CreateSelfInvocation(
             InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody)
         {
@@ -48,6 +43,14 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             return CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget);
         }
 
+        private static InvocationExpressionRepresentation CreateInvocationWithSymbolInfo(
+    InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody,
+    SimpleNameSyntax invocationTarget)
+        {
+            var symbolInfo = SymbolInformationBuilder.Create(invocationTarget, semanticModel);
+            return CreateInvocation(invocationExpressionSyntax, containingBody, invocationTarget, symbolInfo);
+        }
+
         private static InvocationExpressionRepresentation CreateInvocation(
             InvocationExpressionSyntax invocationExpressionSyntax, IBody containingBody, SimpleNameSyntax invocationTarget, SymbolInformation symbolInfo)
         {
@@ -58,14 +61,6 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                     .ToList();
             invocation.Arguments.AddRange(arguments);
             return invocation;
-        }
-
-        private static InvocationExpressionRepresentation CreateInvocationWithSymbolInfo(
-            InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody,
-            SimpleNameSyntax invocationTarget)
-        {
-            var symbolInfo = SymbolInformationBuilder.Create(invocationTarget, semanticModel);
-            return CreateInvocation(invocationExpressionSyntax, containingBody, invocationTarget, symbolInfo);
         }
     }
 }

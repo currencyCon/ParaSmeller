@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ConcurrencyAnalyzer.Builders;
-using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,8 +9,7 @@ namespace ConcurrencyAnalyzer.Representation
 {
     public class ClassRepresentation
     {
-        public readonly ClassDeclarationSyntax ClassDeclarationSyntax;
-        public readonly string FullyQualifiedDomainName;
+        public readonly ClassDeclarationSyntax Implementation;
         public readonly SyntaxToken Name;
         public readonly ICollection<IMember> Members;
 
@@ -39,9 +37,6 @@ namespace ConcurrencyAnalyzer.Representation
             }
         }
 
-
-
-
         private ICollection<PropertyRepresentation> _synchronizedProperties;
 
         public ICollection<PropertyRepresentation> SynchronizedProperties
@@ -66,7 +61,6 @@ namespace ConcurrencyAnalyzer.Representation
             }
         }
 
-
         public ICollection<MethodRepresentation> Methods => Members.OfType<MethodRepresentation>().ToList();
         public ICollection<PropertyRepresentation> Properties => Members.OfType<PropertyRepresentation>().ToList();
 
@@ -75,8 +69,7 @@ namespace ConcurrencyAnalyzer.Representation
         {
             Name = classDeclarationSyntax.Identifier;
             Members = new List<IMember>();
-            ClassDeclarationSyntax = classDeclarationSyntax;
-            FullyQualifiedDomainName = classDeclarationSyntax.Identifier.ToString();
+            Implementation = classDeclarationSyntax;
         }
 
         public IEnumerable<IdentifierNameSyntax> GetIdentifiersInLocks()
@@ -92,7 +85,7 @@ namespace ConcurrencyAnalyzer.Representation
 
         public ExpressionSyntax GetDefaultLockObject()
         {
-            var lockExpressions = SyntaxNodeFilter.GetLockStatements(ClassDeclarationSyntax).Select(e => e.Expression).ToList();
+            var lockExpressions = SyntaxNodeFilter.GetLockStatements(Implementation).Select(e => e.Expression).ToList();
             if (lockExpressions == null || !lockExpressions.Any())
             {
                 return LockBuilder.DefaultLockObject();
@@ -100,9 +93,9 @@ namespace ConcurrencyAnalyzer.Representation
             return lockExpressions.GroupBy(i => i).OrderByDescending(group => group.Count()).Select(group => group.Key).First();
         }
 
-        public bool ClassHasSynchronizedMember()
+        public bool HasSynchronizedMember()
         {
-            return Members.Any(e => e.IsSynchronized());
+            return Members.Any(e => e.IsFullySynchronized());
         }
 
         public IMember GetMemberByName(string memberName)
