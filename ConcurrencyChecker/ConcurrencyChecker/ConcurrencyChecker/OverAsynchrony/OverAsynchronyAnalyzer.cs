@@ -40,7 +40,7 @@ namespace ConcurrencyChecker.OverAsynchrony
                     CheckForPrivateAsync(method, context);
                     if (CheckForNestedAsync(method, context, 0))
                     {
-                        var diagnostic = Diagnostic.Create(RuleNestedAsync, method.MethodImplementation.GetLocation(), MaxDepthAsync+1);
+                        var diagnostic = Diagnostic.Create(RuleNestedAsync, method.Implementation.GetLocation(), MaxDepthAsync+1);
                         context.ReportDiagnostic(diagnostic);
                     }
                 }
@@ -74,7 +74,7 @@ namespace ConcurrencyChecker.OverAsynchrony
 
         private static bool CheckForNestedAsync(MethodRepresentation method, CompilationAnalysisContext context, int counter)
         {
-            var symbol = (IMethodSymbol)context.Compilation.GetSemanticModel(method.MethodImplementation.SyntaxTree).GetDeclaredSymbol(method.MethodImplementation);
+            var symbol = (IMethodSymbol)context.Compilation.GetSemanticModel(method.Implementation.SyntaxTree).GetDeclaredSymbol(method.Implementation);
             
             if (symbol.IsAsync)
             {
@@ -98,11 +98,11 @@ namespace ConcurrencyChecker.OverAsynchrony
         
         private static void CheckForPrivateAsync(MethodRepresentation method, CompilationAnalysisContext context)
         {
-            var symbol = (IMethodSymbol)context.Compilation.GetSemanticModel(method.MethodImplementation.SyntaxTree).GetDeclaredSymbol(method.MethodImplementation);
+            var symbol = (IMethodSymbol)context.Compilation.GetSemanticModel(method.Implementation.SyntaxTree).GetDeclaredSymbol(method.Implementation);
 
             if(symbol.IsAsync && symbol.DeclaredAccessibility != Accessibility.Public)
             {
-                var diagnostic = Diagnostic.Create(Rule, method.MethodImplementation.GetLocation());
+                var diagnostic = Diagnostic.Create(Rule, method.Implementation.GetLocation());
                 context.ReportDiagnostic(diagnostic);
             }
         }

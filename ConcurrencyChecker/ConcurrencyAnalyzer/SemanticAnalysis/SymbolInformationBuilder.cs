@@ -5,6 +5,7 @@ namespace ConcurrencyAnalyzer.SemanticAnalysis
 {
     public static class SymbolInformationBuilder
     {
+        private const string NameSpaceSepatator = ".";
         public static SymbolInformation Create(SimpleNameSyntax simpleNameSyntax, SemanticModel semanticModel)
         {
             var symbolInfo = semanticModel.GetSymbolInfo(simpleNameSyntax);
@@ -40,7 +41,7 @@ namespace ConcurrencyAnalyzer.SemanticAnalysis
         }
         private static string GetOriginalDefinition(ISymbol symbol)
         {
-            return symbol.ContainingType.OriginalDefinition + "." + symbol.Name;
+            return symbol.ContainingType.OriginalDefinition + NameSpaceSepatator + symbol.Name;
         }
     }
 }

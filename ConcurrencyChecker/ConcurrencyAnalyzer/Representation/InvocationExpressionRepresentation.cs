@@ -10,7 +10,7 @@ namespace ConcurrencyAnalyzer.Representation
     {
         public readonly string CalledClass;
         public readonly SimpleNameSyntax InvocationTargetName;
-        public readonly bool Synchronized;
+        public readonly bool IsSynchronized;
         public readonly InvocationExpressionSyntax Implementation;
         public readonly IBody ContainingBody;
         public IMember InvokedImplementation { get; set; }
@@ -18,9 +18,9 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly List<IdentifierNameSyntax> Arguments;
         public readonly string OriginalDefinition;
 
-        public InvocationExpressionRepresentation(bool synchronized, SymbolInformation symbolInfo, InvocationExpressionSyntax implementation, IBody containingBody, SimpleNameSyntax invocationTarget)
+        public InvocationExpressionRepresentation(bool isSynchronized, SymbolInformation symbolInfo, InvocationExpressionSyntax implementation, IBody containingBody, SimpleNameSyntax invocationTarget)
         {
-            Synchronized = synchronized;
+            IsSynchronized = isSynchronized;
             Arguments = new List<IdentifierNameSyntax>();
             CalledClass = symbolInfo.ClassName;
             OriginalDefinition = symbolInfo.OriginalDefinition;

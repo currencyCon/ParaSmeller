@@ -59,7 +59,7 @@ namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
 
             foreach (var clazz in solutionModel.Classes)
             {
-                var fieldDeclarations = clazz.ClassDeclarationSyntax.GetChildren<FieldDeclarationSyntax>();
+                var fieldDeclarations = clazz.Implementation.GetChildren<FieldDeclarationSyntax>();
                 foreach (var fieldDeclarationSyntax in fieldDeclarations)
                 {
                     CheckForUnallowedDeclaration(fieldDeclarationSyntax, context);

@@ -6,17 +6,19 @@ namespace ConcurrencyAnalyzer.Builders
 {
     public static class MethodBuilder
     {
+        private const int OneTab = 1;
+
         public static MethodDeclarationSyntax BuildLockedMethod(MethodDeclarationSyntax method, ExpressionSyntax defaultLockObject)
         {
             var body = method.Body;
             foreach (var statementSyntax in body.Statements)
             {
-                body = body.ReplaceNode(statementSyntax, SyntaxFormatter.AddIndention(statementSyntax, 1));
+                body = body.ReplaceNode(statementSyntax, SyntaxFormatter.AddIndention(statementSyntax, OneTab));
             }
-            body = body.ReplaceToken(body.CloseBraceToken, SyntaxFormatter.AddIndention(body.CloseBraceToken, 1));
+            body = body.ReplaceToken(body.CloseBraceToken, SyntaxFormatter.AddIndention(body.CloseBraceToken, OneTab));
             var lockStatementBlock = LockBuilder.BuildLockBlock(body, defaultLockObject);
-            var newMeth = method.ReplaceNode(method, method.WithBody(lockStatementBlock));
-            return newMeth;
+            var newMethod = method.ReplaceNode(method, method.WithBody(lockStatementBlock));
+            return newMethod;
         }
 
         public static MethodDeclarationSyntax BuildLockedMethod(MethodDeclarationSyntax method)

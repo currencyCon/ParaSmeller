@@ -15,7 +15,7 @@ namespace ConcurrencyAnalyzer.Representation
         public ICollection<IBody> Blocks { get; set; }
         public SyntaxToken Name { get; set; }
         public ICollection<InvocationExpressionRepresentation> Callers { get; set; }
-        public PropertyDeclarationSyntax PropertyImplementation { get; set; }
+        public PropertyDeclarationSyntax Implementation { get; set; }
         public BlockSyntax Getter { get; set; }
         public BlockSyntax Setter { get; set; }
 
@@ -24,8 +24,9 @@ namespace ConcurrencyAnalyzer.Representation
         {
             InvocationExpressions = new List<InvocationExpressionRepresentation>();
             Blocks = new List<IBody>();
-            PropertyImplementation = propertyDeclarationSyntax;
-            Name = PropertyImplementation.Identifier;
+            Callers = new List<InvocationExpressionRepresentation>();
+            Implementation = propertyDeclarationSyntax;
+            Name = Implementation.Identifier;
             ContainingClass = classRepresentation;
             Getter =
                 propertyDeclarationSyntax.AccessorList.Accessors.FirstOrDefault(
@@ -33,7 +34,6 @@ namespace ConcurrencyAnalyzer.Representation
             Setter =
             propertyDeclarationSyntax.AccessorList.Accessors.FirstOrDefault(
                 e => e.Keyword.ToString() == SetKeyWord)?.Body;
-            Callers = new List<InvocationExpressionRepresentation>();
         }
 
         public bool IsFullySynchronized()
@@ -48,14 +48,19 @@ namespace ConcurrencyAnalyzer.Representation
                 return false;
             }
             var isFullySynchronized = true;
-            foreach (var block in Blocks)
+            foreach (var accessor in Blocks)
             {
-                if (!(block.Blocks.Count == 1 && block.Blocks.First().IsSynchronized))
+                if (!AccessorIsFullySynchronized(accessor))
                 {
                     isFullySynchronized = false;
                 }
             }
             return isFullySynchronized;
+        }
+
+        private static bool AccessorIsFullySynchronized(IBody block)
+        {
+            return block.Blocks.Count == 1 && block.Blocks.First().IsSynchronized;
         }
     }
 }

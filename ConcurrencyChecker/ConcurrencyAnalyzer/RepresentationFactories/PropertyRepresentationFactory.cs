@@ -8,18 +8,12 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
     {
         public static PropertyRepresentation Create(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation, SemanticModel semanticModel)
         {
-            return CreateProperty(propertyDeclarationSyntax, classRepresentation, semanticModel);
-        }
-
-
-        private static PropertyRepresentation CreateProperty(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation, SemanticModel semanticModel)
-        {
             var propertyRepresentation = new PropertyRepresentation(propertyDeclarationSyntax, classRepresentation);
-            BuildInvocationExpressions(propertyRepresentation, semanticModel);
+            AddAccessors(propertyRepresentation, semanticModel);
             return propertyRepresentation;
         }
 
-        private static void BuildInvocationExpressions(PropertyRepresentation propertyRepresentation, SemanticModel semanticModel)
+        private static void AddAccessors(PropertyRepresentation propertyRepresentation, SemanticModel semanticModel)
         {
             if (propertyRepresentation.Getter != null)
             {

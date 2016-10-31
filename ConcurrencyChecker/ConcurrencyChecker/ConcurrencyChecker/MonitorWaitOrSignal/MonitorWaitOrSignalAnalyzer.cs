@@ -47,13 +47,13 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
                     CheckWaitOutsideLock(clazz, method, context);
                 }
 
-                CheckPulse(context, clazz.ClassDeclarationSyntax);
+                CheckPulse(context, clazz.Implementation);
             }
         }
 
         private static void CheckWaitOutsideLock(ClassRepresentation clazz, MethodRepresentation method, CompilationAnalysisContext context)
         {
-            foreach (var expressionSyntax in method.MethodImplementation.GetInvocationExpression(MonitorClass, MonitorWaitMethod).Where(e => !e.IsSynchronized()))
+            foreach (var expressionSyntax in method.Implementation.GetInvocationExpression(MonitorClass, MonitorWaitMethod).Where(e => !e.IsSynchronized()))
             {
                 if (expressionSyntax.IsInTopLevelBlock())
                 {
@@ -72,7 +72,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
 
         private static void CheckFunctionCallers(ClassRepresentation clazz, IMember method, CompilationAnalysisContext context)
         {
-            foreach (var invocationExpression in clazz.ClassDeclarationSyntax.GetChildren<InvocationExpressionSyntax>().Where(i => i.Expression.ToString() == method.Name.ToString()))
+            foreach (var invocationExpression in clazz.Implementation.GetChildren<InvocationExpressionSyntax>().Where(i => i.Expression.ToString() == method.Name.ToString()))
             {
                 CheckCondition(context, invocationExpression);
             }

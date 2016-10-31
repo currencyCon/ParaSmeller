@@ -12,7 +12,7 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
         public static IEnumerable<MethodRepresentation> GetMethodsWithHalfSynchronizedProperties(ClassRepresentation classRepresentation)
         {
             var methodsWithHalfSynchronizedProperties = new List<MethodRepresentation>();
-            var unsyncedProperties = classRepresentation.UnSynchronizedProperties.Select(e => e.PropertyImplementation);
+            var unsyncedProperties = classRepresentation.UnSynchronizedProperties.Select(e => e.Implementation);
             var identifiersInSyncedMethods = classRepresentation.SynchronizedMethods.SelectMany(e => SyntaxNodeFilter.GetIdentifiersInLocks(e.Blocks)).Select(e => e.Identifier.Text);
             var unsProp = unsyncedProperties.Where(e => identifiersInSyncedMethods.Contains(e.Identifier.Text)).ToList();
             foreach (var unsyncedMethod in classRepresentation.UnSynchronizedMethods)
@@ -34,14 +34,14 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
             }
             var identifiersInLockStatements =
                 classRepresentation.GetIdentifiersInLocks().Select(e => e.Identifier.ToString());
-            return identifiersInLockStatements.Contains(propertyDeclaration.PropertyImplementation.Identifier.Text);
+            return identifiersInLockStatements.Contains(propertyDeclaration.Implementation.Identifier.Text);
             
         }
 
         public static bool MethodHasHalfSynchronizedProperties(MethodDeclarationSyntax method, ClassRepresentation classRepresentation)
         {
             var methodsWithHalfSynchronizedProperties = GetMethodsWithHalfSynchronizedProperties(classRepresentation);
-            return methodsWithHalfSynchronizedProperties.Select(e => e.MethodImplementation.Identifier.Text).Contains(method.Identifier.Text);
+            return methodsWithHalfSynchronizedProperties.Select(e => e.Implementation.Identifier.Text).Contains(method.Identifier.Text);
         }
     }
 }

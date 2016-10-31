@@ -11,7 +11,5 @@ namespace ConcurrencyAnalyzer.Representation
         SyntaxToken Name { get; set; }
         bool IsFullySynchronized();
         ICollection<InvocationExpressionRepresentation> Callers { get; set; }
-
-        
     }
 }
