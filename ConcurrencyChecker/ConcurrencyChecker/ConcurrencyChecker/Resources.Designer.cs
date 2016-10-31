@@ -357,5 +357,32 @@ namespace ConcurrencyChecker {
                 return ResourceManager.GetString("TapirAnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeouts can lead to starvation2.
+        /// </summary>
+        internal static string TRRAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("TRRAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeouts can lead to starvation.
+        /// </summary>
+        internal static string TRRAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("TRRAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starvation possible.
+        /// </summary>
+        internal static string TRRAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("TRRAnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }
