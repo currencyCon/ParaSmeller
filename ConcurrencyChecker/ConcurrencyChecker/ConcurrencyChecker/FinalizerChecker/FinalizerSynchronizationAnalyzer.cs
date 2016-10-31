@@ -5,7 +5,6 @@ using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationFactories;
 using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -51,26 +50,28 @@ namespace ConcurrencyChecker.FinalizerChecker
 
         private static void CheckIfAllSynchronizedFieldsUseSameStaticLock(ClassRepresentation classRepresentation, CompilationAnalysisContext context)
         {
-            var fieldsUsedInDestructor = classRepresentation.Destructor.GetChildren<IdentifierNameSyntax>().Where(e => e.GetParents<LockStatementSyntax>().Any() && e.GetParents<ExpressionStatementSyntax>().Any()).ToList();
-            var lockedFieldUsages = classRepresentation.Implementation.GetChildren<IdentifierNameSyntax>().Where(e => e.GetParents<LockStatementSyntax>().Any() && !(e.Parent is LockStatementSyntax)&& ! e.GetParents<DestructorDeclarationSyntax>().Any()).ToList();
+            var fieldsUsedInDestructorSynchronized = classRepresentation.Destructor.GetChildren<IdentifierNameSyntax>().
+                Where(e => e.GetParents<LockStatementSyntax>().Any() && 
+                e.GetParents<ExpressionStatementSyntax>().Any()).ToList();
+            var lockedFieldUsagesOutsideDeconstructor = classRepresentation.Implementation.GetChildren<IdentifierNameSyntax>().
+                Where(e => e.GetParents<LockStatementSyntax>().Any() && 
+                !(e.Parent is LockStatementSyntax) && 
+                !e.GetParents<DestructorDeclarationSyntax>().Any()).ToList();
 
-            foreach (var fieldUsedInDestructor in fieldsUsedInDestructor)
+            foreach (var fieldUsedInDestructor in fieldsUsedInDestructorSynchronized)
             {
-                foreach (var fieldDeclarationSyntax in lockedFieldUsages)
+                foreach (var field in lockedFieldUsagesOutsideDeconstructor)
                 {
-                    var fieldDeclarationLock = fieldDeclarationSyntax.GetFirstParent<LockStatementSyntax>();
+                    var fieldDeclarationLock = field.GetFirstParent<LockStatementSyntax>();
                     var destructorLocks = fieldUsedInDestructor.GetParents<LockStatementSyntax>().ToList();
-                    if (
-                        !destructorLocks.Select(e => e.Expression.ToString())
-                            .Contains(fieldDeclarationLock.Expression.ToString()))
+                    if (!destructorLocks.Select(e => e.Expression.ToString()).Contains(fieldDeclarationLock.Expression.ToString()))
                     {
-                        ReportUnsynchronizedField(context, fieldDeclarationSyntax);
+                        ReportUnsynchronizedField(context, field);
                         ReportUnsynchronizedField(context, fieldUsedInDestructor);
                     }
                     if (!classRepresentation.IsStaticDefinedLockObject(fieldDeclarationLock))
                     {
-                        ReportUnsynchronizedField(context, fieldDeclarationSyntax);
-
+                        ReportUnsynchronizedField(context, field);
                     }
                     if (!destructorLocks.Any(classRepresentation.IsStaticDefinedLockObject))
                     {
@@ -82,21 +83,18 @@ namespace ConcurrencyChecker.FinalizerChecker
 
         private static void CheckForUnsynchronizedProperties(ClassRepresentation classRepresentation, CompilationAnalysisContext context)
         {
-            var fieldsUsedInDestructor = classRepresentation.Destructor.GetChildren<IdentifierNameSyntax>().ToList();
-            var fieldDeclarations = classRepresentation.UnSynchronizedProperties.Select(e => e.Implementation).ToList();
-            foreach (var fieldUsedInDestructor in fieldsUsedInDestructor)
+            var membersUsedInDestructor = classRepresentation.Destructor.GetChildren<IdentifierNameSyntax>().ToList();
+            foreach (var memberUsedInDestructor in membersUsedInDestructor)
             {
-                foreach (var fieldDeclarationSyntax in fieldDeclarations)
+                foreach (var unsynchronizedProperty in classRepresentation.UnSynchronizedProperties.Select(e => e.Implementation))
                 {
-                    if (
-                        fieldDeclarationSyntax.Identifier.Text == fieldUsedInDestructor.Identifier.ToString())
+                    if (unsynchronizedProperty.Identifier.Text == memberUsedInDestructor.Identifier.ToString())
                     {
-                        ReportUnsynchronizedField(context, fieldDeclarationSyntax);
-                        if (!fieldUsedInDestructor.GetParents<LockStatementSyntax>().Any())
+                        ReportUnsynchronizedField(context, unsynchronizedProperty);
+                        if (!memberUsedInDestructor.GetParents<LockStatementSyntax>().Any())
                         {
-                            ReportUnsynchronizedField(context, fieldUsedInDestructor);
+                            ReportUnsynchronizedField(context, memberUsedInDestructor);
                         }
-                        
                     }
                 }
             }
@@ -104,21 +102,14 @@ namespace ConcurrencyChecker.FinalizerChecker
 
         private static void CheckForUnsynchronizedFields(ClassRepresentation classRepresentation, CompilationAnalysisContext context)
         {
-            var fieldsUsedInDestructor = classRepresentation.Destructor.GetChildren<IdentifierNameSyntax>().Where(e => !(e.Parent is LockStatementSyntax) && !e.GetParents<LockStatementSyntax>().Any()).ToList();
-            if (!fieldsUsedInDestructor.Any())
+            var fieldsUsedInDestructorUnsynchronized = classRepresentation.Destructor.GetChildren<IdentifierNameSyntax>().Where(e =>!e.GetParents<LockStatementSyntax>().Any()).ToList();
+            foreach (var fieldUsedInDestructor in fieldsUsedInDestructorUnsynchronized)
             {
-                return;
-            }
-            var fieldDeclarations = classRepresentation.Implementation.GetChildren<FieldDeclarationSyntax>().ToList();
-            foreach (var fieldUsedInDestructor in fieldsUsedInDestructor)
-            {
-                foreach (var fieldDeclarationSyntax in fieldDeclarations)
+                foreach (var field in classRepresentation.Fields.ToList())
                 {
-                    if (
-                        fieldDeclarationSyntax.Declaration.Variables.Any(
-                            e => e.Identifier.Text == fieldUsedInDestructor.Identifier.ToString()))
+                    if (field.DeclaresVariable(fieldUsedInDestructor.Identifier.Text))
                     {
-                        ReportUnsynchronizedField(context, fieldDeclarationSyntax);
+                        ReportUnsynchronizedField(context, field);
                         ReportUnsynchronizedField(context, fieldUsedInDestructor);
                     }
                 }

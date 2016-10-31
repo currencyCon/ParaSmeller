@@ -145,19 +145,7 @@ namespace ConcurrencyAnalyzer.Representation
 
         public bool IsStaticDefinedLockObject(LockStatementSyntax lockStatement)
         {
-            foreach (var field in Fields)
-            {
-                if (field.DeclaresVariable(lockStatement.Expression.ToString()))
-                {
-                    if (
-                        field.Modifiers.Any(
-                            e => e.ToString() == SyntaxFactory.Token(SyntaxKind.StaticKeyword).ToString()))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            return Fields.Any(field => field.DeclaresVariable(lockStatement.Expression.ToString(), new[] {SyntaxFactory.Token(SyntaxKind.StaticKeyword).ToString()}));
         }
     }
 }
