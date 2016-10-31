@@ -16,8 +16,7 @@ namespace ConcurrencyChecker.EasterEgg
     {
         private const string Title = "Add a tapir";
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds
-            => ImmutableArray.Create(TapirrAnalyzer.DiagnosticId);
+        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TapirrAnalyzer.DiagnosticId);
 
         public sealed override FixAllProvider GetFixAllProvider()
         {
@@ -27,9 +26,7 @@ namespace ConcurrencyChecker.EasterEgg
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
             var diagnostic = context.Diagnostics.First();
-
             var node = root.FindNode(context.Span);
 
             if (!(node is ClassDeclarationSyntax))
@@ -37,9 +34,7 @@ namespace ConcurrencyChecker.EasterEgg
                 return;
             }
 
-            context.RegisterCodeFix(
-                CodeAction.Create(Title, c => AddTapir(context.Document, (ClassDeclarationSyntax)node, c), Title),
-                diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(Title, c => AddTapir(context.Document, (ClassDeclarationSyntax)node, c), Title), diagnostic);
         }
 
         private static async Task<Document> AddTapir(Document document, ClassDeclarationSyntax node, CancellationToken cancellationToken)

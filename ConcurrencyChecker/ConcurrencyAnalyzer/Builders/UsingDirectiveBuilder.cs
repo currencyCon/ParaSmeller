@@ -1,11 +1,11 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ConcurrencyChecker.ExplicitThreadsChecker
+namespace ConcurrencyAnalyzer.Builders
 {
-    internal static class UsingDirectiveFactory
+    public static class UsingDirectiveBuilder
     {
-        internal static UsingDirectiveSyntax Create(string usingName)
+        public static UsingDirectiveSyntax Create(string usingName)
         {
             NameSyntax qualifiedName = null;
 

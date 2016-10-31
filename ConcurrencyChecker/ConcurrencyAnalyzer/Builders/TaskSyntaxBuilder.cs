@@ -2,9 +2,9 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ConcurrencyChecker.ExplicitThreadsChecker
+namespace ConcurrencyAnalyzer.Builders
 {
-    internal static class TaskSyntaxHelper
+    public static class TaskSyntaxBuilder
     {
         public static InvocationExpressionSyntax CreateInvocationExpressionSyntax(
             ParenthesizedLambdaExpressionSyntax lambda)

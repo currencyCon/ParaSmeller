@@ -26,20 +26,11 @@ namespace ConcurrencyChecker.TentativelyResourceReference
 
         private const bool CheckNotOnlyInsideWhileLoop = true;
         
-        private static readonly string[] TimeoutTypes =
-        {
-            "TimeSpan",
-            "Int32"
-        };
-
-        private static readonly string[] NotAllowedApis =
-        {
-            MonitorWait, WaitHandleWaitOne, WaitHandleWaitAll, WaitHandleWaitAny, MonitorTryEnter, SpinLockTryEnter, BarrierSignalAndWait
-        };
+        private static readonly string[] TimeoutTypes = { "TimeSpan", "Int32" };
+        private static readonly string[] NotAllowedApis = { MonitorWait, WaitHandleWaitOne, WaitHandleWaitAll, WaitHandleWaitAny, MonitorTryEnter, SpinLockTryEnter, BarrierSignalAndWait };
         
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.TRRAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormatPrimitiveSynchronization = new LocalizableResourceString(nameof(Resources.TRRAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
-        
         private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.TRRAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         private static readonly DiagnosticDescriptor PrimitiveSynchronizationUsageRule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormatPrimitiveSynchronization, Category, DiagnosticSeverity.Warning, true, Description);
 

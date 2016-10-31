@@ -3,6 +3,7 @@ using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ConcurrencyAnalyzer.Builders;
 using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -12,14 +13,14 @@ using Microsoft.CodeAnalysis.Editing;
 
 namespace ConcurrencyChecker.ExplicitThreadsChecker
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ExplicitThreadsMultilineCheckerCodeFixProvider)), Shared]
-    public class ExplicitThreadsMultilineCheckerCodeFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ExplicitThreadsMultilineCodeFixProvider)), Shared]
+    public class ExplicitThreadsMultilineCodeFixProvider : CodeFixProvider
     {
         private const string Title = "Use Task.Run2";
         private const string TaskUsing = "System.Threading.Tasks";
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
-            => ImmutableArray.Create(ExplicitThreadsMultilineCheckerAnalyzer.DiagnosticId);
+            => ImmutableArray.Create(ExplicitThreadsMultilineAnalyzer.DiagnosticId);
 
         public sealed override FixAllProvider GetFixAllProvider()
         {
@@ -29,9 +30,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
             var diagnostic = context.Diagnostics.First();
-
             var node = root.FindNode(context.Span);
 
             if (!(node is MemberAccessExpressionSyntax))
@@ -41,9 +40,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
 
             var mem = (MemberAccessExpressionSyntax) node;
 
-            context.RegisterCodeFix(
-                CodeAction.Create(Title, c => ReplaceThreadWithTask(context.Document, mem, c), Title),
-                diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(Title, c => ReplaceThreadWithTask(context.Document, mem, c), Title), diagnostic);
         }
 
         private async Task<Document> ReplaceThreadWithTask(Document document, MemberAccessExpressionSyntax node,
@@ -58,7 +55,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
                 return document;
             }
 
-            var invocationStatement = TaskSyntaxHelper.CreateInvocationStatement(threadArgument);
+            var invocationStatement = TaskSyntaxBuilder.CreateInvocationStatement(threadArgument);
 
             var documentEditor = await DocumentEditor.CreateAsync(document, cancellationToken);
             documentEditor.ReplaceNode(node.Parent, invocationStatement);
@@ -101,7 +98,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
 
         private void RemoveDeclaration(string variableName, BlockSyntax block, DocumentEditor editor)
         {
-            var node = block.GetLocalDeclaredVariables().SingleVariable(variableName);
+            var node = block.GetLocalDeclaredVariables().FindVariableDeclaration(variableName);
             var nodeToDelete = node.AncestorsAndSelf().OfType<LocalDeclarationStatementSyntax>().First();
             editor.RemoveNode(nodeToDelete);
         }
@@ -109,10 +106,10 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
         private void RemoveVariableDeclartion(string variableName, SyntaxNode block, SyntaxEditor editor)
         {
             var declaredVariables = block.GetLocalDeclaredVariables()
-                .SingleVariable(variableName).GetParents<LocalDeclarationStatementSyntax>().First();
+                .FindVariableDeclaration(variableName).GetParents<LocalDeclarationStatementSyntax>().First();
 
             var variableNodeToRemove =
-                declaredVariables.GetChildren<VariableDeclaratorSyntax>().SingleVariable(variableName);
+                declaredVariables.GetChildren<VariableDeclaratorSyntax>().FindVariableDeclaration(variableName);
 
             var newDeclaration = declaredVariables.RemoveNode(variableNodeToRemove, SyntaxRemoveOptions.KeepEndOfLine);
             editor.ReplaceNode(declaredVariables, newDeclaration);
@@ -120,7 +117,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
 
         private void RemoveDirectInstantiation(string variableName, SyntaxNode block, SyntaxEditor editor)
         {
-            var node = block.GetLocalDeclaredVariables().SingleVariable(variableName);
+            var node = block.GetLocalDeclaredVariables().FindVariableDeclaration(variableName);
             var nodeToDelete = node.GetParents<LocalDeclarationStatementSyntax>().First();
             editor.RemoveNode(nodeToDelete);
         }
@@ -138,7 +135,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
         {
             return
                 block.GetLocalDeclaredVariables()
-                .SingleVariable(variableName).Parent.GetChildren<VariableDeclaratorSyntax>()
+                .FindVariableDeclaration(variableName).Parent.GetChildren<VariableDeclaratorSyntax>()
                     .Count() == 1;
         }
 

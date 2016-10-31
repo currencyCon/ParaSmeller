@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
 
-namespace ConcurrencyChecker.Test.HSC
+namespace ConcurrencyChecker.Test.HalfSynchronizedClass
 {
     [TestClass]
     public class UnitTest : CodeFixVerifier

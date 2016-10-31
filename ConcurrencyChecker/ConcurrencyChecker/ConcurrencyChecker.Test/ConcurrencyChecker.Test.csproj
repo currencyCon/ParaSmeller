@@ -102,17 +102,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ETC\ETCRemoveUnusedUsings.cs" />
-    <Compile Include="ETC\ETCUnitTests.cs" />
-    <Compile Include="ETC\ETCUnitTestsMultiline.cs" />
+    <Compile Include="ExplicitThreads\ExplicitThreadsTests.cs" />
+    <Compile Include="ExplicitThreads\ExplicitThreadsTestsMultiline.cs" />
     <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalUnitTests.cs" />
     <Compile Include="FireAndForget\FireAndForgetCheckerTests.cs" />
     <Compile Include="OverAsynchrony\OverAsynchronyUnitTests.cs" />
     <Compile Include="TentativelyResourceReference\TentativelyResourceReferenceTests.cs" />
     <Compile Include="PrimitiveSynchronization\PrimitiveSynchronizationTests.cs" />
     <Compile Include="ReferencesForTests.cs" />
-    <Compile Include="HSC\HalfSynchronizedClassCheckerTests.cs" />
-    <Compile Include="NSMC\NestedSynchronizedMethodClassTests.cs" />
+    <Compile Include="HalfSynchronizedClass\HalfSynchronizedClassCheckerTests.cs" />
+    <Compile Include="NestedSynchronizedMethodClass\NestedSynchronizedMethodClassTests.cs" />
     <Compile Include="TestCodeTester\TestCode.cs" />
     <Compile Include="Verifiers\CodeFixVerifier.cs" />
     <Compile Include="Verifiers\DiagnosticVerifier.cs" />

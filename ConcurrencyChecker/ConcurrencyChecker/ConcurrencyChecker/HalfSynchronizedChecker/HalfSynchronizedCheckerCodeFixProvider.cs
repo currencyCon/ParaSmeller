@@ -46,12 +46,9 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
             }
         }
 
-        private static async Task<Document> SynchronizeProperty(Document document, PropertyDeclarationSyntax property,
-    CancellationToken cancellationToken)
+        private static async Task<Document> SynchronizeProperty(Document document, PropertyDeclarationSyntax property, CancellationToken cancellationToken)
         {
-            var classRepresentation =
-                ClassRepresentationFactory.Create(property.GetFirstParent<ClassDeclarationSyntax>(),
-                    await document.GetSemanticModelAsync(cancellationToken));
+            var classRepresentation = ClassRepresentationFactory.Create(property.GetFirstParent<ClassDeclarationSyntax>(), await document.GetSemanticModelAsync(cancellationToken));
             var defaultLockObject = classRepresentation.GetDefaultLockObject();
             var backingField = PropertyBuilder.BuildBackingField(property);
             var newProperty = PropertyBuilder.BuildPropertyWithSynchronizedBackingField(property, backingField, defaultLockObject);
@@ -61,12 +58,9 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
             return documentEditor.GetChangedDocument();         
         }
 
-        private static async Task<Document> SynchronizeMethod(Document document, MethodDeclarationSyntax method,
-            CancellationToken cancellationToken)
+        private static async Task<Document> SynchronizeMethod(Document document, MethodDeclarationSyntax method, CancellationToken cancellationToken)
         {
-            var classRepresentation =
-                ClassRepresentationFactory.Create(method.GetFirstParent<ClassDeclarationSyntax>(),
-                    await document.GetSemanticModelAsync(cancellationToken));
+            var classRepresentation = ClassRepresentationFactory.Create(method.GetFirstParent<ClassDeclarationSyntax>(), await document.GetSemanticModelAsync(cancellationToken));
             var defaultLockObject = classRepresentation.GetDefaultLockObject();
             var newMeth = MethodBuilder.BuildLockedMethod(method, defaultLockObject);
             var root = await document.GetSyntaxRootAsync(cancellationToken);

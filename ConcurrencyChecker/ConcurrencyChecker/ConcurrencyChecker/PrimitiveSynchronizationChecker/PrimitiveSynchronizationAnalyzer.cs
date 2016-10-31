@@ -23,26 +23,13 @@ namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
         private const string SpinLockEnterOriginalDefinition = "System.Threading.SpinLock.Enter";
         private const string SpinLockType = "SpinLock";
 
-        private static readonly string[] NotAllowedApIs =
-        {
-            YieldOriginalDefinition, MemoryBarrierOriginalDefinition, SpinLockEnterOriginalDefinition,
-            SpinLockExitOriginalDefinition
-        };
-        private static readonly string[] NotAllowedTypes =
-        {
-            SpinLockType
-        };
-        private static readonly string[] NotAllowedModifiers =
-        {
-            VolatileKeyWord
-        };
-        private static readonly string[] NotAllowedApiClasses =
-        {
-            InterlockedKeyword
-        };
+        private static readonly string[] NotAllowedApIs = {YieldOriginalDefinition, MemoryBarrierOriginalDefinition, SpinLockEnterOriginalDefinition, SpinLockExitOriginalDefinition };
+        private static readonly string[] NotAllowedTypes = { SpinLockType };
+        private static readonly string[] NotAllowedModifiers = { VolatileKeyWord };
+        private static readonly string[] NotAllowedApiClasses = { InterlockedKeyword };
+
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.PSAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormatPrimitiveSynchronization = new LocalizableResourceString(nameof(Resources.PrimitiveSynchronizationAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
-        
         private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.PSAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         private static readonly DiagnosticDescriptor PrimitiveSynchronizationUsageRule = new DiagnosticDescriptor(PrimitiveSynchronizationDiagnosticId, Title, MessageFormatPrimitiveSynchronization, Category, DiagnosticSeverity.Warning, true, Description);
 

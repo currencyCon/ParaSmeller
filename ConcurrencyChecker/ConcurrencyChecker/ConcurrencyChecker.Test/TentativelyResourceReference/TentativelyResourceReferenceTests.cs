@@ -1,5 +1,4 @@
-﻿using ConcurrencyChecker.PrimitiveSynchronizationChecker;
-using ConcurrencyChecker.TentativelyResourceReference;
+﻿using ConcurrencyChecker.TentativelyResourceReference;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

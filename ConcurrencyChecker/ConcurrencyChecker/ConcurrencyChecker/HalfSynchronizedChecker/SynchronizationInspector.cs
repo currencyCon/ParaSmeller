@@ -32,8 +32,7 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
             {
                 return false;
             }
-            var identifiersInLockStatements =
-                classRepresentation.GetIdentifiersInLocks().Select(e => e.Identifier.ToString());
+            var identifiersInLockStatements = classRepresentation.GetIdentifiersInLocks().Select(e => e.Identifier.ToString());
             return identifiersInLockStatements.Contains(propertyDeclaration.Implementation.Identifier.Text);
             
         }
