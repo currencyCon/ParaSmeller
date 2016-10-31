@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SyntaxFilters;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ConcurrencyAnalyzer.RepresentationExtensions
 {
@@ -24,6 +26,11 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
         public static IEnumerable<TParents> GetParents<TParents>(this InvocationExpressionRepresentation invocationExpressionRepresentation)
         {
             return invocationExpressionRepresentation.Implementation.GetParents<TParents>();
+        }
+
+        public static IMethodSymbol GetMethodSymbol(this InvocationExpressionRepresentation invocationExpressionRepresentation, CompilationAnalysisContext context)
+        {
+            return (IMethodSymbol) context.Compilation.GetSemanticModel(invocationExpressionRepresentation.Implementation.SyntaxTree).GetSymbolInfo(invocationExpressionRepresentation.Implementation).Symbol;
         }
     }
 }
