@@ -68,5 +68,15 @@ namespace ConcurrencyAnalyzer.SyntaxFilters
         {
             return variables.First(c => c.Identifier.ToString() == variableName);
         }
+
+        public static bool DeclaresVariable(this FieldDeclarationSyntax field, string variableName)
+        {
+            return field.Declaration.Variables.Any(e => e.Identifier.Text == variableName);        
+        }
+
+        public static bool DeclaresVariable(this FieldDeclarationSyntax field, string variableName, string[] modifiers)
+        {
+            return field.DeclaresVariable(variableName) && !modifiers.Except(field.Modifiers.Select(e => e.Text)).Any();
+        }
     }
 }

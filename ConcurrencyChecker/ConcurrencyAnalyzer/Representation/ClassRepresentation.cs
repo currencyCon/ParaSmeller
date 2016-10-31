@@ -3,6 +3,7 @@ using System.Linq;
 using ConcurrencyAnalyzer.Builders;
 using ConcurrencyAnalyzer.SyntaxFilters;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Representation
@@ -12,6 +13,7 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly ClassDeclarationSyntax Implementation;
         public readonly SyntaxToken Name;
         public readonly ICollection<IMember> Members;
+        public readonly DestructorDeclarationSyntax Destructor;
 
         private ICollection<MethodRepresentation> _synchronizedMethods;
 
@@ -63,13 +65,15 @@ namespace ConcurrencyAnalyzer.Representation
 
         public ICollection<MethodRepresentation> Methods => Members.OfType<MethodRepresentation>().ToList();
         public ICollection<PropertyRepresentation> Properties => Members.OfType<PropertyRepresentation>().ToList();
-
+        public readonly ICollection<FieldDeclarationSyntax> Fields;
 
         public ClassRepresentation(ClassDeclarationSyntax classDeclarationSyntax)
         {
             Name = classDeclarationSyntax.Identifier;
             Members = new List<IMember>();
             Implementation = classDeclarationSyntax;
+            Destructor = Implementation.GetFirstChild<DestructorDeclarationSyntax>();
+            Fields = Implementation.GetChildren<FieldDeclarationSyntax>().ToList();
         }
 
         public IEnumerable<IdentifierNameSyntax> GetIdentifiersInLocks()
@@ -137,6 +141,23 @@ namespace ConcurrencyAnalyzer.Representation
                 }
                 GetNextDepthLock(subBlock, members, counter, member);
             }
+        }
+
+        public bool IsStaticDefinedLockObject(LockStatementSyntax lockStatement)
+        {
+            foreach (var field in Fields)
+            {
+                if (field.DeclaresVariable(lockStatement.Expression.ToString()))
+                {
+                    if (
+                        field.Modifiers.Any(
+                            e => e.ToString() == SyntaxFactory.Token(SyntaxKind.StaticKeyword).ToString()))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

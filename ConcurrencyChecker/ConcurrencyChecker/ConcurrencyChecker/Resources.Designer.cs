@@ -161,6 +161,15 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This Member is used within the class and its Finalizer. Consider Synchronizing the usages..
+        /// </summary>
+        internal static string FinalizerSynchronizationAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("FinalizerSynchronizationAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In almost all cases Fire and Forget Calls should&apos;nt take place..
         /// </summary>
         internal static string FireAndForgetAnalyzerDescription {
@@ -175,6 +184,24 @@ namespace ConcurrencyChecker {
         internal static string FireAndForgetAnalyzerTitle {
             get {
                 return ResourceManager.GetString("FireAndForgetAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finalizers run asynchronous to the rest of the code. Access to Members in Finalizers should therefore be synchronized. .
+        /// </summary>
+        internal static string FSAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("FSAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsynchronized Finalizers.
+        /// </summary>
+        internal static string FSAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("FSAnalyzerTitle", resourceCulture);
             }
         }
         

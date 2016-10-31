@@ -222,4 +222,13 @@
   <data name="PSAnalyzerDescription" xml:space="preserve">
     <value>The Synchronization Mechanicms used are very primitive. Consider using a higher form of abstraction. </value>
   </data>
+  <data name="FSAnalyzerTitle" xml:space="preserve">
+    <value>Unsynchronized Finalizers</value>
+  </data>
+  <data name="FinalizerSynchronizationAnalyzerMessageFormat" xml:space="preserve">
+    <value>This Member is used within the class and its Finalizer. Consider Synchronizing the usages.</value>
+  </data>
+  <data name="FSAnalyzerDescription" xml:space="preserve">
+    <value>Finalizers run asynchronous to the rest of the code. Access to Members in Finalizers should therefore be synchronized. </value>
+  </data>
 </root>
