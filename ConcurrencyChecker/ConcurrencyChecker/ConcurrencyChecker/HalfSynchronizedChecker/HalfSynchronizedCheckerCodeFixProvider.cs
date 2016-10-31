@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Builders;
 using ConcurrencyAnalyzer.RepresentationFactories;
-using ConcurrencyAnalyzer.SyntaxFilters;
+using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;

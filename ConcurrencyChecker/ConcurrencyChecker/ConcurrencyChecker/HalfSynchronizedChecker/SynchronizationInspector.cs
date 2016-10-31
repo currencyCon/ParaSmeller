@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
-using ConcurrencyAnalyzer.SyntaxFilters;
+using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyChecker.HalfSynchronizedChecker

@@ -3,7 +3,7 @@ using System.Linq;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.RepresentationFactories;
-using ConcurrencyAnalyzer.SyntaxFilters;
+using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -30,11 +30,11 @@ namespace ConcurrencyChecker.TentativelyResourceReference
         private static readonly string[] NotAllowedApis = { MonitorWait, WaitHandleWaitOne, WaitHandleWaitAll, WaitHandleWaitAny, MonitorTryEnter, SpinLockTryEnter, BarrierSignalAndWait };
         
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.TRRAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
-        public static readonly LocalizableString MessageFormatPrimitiveSynchronization = new LocalizableResourceString(nameof(Resources.TRRAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
+        public static readonly LocalizableString MessageFormatTentativelyResourceReference = new LocalizableResourceString(nameof(Resources.TRRAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.TRRAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
-        private static readonly DiagnosticDescriptor PrimitiveSynchronizationUsageRule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormatPrimitiveSynchronization, Category, DiagnosticSeverity.Warning, true, Description);
+        private static readonly DiagnosticDescriptor TentativelyResourceReferenceRule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormatTentativelyResourceReference, Category, DiagnosticSeverity.Warning, true, Description);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(PrimitiveSynchronizationUsageRule);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(TentativelyResourceReferenceRule);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -101,7 +101,7 @@ namespace ConcurrencyChecker.TentativelyResourceReference
 
         private static void ReportTimeoutUsage(CompilationAnalysisContext context, SyntaxNode syntaxnode)
         {
-            var diagn = Diagnostic.Create(PrimitiveSynchronizationUsageRule, syntaxnode.GetLocation());
+            var diagn = Diagnostic.Create(TentativelyResourceReferenceRule, syntaxnode.GetLocation());
             context.ReportDiagnostic(diagn);
         }
     }

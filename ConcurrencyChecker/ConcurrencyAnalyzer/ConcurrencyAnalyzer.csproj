@@ -62,8 +62,8 @@
     <Compile Include="SemanticAnalysis\DefaultSymbolValues.cs" />
     <Compile Include="SemanticAnalysis\SymbolInformationBuilder.cs" />
     <Compile Include="SemanticAnalysis\SymbolInformation.cs" />
-    <Compile Include="SyntaxFilters\SyntaxNodeExtensions.cs" />
-    <Compile Include="SyntaxFilters\SyntaxNodeFilter.cs" />
+    <Compile Include="SyntaxNodeUtils\SyntaxNodeExtensions.cs" />
+    <Compile Include="SyntaxNodeUtils\SyntaxNodeFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeAnalysis">

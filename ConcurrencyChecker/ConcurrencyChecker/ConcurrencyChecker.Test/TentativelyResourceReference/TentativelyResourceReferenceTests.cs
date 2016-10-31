@@ -32,7 +32,7 @@ namespace Test
             var expected1 = new DiagnosticResult
             {
                 Id = TentativelyResourceReferenceAnalyzer.DiagnosticId,
-                Message = TentativelyResourceReferenceAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Message = TentativelyResourceReferenceAnalyzer.MessageFormatTentativelyResourceReference.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -43,7 +43,7 @@ namespace Test
             var expected2 = new DiagnosticResult
             {
                 Id = TentativelyResourceReferenceAnalyzer.DiagnosticId,
-                Message = TentativelyResourceReferenceAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Message = TentativelyResourceReferenceAnalyzer.MessageFormatTentativelyResourceReference.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -91,7 +91,7 @@ namespace Test
             var expected = new DiagnosticResult
             {
                 Id = TentativelyResourceReferenceAnalyzer.DiagnosticId,
-                Message = TentativelyResourceReferenceAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Message = TentativelyResourceReferenceAnalyzer.MessageFormatTentativelyResourceReference.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -133,7 +133,7 @@ namespace Test
             var expected = new DiagnosticResult
             {
                 Id = TentativelyResourceReferenceAnalyzer.DiagnosticId,
-                Message = TentativelyResourceReferenceAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Message = TentativelyResourceReferenceAnalyzer.MessageFormatTentativelyResourceReference.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -167,7 +167,7 @@ namespace Test
             var expected = new DiagnosticResult
             {
                 Id = TentativelyResourceReferenceAnalyzer.DiagnosticId,
-                Message = TentativelyResourceReferenceAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Message = TentativelyResourceReferenceAnalyzer.MessageFormatTentativelyResourceReference.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -202,7 +202,7 @@ namespace Test
             var expected = new DiagnosticResult
             {
                 Id = TentativelyResourceReferenceAnalyzer.DiagnosticId,
-                Message = TentativelyResourceReferenceAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Message = TentativelyResourceReferenceAnalyzer.MessageFormatTentativelyResourceReference.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {

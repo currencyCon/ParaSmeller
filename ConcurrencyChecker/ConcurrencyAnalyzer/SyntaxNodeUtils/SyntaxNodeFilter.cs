@@ -5,7 +5,7 @@ using ConcurrencyAnalyzer.Representation;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ConcurrencyAnalyzer.SyntaxFilters
+namespace ConcurrencyAnalyzer.SyntaxNodeUtils
 {
     public static class SyntaxNodeFilter
     {

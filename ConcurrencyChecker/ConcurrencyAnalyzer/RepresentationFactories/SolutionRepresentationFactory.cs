@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.SyntaxFilters;
+using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
