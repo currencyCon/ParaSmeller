@@ -9,7 +9,7 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
     public static class MemberExtensions
     {
         
-        public static List<string> GetAllLockPossibilities(this IMember member)
+        public static List<string> GetAllLockArguments(this IMember member)
         {
             var lockObjects = new List<string>();
 
@@ -19,14 +19,14 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
                 {
                     lockObjects.Add(((LockStatementSyntax)block.Implementation).Expression.ToString());
                 }
-                GetLockArgument(block, lockObjects);
+                AppendLockArguments(block, lockObjects);
             }
             
             return lockObjects;
         }
 
         
-        private static void GetLockArgument(IBody block, ICollection<string> lockObjects)
+        private static void AppendLockArguments(IBody block, ICollection<string> lockObjects)
         {
             if (block is LockBlock)
             {
@@ -34,7 +34,7 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
             }
             foreach (var subLockBlock in block.Blocks)
             {
-                GetLockArgument(subLockBlock, lockObjects);
+                AppendLockArguments(subLockBlock, lockObjects);
             }
         }
 

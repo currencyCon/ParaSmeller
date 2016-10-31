@@ -55,7 +55,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
 
                 foreach (var memberWithBody in clazz.GetMembersWithMultipleLocks())
                 {
-                    lockObjects.Add(memberWithBody.GetAllLockPossibilities());
+                    lockObjects.Add(memberWithBody.GetAllLockArguments());
                 }
 
                 bool correct = LockChecker.IsCorrectAquired(lockObjects);
@@ -106,9 +106,7 @@ namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
             }
         }
 
-        private static bool UsesLockRecursive(MemberAccessExpressionSyntax memberAccessExpressionSyntax,
-            SyntaxToken parameter, ExpressionSyntax lockObject,
-            SyntaxNode methodDeclarationSyntax)
+        private static bool UsesLockRecursive(MemberAccessExpressionSyntax memberAccessExpressionSyntax, SyntaxToken parameter, ExpressionSyntax lockObject, SyntaxNode methodDeclarationSyntax)
         {
             return memberAccessExpressionSyntax.Expression.ToString() == parameter.ToString() &&
                    CheckIfAquiresSameLock(lockObject, memberAccessExpressionSyntax.Name, methodDeclarationSyntax);

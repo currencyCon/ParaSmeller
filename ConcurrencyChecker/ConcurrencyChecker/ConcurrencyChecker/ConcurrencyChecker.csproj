@@ -34,12 +34,10 @@
   <ItemGroup>
     <Compile Include="EasterEgg\TapirAnalyzer.cs" />
     <Compile Include="EasterEgg\TapirCodeFixProvider.cs" />
-    <Compile Include="ExplicitThreadsChecker\ExplicitThreadsCheckerAnalyzer.cs" />
-    <Compile Include="ExplicitThreadsChecker\ExplicitThreadsCheckerCodeFixProvider.cs" />
-    <Compile Include="ExplicitThreadsChecker\ExplicitThreadsMultilineCheckerAnalyzer.cs" />
-    <Compile Include="ExplicitThreadsChecker\ExplicitThreadsMultilineCheckerCodeFixProvider.cs" />
-    <Compile Include="ExplicitThreadsChecker\TaskSyntaxHelper.cs" />
-    <Compile Include="ExplicitThreadsChecker\UsingDirectiveFactory.cs" />
+    <Compile Include="ExplicitThreadsChecker\ExplicitThreadsAnalyzer.cs" />
+    <Compile Include="ExplicitThreadsChecker\ExplicitThreadsCodeFixProvider.cs" />
+    <Compile Include="ExplicitThreadsChecker\ExplicitThreadsMultilineAnalyzer.cs" />
+    <Compile Include="ExplicitThreadsChecker\ExplicitThreadsMultilineCodeFixProvider.cs" />
     <Compile Include="ExplicitThreadsChecker\UsingHandler.cs" />
     <Compile Include="FinalizerChecker\FinalizerSynchronizationAnalyzer.cs" />
     <Compile Include="FireAndForgetChecker\FireAndForgetCheckerAnalyzer.cs" />

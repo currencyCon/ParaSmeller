@@ -4,10 +4,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
 
-namespace ConcurrencyChecker.Test.NSMC
+namespace ConcurrencyChecker.Test.NestedSynchronizedMethodClass
 {
     [TestClass]
-    public class UnitTest : CodeFixVerifier
+    public class NestedSynchronizedMethodClassTest : CodeFixVerifier
     {
         
         [TestMethod]

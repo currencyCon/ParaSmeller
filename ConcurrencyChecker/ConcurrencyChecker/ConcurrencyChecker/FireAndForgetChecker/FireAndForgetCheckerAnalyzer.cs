@@ -27,7 +27,6 @@ namespace ConcurrencyChecker.FireAndForgetChecker
         public override void Initialize(AnalysisContext context)
         {
             context.RegisterCompilationAction(CheckForUnawaitedTasks);
-
         }
 
         private static async void CheckForUnawaitedTasks(CompilationAnalysisContext context)
@@ -143,7 +142,6 @@ namespace ConcurrencyChecker.FireAndForgetChecker
 
         private static void ReportFireAndForget(CompilationAnalysisContext context, CSharpSyntaxNode threadInvocation)
         {
-
             var diagnostic = Diagnostic.Create(RuleFireAndForgetCall, threadInvocation.GetLocation());
             context.ReportDiagnostic(diagnostic);
         }

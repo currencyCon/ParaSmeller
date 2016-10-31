@@ -13,7 +13,8 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly ClassDeclarationSyntax Implementation;
         public readonly SyntaxToken Name;
         public readonly ICollection<IMember> Members;
-        public readonly DestructorDeclarationSyntax Destructor;
+		public readonly DestructorDeclarationSyntax Destructor;
+        private const int ThresholdMaxDepthAsync = 3;
 
         private ICollection<MethodRepresentation> _synchronizedMethods;
 
@@ -110,7 +111,7 @@ namespace ConcurrencyAnalyzer.Representation
         public  List<IMember> GetMembersWithMultipleLocks()
         {
             var members = new List<IMember>();
-            var counter = 0;
+            var counter = 1;
             foreach (var memberWithBody in Members)
             {
                 foreach (var block in memberWithBody.Blocks)
@@ -119,16 +120,16 @@ namespace ConcurrencyAnalyzer.Representation
                     {
                         counter++;
                     }
-                    GetNextDepthLock(block, members, counter, memberWithBody);
+                    GetNextDeeperLock(block, members, counter, memberWithBody);
                 }
             }
 
             return members;
         }
 
-        private static void GetNextDepthLock(IBody block, ICollection<IMember> members, int counter, IMember member)
+        private static void GetNextDeeperLock(IBody block, ICollection<IMember> members, int counter, IMember member)
         {
-            if (counter == 2 && !members.Contains(member))
+            if (counter == ThresholdMaxDepthAsync && !members.Contains(member))
             {
                 members.Add(member);
             }
@@ -139,7 +140,7 @@ namespace ConcurrencyAnalyzer.Representation
                 {
                     counter++;
                 }
-                GetNextDepthLock(subBlock, members, counter, member);
+                GetNextDeeperLock(subBlock, members, counter, member);
             }
         }
 

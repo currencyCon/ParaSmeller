@@ -5,14 +5,12 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
 
-namespace ConcurrencyChecker.Test.ETC
+namespace ConcurrencyChecker.Test.ExplicitThreads
 {
     [TestClass]
     public class UnitTestMultiline : CodeFixVerifier
     {
         
-        
-
         [TestMethod]
         public void TestMultilineCodeSmell()
         {
@@ -350,12 +348,12 @@ namespace ExplicitThreadsSmell
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
-            return new ExplicitThreadsMultilineCheckerCodeFixProvider();
+            return new ExplicitThreadsMultilineCodeFixProvider();
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new ExplicitThreadsMultilineCheckerAnalyzer();
+            return new ExplicitThreadsMultilineAnalyzer();
         }
 
 

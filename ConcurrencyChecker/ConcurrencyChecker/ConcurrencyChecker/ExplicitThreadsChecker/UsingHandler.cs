@@ -1,10 +1,11 @@
 ﻿using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ConcurrencyAnalyzer.Builders;
 
 namespace ConcurrencyChecker.ExplicitThreadsChecker
 {
-    internal static class UsingHandler
+    public static class UsingHandler
     {
         internal static SyntaxNode AddUsingIfNotExists(SyntaxNode root, string usingName)
         {
@@ -13,7 +14,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
             var exists = compilationUnit.Usings.Any(u => u.Name.ToString() == usingName);
             if (!exists)
             {
-                var usingSystemThreadingTask = UsingDirectiveFactory.Create(usingName);
+                var usingSystemThreadingTask = UsingDirectiveBuilder.Create(usingName);
                 compilationUnit = compilationUnit.AddUsings(usingSystemThreadingTask);
             }
 

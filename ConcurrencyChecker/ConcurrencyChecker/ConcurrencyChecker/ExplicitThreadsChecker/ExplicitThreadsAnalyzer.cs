@@ -8,25 +8,19 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace ConcurrencyChecker.ExplicitThreadsChecker
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ExplicitThreadsCheckerAnalyzer : DiagnosticAnalyzer
+    public class ExplicitThreadsAnalyzer : DiagnosticAnalyzer
     {
         public const string DiagnosticId = "ETC001";
         private const string ThreadStartDefintion = "System.Threading.Thread.Start()";
         private const string Category = "ParallelCorrectness";
 
-        private static readonly LocalizableString Title = new LocalizableResourceString(
-            nameof(Resources.ETCAnalyzerTitle), Resources.ResourceManager, typeof (Resources));
+        private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.ETCAnalyzerTitle), Resources.ResourceManager, typeof (Resources));
 
-        private static readonly LocalizableString MessageFormat =
-            new LocalizableResourceString(nameof(Resources.ETCAnalyzerMessageFormatSingleLine), Resources.ResourceManager,
-                typeof (Resources));
+        private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.ETCAnalyzerMessageFormatSingleLine), Resources.ResourceManager, typeof (Resources));
 
-        private static readonly LocalizableString Description =
-            new LocalizableResourceString(nameof(Resources.ETCAnalyzerDescription), Resources.ResourceManager,
-                typeof (Resources));
+        private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.ETCAnalyzerDescription), Resources.ResourceManager, typeof (Resources));
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat,
-            Category, DiagnosticSeverity.Warning, true, Description);
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, true, Description);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

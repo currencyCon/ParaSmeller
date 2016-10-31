@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
 
-namespace ConcurrencyChecker.Test.ETC
+namespace ConcurrencyChecker.Test.ExplicitThreads
 {
     [TestClass]
     public class UnitTest : CodeFixVerifier
@@ -192,12 +192,12 @@ namespace ExplicitThreadsSmell
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
-            return new ExplicitThreadsCheckerCodeFixProvider();
+            return new ExplicitThreadsCodeFixProvider();
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new ExplicitThreadsCheckerAnalyzer();
+            return new ExplicitThreadsAnalyzer();
         }
 
         

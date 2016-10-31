@@ -24,8 +24,7 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
         private static readonly DiagnosticDescriptor RuleHalfSynchronized = new DiagnosticDescriptor(HalfSynchronizedChildDiagnosticId, Title, MessageFormatHalfSynchronized, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
         private static readonly DiagnosticDescriptor RuleUnsynchronizedProperty = new DiagnosticDescriptor(UnsynchronizedPropertyId, Title, MessageFormatUnsychronizedProperty, Category, DiagnosticSeverity.Warning, isEnabledByDefault:true, description: Description);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-            => ImmutableArray.Create(RuleHalfSynchronized, RuleUnsynchronizedProperty);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(RuleHalfSynchronized, RuleUnsynchronizedProperty);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -43,8 +42,7 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
                 return;
             }
             var classRep = ClassRepresentationFactory.Create(classDeclaration, context.SemanticModel);
-
-
+            
             if (!classRep.HasSynchronizedMember())
             {
                 return;
@@ -82,17 +80,14 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
             }
         }
 
-        private static void ReportUnsynchronizationPropertyDiagnostic(SyntaxNodeAnalysisContext context,
-    CSharpSyntaxNode propertyDeclarationSyntax)
+        private static void ReportUnsynchronizationPropertyDiagnostic(SyntaxNodeAnalysisContext context, CSharpSyntaxNode propertyDeclarationSyntax)
         {
             var diagnostic = Diagnostic.Create(RuleUnsynchronizedProperty, propertyDeclarationSyntax.GetLocation());
             context.ReportDiagnostic(diagnostic);
         }
 
-        private static void ReportHalfSynchronizationDiagnostic(SyntaxNodeAnalysisContext context,
-    CSharpSyntaxNode propertyDeclarationSyntax, string elementType, string elementTypeName)
+        private static void ReportHalfSynchronizationDiagnostic(SyntaxNodeAnalysisContext context, CSharpSyntaxNode propertyDeclarationSyntax, string elementType, string elementTypeName)
         {
-
             object[] messageArguments = { elementType, elementTypeName };
             var diagnostic = Diagnostic.Create(RuleHalfSynchronized, propertyDeclarationSyntax.GetLocation(), messageArguments);
             context.ReportDiagnostic(diagnostic);

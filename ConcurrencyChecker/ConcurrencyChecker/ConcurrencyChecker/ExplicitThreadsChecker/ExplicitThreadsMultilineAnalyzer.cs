@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace ConcurrencyChecker.ExplicitThreadsChecker
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ExplicitThreadsMultilineCheckerAnalyzer : DiagnosticAnalyzer
+    public class ExplicitThreadsMultilineAnalyzer : DiagnosticAnalyzer
     {
         public const string DiagnosticId = "ETC002";
         private const string ThreadStartDefintion = "System.Threading.Thread.Start()";
@@ -49,7 +49,6 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
             }
 
             var callingMethod = root as MemberAccessExpressionSyntax;
-
             var methodSymbol = context.SemanticModel.GetSymbolInfo(root).Symbol as IMethodSymbol;
 
             if (methodSymbol == null)
@@ -97,8 +96,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
                     logWarning = false;
                 }
             }
-
-
+            
             if (logWarning)
             {
                 var diagn = Diagnostic.Create(Rule, root.GetLocation(), identifier.ToString());
@@ -108,11 +106,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
 
         private static bool IsThreadDeclaredInBlock(BlockSyntax block, ExpressionSyntax identifier)
         {
-            return
-                block
-                    .DescendantNodes()
-                    .OfType<VariableDeclaratorSyntax>()
-                    .Any(v => v.Identifier.ToString() == identifier.ToString());
+            return block.DescendantNodes().OfType<VariableDeclaratorSyntax>().Any(v => v.Identifier.ToString() == identifier.ToString());
         }
     }
 }
