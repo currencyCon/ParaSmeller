@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 
-namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
+namespace ConcurrencyAnalyzer.SymbolExtensions
 {
-    internal static class TypeExtension
+    public static class TypeExtension
     {
         public static IEnumerable<ITypeSymbol> GetBaseTypesAndThis(this ITypeSymbol type)
         {

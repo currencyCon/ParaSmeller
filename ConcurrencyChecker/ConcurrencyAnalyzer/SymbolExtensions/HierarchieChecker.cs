@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 
-namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
+namespace ConcurrencyAnalyzer.SymbolExtensions
 {
-    internal class HierarchieChecker
+    public class HierarchieChecker
     {
         readonly List<string> _inheritanceClasses = new List<string>();
 

@@ -46,10 +46,7 @@
     <Compile Include="HalfSynchronizedChecker\SynchronizationInspector.cs" />
     <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalCodeFixProvider.cs" />
     <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalAnalyzer.cs" />
-    <Compile Include="NestedSynchronizedMethodClassChecker\LockChecker.cs" />
     <Compile Include="NestedSynchronizedMethodClassChecker\NestedSynchronizedMethodClassAnalyzer.cs" />
-    <Compile Include="NestedSynchronizedMethodClassChecker\HierarchieChecker.cs" />
-    <Compile Include="NestedSynchronizedMethodClassChecker\TypeExtension.cs" />
     <Compile Include="OverAsynchrony\OverAsynchronyAnalyzer.cs" />
     <Compile Include="PrimitiveSynchronizationChecker\PrimitiveSynchronizationAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

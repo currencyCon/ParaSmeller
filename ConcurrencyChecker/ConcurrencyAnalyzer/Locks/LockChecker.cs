@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace ConcurrencyChecker.NestedSynchronizedMethodClassChecker
+namespace ConcurrencyAnalyzer.Locks
 {
-    internal static class LockChecker
+    public static class LockChecker
     {
         public static bool IsCorrectAquired(List<List<string>> lockObjects)
         {

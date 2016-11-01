@@ -40,6 +40,7 @@
     <Compile Include="Builders\SyntaxFormatter.cs" />
     <Compile Include="Builders\TaskSyntaxBuilder.cs" />
     <Compile Include="Builders\UsingDirectiveBuilder.cs" />
+    <Compile Include="Locks\LockChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepresentationExtensions\InvocationExpressionRepresentationExtensions.cs" />
     <Compile Include="RepresentationExtensions\MemberExtensions.cs" />
@@ -62,6 +63,8 @@
     <Compile Include="SemanticAnalysis\DefaultSymbolValues.cs" />
     <Compile Include="SemanticAnalysis\SymbolInformationBuilder.cs" />
     <Compile Include="SemanticAnalysis\SymbolInformation.cs" />
+    <Compile Include="SymbolExtensions\HierarchieChecker.cs" />
+    <Compile Include="SymbolExtensions\TypeExtension.cs" />
     <Compile Include="SyntaxNodeUtils\SyntaxNodeExtensions.cs" />
     <Compile Include="SyntaxNodeUtils\SyntaxNodeFilter.cs" />
   </ItemGroup>
@@ -72,6 +75,13 @@
     <Reference Include="Microsoft.CodeAnalysis.CSharp">
       <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.36\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

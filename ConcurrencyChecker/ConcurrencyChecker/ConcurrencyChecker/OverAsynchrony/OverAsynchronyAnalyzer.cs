@@ -15,6 +15,7 @@ namespace ConcurrencyChecker.OverAsynchrony
         public const string DiagnosticId = "OA001";
         public const string DiagnosticIdNestedAsync = "OA002";
         public const int MaxDepthAsync = 2;
+
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.OAAnalyzerTitle), Resources.ResourceManager, typeof (Resources));
         private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.OAAnalyzerMessageFormat), Resources.ResourceManager, typeof (Resources));
         private static readonly LocalizableString MessageFormatNestedAsync = new LocalizableResourceString(nameof(Resources.OAAnalyzerMessageFormatNestedAsync), Resources.ResourceManager, typeof(Resources));

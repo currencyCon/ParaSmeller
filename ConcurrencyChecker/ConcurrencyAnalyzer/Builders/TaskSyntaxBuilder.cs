@@ -6,8 +6,7 @@ namespace ConcurrencyAnalyzer.Builders
 {
     public static class TaskSyntaxBuilder
     {
-        public static InvocationExpressionSyntax CreateInvocationExpressionSyntax(
-            ParenthesizedLambdaExpressionSyntax lambda)
+        private static InvocationExpressionSyntax CreateInvocationExpressionSyntax(ParenthesizedLambdaExpressionSyntax lambda)
         {
             var taskRunSyntax = CreateTaskRun();
 
@@ -18,7 +17,7 @@ namespace ConcurrencyAnalyzer.Builders
             return invocationStatement;
         }
 
-        public static InvocationExpressionSyntax CreateInvocationExpressionSyntax(IdentifierNameSyntax methodName)
+        private static InvocationExpressionSyntax CreateInvocationExpressionSyntax(IdentifierNameSyntax methodName)
         {
             var taskRunSyntax = CreateTaskRun();
             var emptyParameterList = SyntaxFactory.ParameterList();
@@ -35,7 +34,7 @@ namespace ConcurrencyAnalyzer.Builders
             return invocationStatement;
         }
 
-        public static MemberAccessExpressionSyntax CreateTaskRun()
+        private static MemberAccessExpressionSyntax CreateTaskRun()
         {
             var task = SyntaxFactory.IdentifierName("Task");
             var run = SyntaxFactory.IdentifierName("Run");
