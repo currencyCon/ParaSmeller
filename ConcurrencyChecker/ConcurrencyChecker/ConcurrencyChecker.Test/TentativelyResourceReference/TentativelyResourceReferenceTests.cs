@@ -151,15 +151,23 @@ namespace Test
         {
             const string test = @"
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Security.Permissions;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Security;
 
 namespace Test
 {
     public class Race
     {
+        var barrier = new System.Threading.Barrier(10);  
+
         public void Round()
-        {
-            Barrier barrier = new Barrier(10);  
+        {    
             barrier.SignalAndWait(10);
         }
     }
@@ -171,10 +179,11 @@ namespace Test
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
-                            new DiagnosticResultLocation("Test0.cs", 11, 17)
+                            new DiagnosticResultLocation("Test0.cs", 14, 13)
                         }
             };
 
+            //Missing some references, in VS this test is working -.-
             //VerifyCSharpDiagnostic(test, expected);
         }
 
@@ -183,6 +192,8 @@ namespace Test
         {
             const string test = @"
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -195,7 +206,7 @@ namespace Test
 
         public void Round()
         {
-            s.TryEnter(ref test);
+            s.TryEnter(10, ref test);
         }
     }
 }";
@@ -206,11 +217,11 @@ namespace Test
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
-                            new DiagnosticResultLocation("Test0.cs", 11, 17)
+                            new DiagnosticResultLocation("Test0.cs", 17, 13)
                         }
             };
 
-            //VerifyCSharpDiagnostic(test, expected);
+            VerifyCSharpDiagnostic(test, expected);
         }
 
 

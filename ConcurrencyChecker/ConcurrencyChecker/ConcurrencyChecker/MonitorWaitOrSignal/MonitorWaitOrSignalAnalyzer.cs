@@ -21,6 +21,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
         private const string MonitorClass = "Monitor";
         private const string MonitorPulseMethod = "Pulse";
         private const string MonitorWaitMethod = "Wait";
+
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.MWSAnalyzerTitle), Resources.ResourceManager, typeof (Resources));
         private static readonly LocalizableString MessageFormatIf = new LocalizableResourceString(nameof(Resources.MWSIfAnalyzerMessageFormat), Resources.ResourceManager, typeof (Resources));
         private static readonly LocalizableString MessageFormatPulse = new LocalizableResourceString(nameof(Resources.MWSPulseAnalyzerMessageFormat), Resources.ResourceManager, typeof (Resources));

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="ConcurrencyChecker..bf90f115-f2a6-48b1-a3e0-52f27e154325" Version="1.5" Language="en-US" Publisher="rafae"/>
+    <Identity Id="ConcurrencyChecker..bf90f115-f2a6-48b1-a3e0-52f27e154325" Version="1.6" Language="en-US" Publisher="currencyCon"/>
     <DisplayName>ConcurrencyChecker</DisplayName>
     <Description xml:space="preserve">This is a sample diagnostic extension for the .NET Compiler Platform ("Roslyn").</Description>
   </Metadata>

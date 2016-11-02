@@ -30,8 +30,9 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
 
         public static IMethodSymbol GetMethodSymbol(this InvocationExpressionRepresentation invocationExpressionRepresentation, CompilationAnalysisContext context)
         {
-            var bla = context.Compilation.GetSemanticModel(invocationExpressionRepresentation.Implementation.SyntaxTree).GetSymbolInfo(invocationExpressionRepresentation.Implementation);
-            return (IMethodSymbol) context.Compilation.GetSemanticModel(invocationExpressionRepresentation.Implementation.SyntaxTree).GetSymbolInfo(invocationExpressionRepresentation.Implementation).Symbol;
+            return invocationExpressionRepresentation.Implementation.GetMethodSymbol(context);
         }
+
+        
     }
 }

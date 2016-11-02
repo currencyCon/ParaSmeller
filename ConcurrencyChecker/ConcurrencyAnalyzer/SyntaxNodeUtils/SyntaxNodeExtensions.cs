@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ConcurrencyAnalyzer.SyntaxNodeUtils
 {
@@ -72,6 +73,12 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
         public static bool DeclaresVariable(this FieldDeclarationSyntax field, string variableName, string[] modifiers)
         {
             return field.DeclaresVariable(variableName) && !modifiers.Except(field.Modifiers.Select(e => e.Text)).Any();
+        }
+
+        public static IMethodSymbol GetMethodSymbol(this SyntaxNode syntaxNode, CompilationAnalysisContext context)
+        {
+            var symbol = context.Compilation.GetSemanticModel(syntaxNode.SyntaxTree).GetSymbolInfo(syntaxNode);
+            return (IMethodSymbol)symbol.Symbol;
         }
     }
 }

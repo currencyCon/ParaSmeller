@@ -353,7 +353,7 @@ namespace ExplicitThreadsSmell
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new ExplicitThreadsMultilineAnalyzer();
+            return new ExplicitThreadsAnalyzer();
         }
 
 
