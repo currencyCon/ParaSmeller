@@ -16,54 +16,10 @@ namespace ConcurrencyAnalyzer.Representation
 		public readonly DestructorDeclarationSyntax Destructor;
         private const int ThresholdMaxDepthAsync = 3;
 
-        private ICollection<MethodRepresentation> _synchronizedMethods;
-
-        public ICollection<MethodRepresentation> SynchronizedMethods
-        {
-            get
-            {
-                return _synchronizedMethods ??
-                       (_synchronizedMethods = Members.Where(e => e is MethodRepresentation && e.IsFullySynchronized())
-                           .Select(e => e as MethodRepresentation).ToList());
-            }
-        }
-
-        private ICollection<MethodRepresentation> _unSynchronizedMethods;
-
-        public ICollection<MethodRepresentation> UnSynchronizedMethods
-        {
-            get
-            {
-                return _unSynchronizedMethods ??
-                       (_unSynchronizedMethods = Members.Where(e => e is MethodRepresentation && !e.IsFullySynchronized())
-                           .Select(e => e as MethodRepresentation).ToList());
-            }
-        }
-
-        private ICollection<PropertyRepresentation> _synchronizedProperties;
-
-        public ICollection<PropertyRepresentation> SynchronizedProperties
-        {
-            get
-            {
-                return _synchronizedProperties ??
-                       (_synchronizedProperties = Members.Where(e => e is PropertyRepresentation && e.IsFullySynchronized())
-                           .Select(e => e as PropertyRepresentation).ToList());
-            }
-        }
-
-        private ICollection<PropertyRepresentation> _unSynchronizedProperties;
-
-        public ICollection<PropertyRepresentation> UnSynchronizedProperties
-        {
-            get
-            {
-                return _unSynchronizedProperties ??
-                       (_unSynchronizedProperties = Members.Where(e => e is PropertyRepresentation && !e.IsFullySynchronized())
-                           .Select(e => e as PropertyRepresentation).ToList());
-            }
-        }
-
+        public ICollection<MethodRepresentation> SynchronizedMethods { get; set; }
+        public ICollection<MethodRepresentation> UnSynchronizedMethods { get; set; }
+        public ICollection<PropertyRepresentation> SynchronizedProperties { get; set; }
+        public ICollection<PropertyRepresentation> UnSynchronizedProperties { get; set; }
         public ICollection<MethodRepresentation> Methods => Members.OfType<MethodRepresentation>().ToList();
         public ICollection<PropertyRepresentation> Properties => Members.OfType<PropertyRepresentation>().ToList();
         public readonly ICollection<FieldDeclarationSyntax> Fields;

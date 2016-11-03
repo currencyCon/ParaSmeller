@@ -1,4 +1,6 @@
-﻿using ConcurrencyAnalyzer.Representation;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,7 +14,31 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             var classRepresentation = new ClassRepresentation(syntaxTree);
             AddMethods(classRepresentation, semanticModel);
             AddProperties(classRepresentation, semanticModel);
+            InitMembers(classRepresentation);
             return classRepresentation;
+        }
+
+        private static void InitMembers(ClassRepresentation classRepresentation)
+        {
+            classRepresentation.SynchronizedMethods = GetMembers<MethodRepresentation>(classRepresentation,true);
+            classRepresentation.UnSynchronizedMethods = GetMembers<MethodRepresentation>(classRepresentation, false);
+            classRepresentation.SynchronizedProperties = GetMembers<PropertyRepresentation>(classRepresentation, true);
+            classRepresentation.UnSynchronizedProperties = GetMembers<PropertyRepresentation>(classRepresentation, false);
+        }
+
+        private static ICollection<TMember> GetMembers<TMember>(ClassRepresentation classRepresentation,
+            bool synchronized) where TMember : class, IMember
+        {
+            var members = classRepresentation.Members.Where(e => e is TMember);
+            if (synchronized)
+            {
+                members = members.Where(e => e.IsFullySynchronized());
+            }
+            else
+            {
+                members = members.Where(e => !e.IsFullySynchronized());
+            }
+            return members.Select(e => e as TMember).ToList();
         }
 
         private static void AddProperties(ClassRepresentation classRepresentation, SemanticModel semanticModel)
