@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ConcurrencyAnalyzer.Checkers;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
@@ -9,7 +10,7 @@ using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
 
 namespace ConcurrencyAnalyzer.PrimitiveSynchronizationChecker
 {
-    public class PrimitiveSynchronizationReporter
+    public class PrimitiveSynchronizationReporter: IReporter
     {
         private const string Category = "Synchronization";
         public const string PrimitiveSynchronizationDiagnosticId = "PS001";
@@ -31,7 +32,7 @@ namespace ConcurrencyAnalyzer.PrimitiveSynchronizationChecker
         private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.PSAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 
 
-        public static ICollection<Diagnostic> Report(SolutionRepresentation solutionRepresentation)
+        public ICollection<Diagnostic> Report(SolutionRepresentation solutionRepresentation)
         {
             var reports = new List<Diagnostic>();
             foreach (var clazz in solutionRepresentation.Classes)

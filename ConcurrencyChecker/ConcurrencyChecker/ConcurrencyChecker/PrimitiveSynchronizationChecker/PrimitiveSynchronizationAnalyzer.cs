@@ -1,8 +1,9 @@
 ﻿using System.Collections.Immutable;
-using ConcurrencyAnalyzer.PrimitiveSynchronizationChecker;
-using ConcurrencyAnalyzer.RepresentationFactories;
+using ConcurrencyAnalyzer.Diagnostics;
+using ConcurrencyAnalyzer.Reporter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Diagnostic = Microsoft.CodeAnalysis.Diagnostic;
 
 namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
 {
@@ -26,8 +27,8 @@ namespace ConcurrencyChecker.PrimitiveSynchronizationChecker
 
         private static async void CheckForPrimitiveSynchronization(CompilationAnalysisContext context)
         {
-            var solutionModel = await SolutionRepresentationFactory.Create(context.Compilation);
-            var diags = PrimitiveSynchronizationReporter.Report(solutionModel);
+            var smellReporter = new SmellReporter();
+            var diags = await smellReporter.Report(context.Compilation, Smell.PrimitiveSynchronization);
             foreach (var diagnostic in diags)
             {
                 context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor(diagnostic.Id, diagnostic.Title, diagnostic.MessageFormat, diagnostic.Category, DiagnosticSeverity.Warning, true, diagnostic.Description), diagnostic.Location));
