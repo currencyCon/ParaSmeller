@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -77,8 +78,29 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
 
         public static IMethodSymbol GetMethodSymbol(this SyntaxNode syntaxNode, CompilationAnalysisContext context)
         {
-            var symbol = context.Compilation.GetSemanticModel(syntaxNode.SyntaxTree).GetSymbolInfo(syntaxNode);
-            return (IMethodSymbol)symbol.Symbol;
+            try
+            {
+                var symbol = context.Compilation.GetSemanticModel(syntaxNode.SyntaxTree).GetSymbolInfo(syntaxNode);
+                return (IMethodSymbol) symbol.Symbol;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
+
+        public static INamedTypeSymbol GetNamedSymbol(this SyntaxNode syntaxNode, CompilationAnalysisContext context)
+        {
+            try
+            {
+                var symbol = context.Compilation.GetSemanticModel(syntaxNode.SyntaxTree).GetSymbolInfo(syntaxNode);
+                return (INamedTypeSymbol) symbol.Symbol;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        
     }
 }

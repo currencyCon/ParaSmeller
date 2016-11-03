@@ -38,8 +38,6 @@
     <Compile Include="Builders\MethodBuilder.cs" />
     <Compile Include="Builders\PropertyBuilder.cs" />
     <Compile Include="Builders\SyntaxFormatter.cs" />
-    <Compile Include="Builders\TaskSyntaxBuilder.cs" />
-    <Compile Include="Builders\UsingDirectiveBuilder.cs" />
     <Compile Include="Checkers\Reporter.cs" />
     <Compile Include="Diagnostics\Diagnostic.cs" />
     <Compile Include="Diagnostics\Smell.cs" />

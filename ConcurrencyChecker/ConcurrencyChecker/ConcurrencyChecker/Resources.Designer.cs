@@ -125,7 +125,7 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Thread.Start should be replaced with Task.Run.
+        ///   Looks up a localized string similar to Threads should be replaced with Task.
         /// </summary>
         internal static string ETCAnalyzerDescription {
             get {
@@ -134,7 +134,7 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should be replaced with Task.Run.
+        ///   Looks up a localized string similar to Threads should be replaced with Task.
         /// </summary>
         internal static string ETCAnalyzerMessageFormat {
             get {
@@ -143,16 +143,7 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;new Thread&apos; should be replaced with Task.Run.
-        /// </summary>
-        internal static string ETCAnalyzerMessageFormatSingleLine {
-            get {
-                return ResourceManager.GetString("ETCAnalyzerMessageFormatSingleLine", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Thread.Start shouldn&apos;t be used.
+        ///   Looks up a localized string similar to Threads shouldn&apos;t be used.
         /// </summary>
         internal static string ETCAnalyzerTitle {
             get {

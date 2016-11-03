@@ -103,8 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExplicitThreads\ExplicitThreadsTests.cs" />
-    <Compile Include="ExplicitThreads\ExplicitThreadsTestsMultiline.cs" />
-	<Compile Include="Finalizer\UnsynchronizedFinalizersTests.cs" />
+    <Compile Include="Finalizer\UnsynchronizedFinalizersTests.cs" />
     <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalUnitTests.cs" />
     <Compile Include="FireAndForget\FireAndForgetCheckerTests.cs" />
     <Compile Include="OverAsynchrony\OverAsynchronyUnitTests.cs" />
