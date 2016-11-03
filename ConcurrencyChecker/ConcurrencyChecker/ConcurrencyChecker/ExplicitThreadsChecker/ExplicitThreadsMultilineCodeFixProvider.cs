@@ -19,8 +19,7 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
         private const string Title = "Use Task.Run2";
         private const string TaskUsing = "System.Threading.Tasks";
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds
-            => ImmutableArray.Create(ExplicitThreadsAnalyzer.DiagnosticIdMultiline);
+        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ExplicitThreadsAnalyzer.DiagnosticIdMultiline);
 
         public sealed override FixAllProvider GetFixAllProvider()
         {

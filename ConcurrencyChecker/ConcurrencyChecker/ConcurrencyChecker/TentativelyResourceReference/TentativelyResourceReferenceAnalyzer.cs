@@ -45,12 +45,9 @@ namespace ConcurrencyChecker.TentativelyResourceReference
         {
             var solutionModel = await SolutionRepresentationFactory.Create(context.Compilation);
 
-            foreach (var clazz in solutionModel.Classes)
+            foreach (var member in solutionModel.Classes.SelectMany(c => c.Methods))
             {
-                foreach (var member in clazz.Methods)
-                {
-                    CheckForNotAllowedApiUsages(member, context);
-                }
+                CheckForNotAllowedApiUsages(member, context);
             }
         }
 
