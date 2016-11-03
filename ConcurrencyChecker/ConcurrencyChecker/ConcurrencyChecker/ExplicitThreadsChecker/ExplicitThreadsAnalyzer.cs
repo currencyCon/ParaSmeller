@@ -13,7 +13,6 @@ namespace ConcurrencyChecker.ExplicitThreadsChecker
     {
         public const string DiagnosticId = "ETC001";
         private const string ThreadDefintion = "System.Threading.Thread";
-        private const string ThreadStartDefintion = "System.Threading.Thread.Start()";
         private const string Category = "ParallelCorrectness";
 
         private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.ETCAnalyzerTitle), Resources.ResourceManager, typeof (Resources));
