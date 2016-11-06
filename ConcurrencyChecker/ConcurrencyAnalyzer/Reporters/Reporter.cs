@@ -2,7 +2,7 @@
 using ConcurrencyAnalyzer.Diagnostics;
 using ConcurrencyAnalyzer.Representation;
 
-namespace ConcurrencyAnalyzer.Checkers
+namespace ConcurrencyAnalyzer.Reporters
 {
     public interface IReporter
     {

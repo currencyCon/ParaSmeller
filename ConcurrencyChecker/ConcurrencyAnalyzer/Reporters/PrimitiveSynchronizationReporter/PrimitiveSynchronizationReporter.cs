@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ConcurrencyAnalyzer.Checkers;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
@@ -8,11 +7,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
 
-namespace ConcurrencyAnalyzer.PrimitiveSynchronizationChecker
+namespace ConcurrencyAnalyzer.Reporters.PrimitiveSynchronizationReporter
 {
     public class PrimitiveSynchronizationReporter: IReporter
     {
-        private const string Category = "Synchronization";
+        public const string Category = "Synchronization";
         public const string PrimitiveSynchronizationDiagnosticId = "PS001";
         private const string InterlockedKeyword = "Interlocked";
         private const string VolatileKeyWord = "volatile";
@@ -27,9 +26,9 @@ namespace ConcurrencyAnalyzer.PrimitiveSynchronizationChecker
         private static readonly string[] NotAllowedModifiers = { VolatileKeyWord };
         private static readonly string[] NotAllowedApiClasses = { InterlockedKeyword };
 
-        private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.PSAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
+        public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.PSAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormatPrimitiveSynchronization = new LocalizableResourceString(nameof(Resources.PrimitiveSynchronizationAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
-        private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.PSAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
+        public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.PSAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 
 
         public ICollection<Diagnostic> Report(SolutionRepresentation solutionRepresentation)

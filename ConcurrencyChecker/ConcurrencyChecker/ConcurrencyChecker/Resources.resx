@@ -212,15 +212,6 @@
   <data name="OAAnalyzerMessageFormatNestedAsync" xml:space="preserve">
     <value>Async shoudn't be nested {0} times</value>
   </data>
-  <data name="PSAnalyzerTitle" xml:space="preserve">
-    <value>Primitive Synchronization</value>
-  </data>
-  <data name="PrimitiveSynchronizationAnalyzerMessageFormat" xml:space="preserve">
-    <value>Consider using more abstract constructs like lock if not implementing a high performant library.</value>
-  </data>
-  <data name="PSAnalyzerDescription" xml:space="preserve">
-    <value>The Synchronization Mechanicms used are very primitive. Consider using a higher form of abstraction. </value>
-  </data>
   <data name="TRRAnalyzerDescription" xml:space="preserve">
     <value>Timeouts can lead to starvation2</value>
   </data>

@@ -1,4 +1,5 @@
-﻿using ConcurrencyChecker.FireAndForgetChecker;
+﻿using ConcurrencyAnalyzer.Reporters.FireAndForgetReporter;
+using ConcurrencyChecker.FireAndForgetChecker;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -38,7 +39,7 @@ namespace Test
 ";
             var expected = new DiagnosticResult
             {
-                Id = FireAndForgetCheckerAnalyzer.FireAndForgetCallId,
+                Id = FireAndForgetReporter.FireAndForgetCallId,
                 Message = "The result of this Computation is potentially never awaited",
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {
@@ -79,7 +80,7 @@ namespace Test
 ";
             var expected = new DiagnosticResult
             {
-                Id = FireAndForgetCheckerAnalyzer.FireAndForgetCallId,
+                Id = FireAndForgetReporter.FireAndForgetCallId,
                 Message = "The result of this Computation is potentially never awaited",
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {

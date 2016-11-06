@@ -1,21 +1,18 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ConcurrencyAnalyzer.Checkers;
 using ConcurrencyAnalyzer.Diagnostics;
-using ConcurrencyAnalyzer.PrimitiveSynchronizationChecker;
 using ConcurrencyAnalyzer.RepresentationFactories;
 using Microsoft.CodeAnalysis;
 using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
 
-namespace ConcurrencyAnalyzer.Reporter
+namespace ConcurrencyAnalyzer.Reporters
 {
     public class SmellReporter
     {
         private static readonly Dictionary<Smell, IReporter> Reporters = new Dictionary<Smell, IReporter>
         {
-            {Smell.PrimitiveSynchronization, new PrimitiveSynchronizationReporter()}
+            {Smell.PrimitiveSynchronization, new PrimitiveSynchronizationReporter.PrimitiveSynchronizationReporter()},
+            {Smell.FireAndForget, new FireAndForgetReporter.FireAndForgetReporter() }
         };
 
         public async Task<ICollection<Diagnostic>> Report(Compilation compilation)

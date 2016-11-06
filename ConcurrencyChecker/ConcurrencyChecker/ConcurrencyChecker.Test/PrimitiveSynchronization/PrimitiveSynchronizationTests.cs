@@ -1,4 +1,5 @@
-﻿using ConcurrencyChecker.PrimitiveSynchronizationChecker;
+﻿using ConcurrencyAnalyzer.Reporters.PrimitiveSynchronizationReporter;
+using ConcurrencyChecker.PrimitiveSynchronizationChecker;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -33,8 +34,8 @@ namespace Test
 }";
             var expected = new DiagnosticResult
             {
-                Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
-                Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -65,8 +66,8 @@ namespace Test
 }";
             var expected = new DiagnosticResult
             {
-                Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
-                Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -101,8 +102,8 @@ namespace Test
 }";
             var expected = new DiagnosticResult
             {
-                Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
-                Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -139,8 +140,8 @@ namespace Test
 }";
             var expected = new DiagnosticResult
             {
-                Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
-                Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -171,8 +172,8 @@ namespace Test
 }";
             var expected = new DiagnosticResult
             {
-                Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
-                Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -218,8 +219,8 @@ namespace Test
 }";
             var expected = new DiagnosticResult
             {
-                Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
-                Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -335,8 +336,8 @@ class SpinLockDemo2
     }";
             var expected = new [] {
             new DiagnosticResult {
-                Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
-                Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -344,8 +345,8 @@ class SpinLockDemo2
                         }
             },
                         new DiagnosticResult {
-                Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
-                Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -353,8 +354,8 @@ class SpinLockDemo2
                         }
             },
                                     new DiagnosticResult {
-                Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
-                Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -403,8 +404,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
 }";
             var expected = new[] {
                 new DiagnosticResult {
-                    Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
-                    Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                    Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                    Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
                     Severity = DiagnosticSeverity.Warning,
                     Locations =
                         new[] {
@@ -412,8 +413,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
                             }
                 },
                 new DiagnosticResult {
-                    Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
-                    Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                    Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                    Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
                     Severity = DiagnosticSeverity.Warning,
                     Locations =
                         new[] {
@@ -421,8 +422,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
                             }
                 },
                 new DiagnosticResult {
-                    Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
-                    Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                    Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                    Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
                     Severity = DiagnosticSeverity.Warning,
                     Locations =
                         new[] {
@@ -430,8 +431,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
                             }
                 },
                 new DiagnosticResult {
-                    Id = PrimitiveSynchronizationAnalyzer.PrimitiveSynchronizationDiagnosticId,
-                    Message = PrimitiveSynchronizationAnalyzer.MessageFormatPrimitiveSynchronization.ToString(),
+                    Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                    Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
                     Severity = DiagnosticSeverity.Warning,
                     Locations =
                         new[] {

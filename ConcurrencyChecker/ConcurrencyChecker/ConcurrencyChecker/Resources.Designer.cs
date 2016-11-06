@@ -305,33 +305,6 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consider using more abstract constructs like lock if not implementing a high performant library..
-        /// </summary>
-        internal static string PrimitiveSynchronizationAnalyzerMessageFormat {
-            get {
-                return ResourceManager.GetString("PrimitiveSynchronizationAnalyzerMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Synchronization Mechanicms used are very primitive. Consider using a higher form of abstraction. .
-        /// </summary>
-        internal static string PSAnalyzerDescription {
-            get {
-                return ResourceManager.GetString("PSAnalyzerDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Primitive Synchronization.
-        /// </summary>
-        internal static string PSAnalyzerTitle {
-            get {
-                return ResourceManager.GetString("PSAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Tapirs shouldn&apos;t be alone.
         /// </summary>
         internal static string TapirAnalyzerDescription {

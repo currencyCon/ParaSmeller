@@ -104,7 +104,7 @@
   <ItemGroup>
     <Compile Include="ExplicitThreads\ExplicitThreadsTests.cs" />
     <Compile Include="ExplicitThreads\ExplicitThreadsTestsMultiline.cs" />
-	<Compile Include="Finalizer\UnsynchronizedFinalizersTests.cs" />
+    <Compile Include="Finalizer\UnsynchronizedFinalizersTests.cs" />
     <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalUnitTests.cs" />
     <Compile Include="FireAndForget\FireAndForgetCheckerTests.cs" />
     <Compile Include="OverAsynchrony\OverAsynchronyUnitTests.cs" />
@@ -125,6 +125,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ConcurrencyAnalyzer\ConcurrencyAnalyzer.csproj">
+      <Project>{09CF3DCC-1DAF-4180-A2E2-BA41BC7E1AD3}</Project>
+      <Name>ConcurrencyAnalyzer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ConcurrencyChecker\ConcurrencyChecker.csproj">
       <Project>{40285A25-7897-4D97-9A8E-94E1B1E718DE}</Project>
       <Name>ConcurrencyChecker</Name>
