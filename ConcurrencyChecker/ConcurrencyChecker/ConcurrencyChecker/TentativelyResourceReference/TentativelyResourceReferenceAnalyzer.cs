@@ -24,7 +24,7 @@ namespace ConcurrencyChecker.TentativelyResourceReference
         private const string SpinLockTryEnter = "System.Threading.SpinLock.TryEnter";
         private const string BarrierSignalAndWait = "System.Threading.Barrier.SignalAndWait";
 
-        private const bool CheckNotOnlyInsideWhileLoop = true;
+        private static bool _checkNotOnlyInsideWhileLoop = false;
         
         private static readonly string[] TimeoutTypes = { "TimeSpan", "Int32" };
         private static readonly string[] NotAllowedApis = { MonitorWait, WaitHandleWaitOne, WaitHandleWaitAll, WaitHandleWaitAny, MonitorTryEnter, SpinLockTryEnter, BarrierSignalAndWait };
@@ -41,16 +41,20 @@ namespace ConcurrencyChecker.TentativelyResourceReference
             context.RegisterCompilationAction(CheckForPrimitiveSynchronization);
         }
 
+        public TentativelyResourceReferenceAnalyzer() : this(true) { }
+
+        public TentativelyResourceReferenceAnalyzer(bool checkNotOnlyInsideWhileLoop)
+        {
+            _checkNotOnlyInsideWhileLoop = checkNotOnlyInsideWhileLoop;
+        }
+
         private static async void CheckForPrimitiveSynchronization(CompilationAnalysisContext context)
         {
             var solutionModel = await SolutionRepresentationFactory.Create(context.Compilation);
 
-            foreach (var clazz in solutionModel.Classes)
+            foreach (var member in solutionModel.Classes.SelectMany(c => c.Methods))
             {
-                foreach (var member in clazz.Methods)
-                {
-                    CheckForNotAllowedApiUsages(member, context);
-                }
+                CheckForNotAllowedApiUsages(member, context);
             }
         }
 
@@ -61,7 +65,7 @@ namespace ConcurrencyChecker.TentativelyResourceReference
             {
                 var symbol = invocationToReport.GetMethodSymbol(context);
 
-                if (ContainsTimeout(symbol)/*&& (IsInWhileLoop(invocationToReport.Implementation) || CheckNotOnlyInsideWhileLoop)*/)
+                if (ContainsTimeout(symbol) && (IsInWhileLoop(invocationToReport.Implementation) || _checkNotOnlyInsideWhileLoop))
                 {
                     ReportTimeoutUsage(context, invocationToReport.Implementation);
                 }

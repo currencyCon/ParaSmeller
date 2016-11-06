@@ -11,18 +11,8 @@ namespace ConcurrencyChecker.Test.ExplicitThreads
     public class UnitTest : CodeFixVerifier
     {
 
-        //No diagnostics expected to show up
         [TestMethod]
-        public void TestNoDiagnostics()
-        {
-            var test = @"";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-
-        [TestMethod]
-        public void TestThreadNoDiagnostics()
+        public void TestThreadDiagnostics()
         {
             var test = @"
 using System.Threading;
@@ -34,12 +24,33 @@ namespace ExplicitThreadsSmell
         public void Test1()
         {
             Thread t = new Thread(Compute);  
-            t.start();
-            t.join();
+            t.Start();
         }
     }
 }";
-            VerifyCSharpDiagnostic(test);
+            var expected1 = new DiagnosticResult
+            {
+                Id = ExplicitThreadsAnalyzer.DiagnosticId,
+                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test0.cs", 10, 13)
+                        }
+            };
+
+            var expected2 = new DiagnosticResult
+            {
+                Id = ExplicitThreadsAnalyzer.DiagnosticId,
+                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test0.cs", 10, 24)
+                        }
+            };
+
+            VerifyCSharpDiagnostic(test, expected1, expected2);
         }
 
 
@@ -73,8 +84,8 @@ namespace ExplicitThreadsSmell
 
             var expected1 = new DiagnosticResult
             {
-                Id = "ETC001",
-                Message = "'new Thread' should be replaced with Task.Run",
+                Id = ExplicitThreadsAnalyzer.DiagnosticId,
+                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -84,8 +95,8 @@ namespace ExplicitThreadsSmell
 
             var expected2 = new DiagnosticResult
             {
-                Id = "ETC001",
-                Message = "'new Thread' should be replaced with Task.Run",
+                Id = ExplicitThreadsAnalyzer.DiagnosticId,
+                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -115,8 +126,8 @@ namespace ExplicitThreadsSmell
 }";
             var expected = new DiagnosticResult
             {
-                Id = "ETC001",
-                Message = "'new Thread' should be replaced with Task.Run",
+                Id = ExplicitThreadsAnalyzer.DiagnosticId,
+                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -125,22 +136,7 @@ namespace ExplicitThreadsSmell
             };
 
             VerifyCSharpDiagnostic(test, expected);
-
-            var fixtest = @"
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace ExplicitThreadsSmell
-{
-    class SimpleThread
-    {
-        public void Test1()
-        {
-            Task.Run(() => Compute());  
-        }
-    }
-}";
-            VerifyCSharpFix(test, fixtest, allowNewCompilerDiagnostics: true);
+            
         }
 
         [TestMethod]
@@ -161,8 +157,8 @@ namespace ExplicitThreadsSmell
 }";
             var expected = new DiagnosticResult
             {
-                Id = "ETC001",
-                Message = "'new Thread' should be replaced with Task.Run",
+                Id = ExplicitThreadsAnalyzer.DiagnosticId,
+                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -171,10 +167,14 @@ namespace ExplicitThreadsSmell
             };
 
             VerifyCSharpDiagnostic(test, expected);
+            
+        }
 
-            var fixtest = @"
+        [TestMethod]
+        public void TestMultilineCodeSmell()
+        {
+            var test = @"
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ExplicitThreadsSmell
 {
@@ -182,17 +182,41 @@ namespace ExplicitThreadsSmell
     {
         public void Test1()
         {
-            Task.Run(() => { int i = 10; i++;});
+            Thread t;
+            t = new Thread(Compute);
+            t.Start();
         }
     }
 }";
-            VerifyCSharpFix(test, fixtest, allowNewCompilerDiagnostics:true);
+            var expected1 = new DiagnosticResult
+            {
+                Id = ExplicitThreadsAnalyzer.DiagnosticId,
+                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test0.cs", 10, 13)
+                        }
+            };
+
+            var expected2 = new DiagnosticResult
+            {
+                Id = ExplicitThreadsAnalyzer.DiagnosticId,
+                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test0.cs", 11, 17)
+                        }
+            };
+
+            VerifyCSharpDiagnostic(test, expected1, expected2);
+
         }
-
-
+        
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
-            return new ExplicitThreadsCodeFixProvider();
+            return null;
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()

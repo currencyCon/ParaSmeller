@@ -38,8 +38,6 @@
     <Compile Include="Builders\MethodBuilder.cs" />
     <Compile Include="Builders\PropertyBuilder.cs" />
     <Compile Include="Builders\SyntaxFormatter.cs" />
-    <Compile Include="Builders\TaskSyntaxBuilder.cs" />
-    <Compile Include="Builders\UsingDirectiveBuilder.cs" />
     <Compile Include="Reporters\FireAndForgetReporter\FireAndForgetReporter.cs" />
     <Compile Include="Reporters\Reporter.cs" />
     <Compile Include="Diagnostics\Diagnostic.cs" />
@@ -50,7 +48,6 @@
     <Compile Include="Reporters\SmellReporter.cs" />
     <Compile Include="RepresentationExtensions\InvocationExpressionRepresentationExtensions.cs" />
     <Compile Include="RepresentationExtensions\MemberExtensions.cs" />
-    <Compile Include="RepresentationExtensions\MethodExtensions.cs" />
     <Compile Include="RepresentationFactories\BlockRepresentationFactory.cs" />
     <Compile Include="RepresentationFactories\ClassRepresentationFactory.cs" />
     <Compile Include="RepresentationFactories\InvocationExpressionRepresentationFactory.cs" />
