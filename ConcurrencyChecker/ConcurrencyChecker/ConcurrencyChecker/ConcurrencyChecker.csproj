@@ -39,7 +39,6 @@
     <Compile Include="FireAndForgetChecker\FireAndForgetCheckerAnalyzer.cs" />
     <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerCodeFixProvider.cs" />
     <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerAnalyzer.cs" />
-    <Compile Include="HalfSynchronizedChecker\SynchronizationInspector.cs" />
     <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalCodeFixProvider.cs" />
     <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalAnalyzer.cs" />
     <Compile Include="NestedSynchronizedMethodClassChecker\NestedSynchronizedMethodClassAnalyzer.cs" />

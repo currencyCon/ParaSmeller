@@ -12,7 +12,9 @@ namespace ConcurrencyAnalyzer.Reporters
         private static readonly Dictionary<Smell, IReporter> Reporters = new Dictionary<Smell, IReporter>
         {
             {Smell.PrimitiveSynchronization, new PrimitiveSynchronizationReporter.PrimitiveSynchronizationReporter()},
-            {Smell.FireAndForget, new FireAndForgetReporter.FireAndForgetReporter() }
+            {Smell.FireAndForget, new FireAndForgetReporter.FireAndForgetReporter() },
+            {Smell.Finalizer, new FinalizerReporter.FinalizerReporter() },
+            {Smell.HalfSynchronized, new HalfSynchronizedReporter.HalfSynchronizedReporter() }
         };
 
         public async Task<ICollection<Diagnostic>> Report(Compilation compilation)

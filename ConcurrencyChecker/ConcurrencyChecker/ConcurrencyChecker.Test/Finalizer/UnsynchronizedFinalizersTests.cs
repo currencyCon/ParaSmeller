@@ -1,4 +1,5 @@
-﻿using ConcurrencyChecker.FinalizerChecker;
+﻿using ConcurrencyAnalyzer.Reporters.FinalizerReporter;
+using ConcurrencyChecker.FinalizerChecker;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -63,8 +64,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
             var expected = new [] {
             
                 new DiagnosticResult{
-                Id = FinalizerSynchronizationAnalyzer.FinalizerSynchronizationDiagnosticId,
-                Message = FinalizerSynchronizationAnalyzer.MessageFormatFinalizerSynchronization.ToString(),
+                Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
+                Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -72,8 +73,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
                         }
                 },
                 new DiagnosticResult{
-                Id = FinalizerSynchronizationAnalyzer.FinalizerSynchronizationDiagnosticId,
-                Message = FinalizerSynchronizationAnalyzer.MessageFormatFinalizerSynchronization.ToString(),
+                Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
+                Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -161,8 +162,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
 }";
             var expected = new DiagnosticResult
             {
-                Id = FinalizerSynchronizationAnalyzer.FinalizerSynchronizationDiagnosticId,
-                Message = FinalizerSynchronizationAnalyzer.MessageFormatFinalizerSynchronization.ToString(),
+                Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
+                Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 6, 9)}
             };
@@ -192,8 +193,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
             var expected = new[] {
 
                 new DiagnosticResult{
-                Id = FinalizerSynchronizationAnalyzer.FinalizerSynchronizationDiagnosticId,
-                Message = FinalizerSynchronizationAnalyzer.MessageFormatFinalizerSynchronization.ToString(),
+                Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
+                Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -201,8 +202,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
                         }
                 },
                 new DiagnosticResult{
-                Id = FinalizerSynchronizationAnalyzer.FinalizerSynchronizationDiagnosticId,
-                Message = FinalizerSynchronizationAnalyzer.MessageFormatFinalizerSynchronization.ToString(),
+                Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
+                Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -244,8 +245,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
             var expected = new[] {
 
                 new DiagnosticResult{
-                Id = FinalizerSynchronizationAnalyzer.FinalizerSynchronizationDiagnosticId,
-                Message = FinalizerSynchronizationAnalyzer.MessageFormatFinalizerSynchronization.ToString(),
+                Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
+                Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -253,8 +254,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
                         }
                 },
                 new DiagnosticResult{
-                Id = FinalizerSynchronizationAnalyzer.FinalizerSynchronizationDiagnosticId,
-                Message = FinalizerSynchronizationAnalyzer.MessageFormatFinalizerSynchronization.ToString(),
+                Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
+                Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -297,8 +298,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
             var expected = new[] {
 
                 new DiagnosticResult{
-                Id = FinalizerSynchronizationAnalyzer.FinalizerSynchronizationDiagnosticId,
-                Message = FinalizerSynchronizationAnalyzer.MessageFormatFinalizerSynchronization.ToString(),
+                Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
+                Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -306,8 +307,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
                         }
                 },
                 new DiagnosticResult{
-                Id = FinalizerSynchronizationAnalyzer.FinalizerSynchronizationDiagnosticId,
-                Message = FinalizerSynchronizationAnalyzer.MessageFormatFinalizerSynchronization.ToString(),
+                Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
+                Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -348,8 +349,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
             var expected = new[] {
 
                 new DiagnosticResult{
-                Id = FinalizerSynchronizationAnalyzer.FinalizerSynchronizationDiagnosticId,
-                Message = FinalizerSynchronizationAnalyzer.MessageFormatFinalizerSynchronization.ToString(),
+                Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
+                Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -357,8 +358,8 @@ namespace ConcurrencyChecker.Test.TestCodeTester
                         }
                 },
                 new DiagnosticResult{
-                Id = FinalizerSynchronizationAnalyzer.FinalizerSynchronizationDiagnosticId,
-                Message = FinalizerSynchronizationAnalyzer.MessageFormatFinalizerSynchronization.ToString(),
+                Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
+                Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {

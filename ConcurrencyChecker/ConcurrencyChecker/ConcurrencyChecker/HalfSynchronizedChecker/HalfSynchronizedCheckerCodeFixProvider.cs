@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Builders;
+using ConcurrencyAnalyzer.Reporters.HalfSynchronizedReporter;
 using ConcurrencyAnalyzer.RepresentationFactories;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
@@ -19,7 +20,7 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
     {
         private const string Title = "Synchronize Member";
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(HalfSynchronizedCheckerAnalyzer.HalfSynchronizedChildDiagnosticId, HalfSynchronizedCheckerAnalyzer.UnsynchronizedPropertyId);
+        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(HalfSynchronizedReporter.HalfSynchronizedChildDiagnosticId, HalfSynchronizedReporter.UnsynchronizedPropertyId);
 
         public sealed override FixAllProvider GetFixAllProvider()
         {
@@ -37,12 +38,12 @@ namespace ConcurrencyChecker.HalfSynchronizedChecker
             if (syntaxNode is MethodDeclarationSyntax)
             {
                 context.RegisterCodeFix(
-                    CodeAction.Create(Title, c => SynchronizeMethod(context.Document, (MethodDeclarationSyntax) syntaxNode, c), Title), context.Diagnostics.First(a => a.Id == HalfSynchronizedCheckerAnalyzer.HalfSynchronizedChildDiagnosticId));
+                    CodeAction.Create(Title, c => SynchronizeMethod(context.Document, (MethodDeclarationSyntax) syntaxNode, c), Title), context.Diagnostics.First(a => a.Id == HalfSynchronizedReporter.HalfSynchronizedChildDiagnosticId));
             }
             else if (syntaxNode is PropertyDeclarationSyntax)
             {
                 context.RegisterCodeFix(
-                    CodeAction.Create(Title, c => SynchronizeProperty(context.Document, (PropertyDeclarationSyntax)syntaxNode, c), equivalenceKey: Title), context.Diagnostics.First(a => a.Id == HalfSynchronizedCheckerAnalyzer.UnsynchronizedPropertyId));
+                    CodeAction.Create(Title, c => SynchronizeProperty(context.Document, (PropertyDeclarationSyntax)syntaxNode, c), equivalenceKey: Title), context.Diagnostics.First(a => a.Id == HalfSynchronizedReporter.UnsynchronizedPropertyId));
             }
         }
 

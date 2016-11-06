@@ -1,4 +1,5 @@
-﻿using ConcurrencyChecker.HalfSynchronizedChecker;
+﻿using ConcurrencyAnalyzer.Reporters.HalfSynchronizedReporter;
+using ConcurrencyChecker.HalfSynchronizedChecker;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -88,7 +89,7 @@ namespace ConcurrencyChecker.Test.HalfSynchronizedClass
                 }";
             var expected = new DiagnosticResult
             {
-                Id = HalfSynchronizedCheckerAnalyzer.UnsynchronizedPropertyId,
+                Id = HalfSynchronizedReporter.UnsynchronizedPropertyId,
                 Message = "The Property is used in a synchronized Member. Consider synchronizing it.",
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {
@@ -120,7 +121,7 @@ namespace ConcurrencyChecker.Test.HalfSynchronizedClass
             ";
             var expected = new DiagnosticResult
             {
-                Id = HalfSynchronizedCheckerAnalyzer.UnsynchronizedPropertyId,
+                Id = HalfSynchronizedReporter.UnsynchronizedPropertyId,
                 Message = "The Property is used in a synchronized Member. Consider synchronizing it.",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
@@ -165,7 +166,7 @@ namespace ConcurrencyChecker.Test.HalfSynchronizedClass
             ";
             var expected = new DiagnosticResult
             {
-                Id = HalfSynchronizedCheckerAnalyzer.UnsynchronizedPropertyId,
+                Id = HalfSynchronizedReporter.UnsynchronizedPropertyId,
                 Message = "The Property is used in a synchronized Member. Consider synchronizing it.",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
@@ -202,7 +203,7 @@ namespace ConcurrencyChecker.Test.HalfSynchronizedClass
             var expected = new [] {
                 new DiagnosticResult
             {
-                Id = HalfSynchronizedCheckerAnalyzer.UnsynchronizedPropertyId,
+                Id = HalfSynchronizedReporter.UnsynchronizedPropertyId,
                 Message = "The Property is used in a synchronized Member. Consider synchronizing it.",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
@@ -212,7 +213,7 @@ namespace ConcurrencyChecker.Test.HalfSynchronizedClass
             },
                 new DiagnosticResult
             {
-                Id = HalfSynchronizedCheckerAnalyzer.HalfSynchronizedChildDiagnosticId,
+                Id = HalfSynchronizedReporter.HalfSynchronizedChildDiagnosticId,
                 Message = "The Property  is also used in another synchronized Method . Consider synchronizing also this one.",
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
@@ -276,7 +277,7 @@ namespace Test
     }
 }
 ";
-            VerifyCSharpFix(test, fixTest, warningId:HalfSynchronizedCheckerAnalyzer.HalfSynchronizedChildDiagnosticId);
+            VerifyCSharpFix(test, fixTest, warningId: HalfSynchronizedReporter.HalfSynchronizedChildDiagnosticId);
         }
 
         [TestMethod]
@@ -351,7 +352,7 @@ namespace Test
     }
 }
 ";
-            VerifyCSharpFix(test, fixTest, warningId: HalfSynchronizedCheckerAnalyzer.HalfSynchronizedChildDiagnosticId);
+            VerifyCSharpFix(test, fixTest, warningId: HalfSynchronizedReporter.HalfSynchronizedChildDiagnosticId);
         }
 
         [TestMethod]
@@ -412,7 +413,7 @@ namespace Test
     }
 }
 ";
-            VerifyCSharpFix(test, fixTest, warningId: HalfSynchronizedCheckerAnalyzer.UnsynchronizedPropertyId);
+            VerifyCSharpFix(test, fixTest, warningId: HalfSynchronizedReporter.UnsynchronizedPropertyId);
         }
 
 
@@ -494,7 +495,7 @@ namespace Test
     }
 }
 ";
-            VerifyCSharpFix(test, fixTest, warningId: HalfSynchronizedCheckerAnalyzer.UnsynchronizedPropertyId);
+            VerifyCSharpFix(test, fixTest, warningId: HalfSynchronizedReporter.UnsynchronizedPropertyId);
         }
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {

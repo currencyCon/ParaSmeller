@@ -38,7 +38,11 @@
     <Compile Include="Builders\MethodBuilder.cs" />
     <Compile Include="Builders\PropertyBuilder.cs" />
     <Compile Include="Builders\SyntaxFormatter.cs" />
+    <Compile Include="Reporters\ExplizitThreadsReporter\ExplicitThreadsReporter.cs" />
+    <Compile Include="Reporters\FinalizerReporter\FinalizerReporter.cs" />
     <Compile Include="Reporters\FireAndForgetReporter\FireAndForgetReporter.cs" />
+    <Compile Include="Reporters\HalfSynchronizedReporter\HalfSynchronizedReporter.cs" />
+    <Compile Include="Reporters\HalfSynchronizedReporter\SynchronizationInspector.cs" />
     <Compile Include="Reporters\Reporter.cs" />
     <Compile Include="Diagnostics\Diagnostic.cs" />
     <Compile Include="Diagnostics\Smell.cs" />
