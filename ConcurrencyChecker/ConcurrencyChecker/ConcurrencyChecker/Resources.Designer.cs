@@ -62,56 +62,11 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type names should be all uppercase..
-        /// </summary>
-        internal static string AnalyzerDescription {
-            get {
-                return ResourceManager.GetString("AnalyzerDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Type name &apos;{0}&apos; contains lowercase letters.
-        /// </summary>
-        internal static string AnalyzerMessageFormat {
-            get {
-                return ResourceManager.GetString("AnalyzerMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The {0} {1} is also used in another synchronized Method . Consider synchronizing also this one..
-        /// </summary>
-        internal static string AnalyzerMessageFormatHalfSynchronized {
-            get {
-                return ResourceManager.GetString("AnalyzerMessageFormatHalfSynchronized", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &apos;new Thread&apos; should be replaced with Task.Run.
         /// </summary>
         internal static string AnalyzerMessageFormatSingleLine {
             get {
                 return ResourceManager.GetString("AnalyzerMessageFormatSingleLine", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Property is used in a synchronized Member. Consider synchronizing it..
-        /// </summary>
-        internal static string AnalyzerMessageFormatUnsynchronizedProperty {
-            get {
-                return ResourceManager.GetString("AnalyzerMessageFormatUnsynchronizedProperty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Type name contains lowercase letters.
-        /// </summary>
-        internal static string AnalyzerTitle {
-            get {
-                return ResourceManager.GetString("AnalyzerTitle", resourceCulture);
             }
         }
         
@@ -139,69 +94,6 @@ namespace ConcurrencyChecker {
         internal static string ETCAnalyzerTitle {
             get {
                 return ResourceManager.GetString("ETCAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This Member is used within the class and its Finalizer. Consider Synchronizing the usages..
-        /// </summary>
-        internal static string FinalizerSynchronizationAnalyzerMessageFormat {
-            get {
-                return ResourceManager.GetString("FinalizerSynchronizationAnalyzerMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Finalizers run asynchronous to the rest of the code. Access to Members in Finalizers should therefore be synchronized. .
-        /// </summary>
-        internal static string FSAnalyzerDescription {
-            get {
-                return ResourceManager.GetString("FSAnalyzerDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unsynchronized Finalizers.
-        /// </summary>
-        internal static string FSAnalyzerTitle {
-            get {
-                return ResourceManager.GetString("FSAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Starvation could happen.
-        /// </summary>
-        internal static string MWSAnalyzerDescription {
-            get {
-                return ResourceManager.GetString("MWSAnalyzerDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Wrong monitor usage.
-        /// </summary>
-        internal static string MWSAnalyzerTitle {
-            get {
-                return ResourceManager.GetString("MWSAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to if should be replaced with while.
-        /// </summary>
-        internal static string MWSIfAnalyzerMessageFormat {
-            get {
-                return ResourceManager.GetString("MWSIfAnalyzerMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Pulse should be replaced with PulseAll.
-        /// </summary>
-        internal static string MWSPulseAnalyzerMessageFormat {
-            get {
-                return ResourceManager.GetString("MWSPulseAnalyzerMessageFormat", resourceCulture);
             }
         }
         

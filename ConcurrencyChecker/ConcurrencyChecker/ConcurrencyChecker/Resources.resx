@@ -117,26 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AnalyzerDescription" xml:space="preserve">
-    <value>Type names should be all uppercase.</value>
-    <comment>An optional longer localizable description of the diagnostic.</comment>
-  </data>
-  <data name="AnalyzerMessageFormat" xml:space="preserve">
-    <value>Type name '{0}' contains lowercase letters</value>
-    <comment>The format-able message the diagnostic displays.</comment>
-  </data>
-  <data name="AnalyzerMessageFormatHalfSynchronized" xml:space="preserve">
-    <value>The {0} {1} is also used in another synchronized Method . Consider synchronizing also this one.</value>
-    <comment>The format-able message the diagnostic displays.</comment>
-  </data>
-  <data name="AnalyzerMessageFormatUnsynchronizedProperty" xml:space="preserve">
-    <value>The Property is used in a synchronized Member. Consider synchronizing it.</value>
-    <comment>The format-able message the diagnostic displays.</comment>
-  </data>
-  <data name="AnalyzerTitle" xml:space="preserve">
-    <value>Type name contains lowercase letters</value>
-    <comment>The title of the diagnostic.</comment>
-  </data>
+
   <data name="AnalyzerMessageFormatSingleLine" xml:space="preserve">
     <value>'new Thread' should be replaced with Task.Run</value>
   </data>
@@ -163,18 +144,6 @@
   <data name="NSMCAnalyzerTitle" xml:space="preserve">
     <value>NestedSynchronizedMethod Calls</value>
     <comment>The title of the diagnostic.</comment>
-  </data>
-  <data name="MWSAnalyzerDescription" xml:space="preserve">
-    <value>Starvation could happen</value>
-  </data>
-  <data name="MWSIfAnalyzerMessageFormat" xml:space="preserve">
-    <value>if should be replaced with while</value>
-  </data>
-  <data name="MWSAnalyzerTitle" xml:space="preserve">
-    <value>Wrong monitor usage</value>
-  </data>
-  <data name="MWSPulseAnalyzerMessageFormat" xml:space="preserve">
-    <value>Pulse should be replaced with PulseAll</value>
   </data>
   <data name="TapirAnalyzerDescription" xml:space="preserve">
     <value>Tapirs shouldn't be alone</value>
@@ -205,14 +174,5 @@
   </data>
   <data name="TRRAnalyzerTitle" xml:space="preserve">
     <value>Starvation possible</value>
-  </data>
-  <data name="FSAnalyzerTitle" xml:space="preserve">
-    <value>Unsynchronized Finalizers</value>
-  </data>
-  <data name="FinalizerSynchronizationAnalyzerMessageFormat" xml:space="preserve">
-    <value>This Member is used within the class and its Finalizer. Consider Synchronizing the usages.</value>
-  </data>
-  <data name="FSAnalyzerDescription" xml:space="preserve">
-    <value>Finalizers run asynchronous to the rest of the code. Access to Members in Finalizers should therefore be synchronized. </value>
   </data>
 </root>

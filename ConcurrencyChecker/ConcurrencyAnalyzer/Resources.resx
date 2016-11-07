@@ -117,17 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AnalyzerDescription" xml:space="preserve">
-    <value>Type names should be all uppercase.</value>
+  <data name="HalfSynchronizedDescription" xml:space="preserve">
+    <value>All Member of a class should synchronize the same invocations.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="FireAndForgetAnalyzerDescription" xml:space="preserve">
     <value>In almost all cases Fire and Forget Calls should'nt take place.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
-  </data>
-  <data name="AnalyzerMessageFormat" xml:space="preserve">
-    <value>Type name '{0}' contains lowercase letters</value>
-    <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="AnalyzerMessageFormatHalfSynchronized" xml:space="preserve">
     <value>The {0} {1} is also used in another synchronized Method . Consider synchronizing also this one.</value>
@@ -141,8 +137,8 @@
     <value>The Property is used in a synchronized Member. Consider synchronizing it.</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
-  <data name="AnalyzerTitle" xml:space="preserve">
-    <value>Type name contains lowercase letters</value>
+  <data name="HalfSynchronizedTitle" xml:space="preserve">
+    <value>Synchronization should be absolute.</value>
     <comment>The title of the diagnostic.</comment>
   </data>
   <data name="FireAndForgetAnalyzerTitle" xml:space="preserve">

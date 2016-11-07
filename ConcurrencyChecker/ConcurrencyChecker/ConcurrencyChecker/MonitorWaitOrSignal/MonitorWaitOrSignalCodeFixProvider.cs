@@ -3,6 +3,7 @@ using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ConcurrencyAnalyzer.Reporters.MonitorOrWaitSignalReporter;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -19,7 +20,7 @@ namespace ConcurrencyChecker.MonitorWaitOrSignal
         private const string TitlePulse = "Use PulseAll instead of PUlse";
         private const string MonitorPulseAllMethod = "PulseAll";
         private const string MonitorPulseMethod = "Pulse";
-        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(MonitorWaitOrSignalAnalyzer.MonitorIfConditionDiagnosticId, MonitorWaitOrSignalAnalyzer.MonitorPulseDiagnosticId);
+        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(MonitorOrWaitSignalReporter.MonitorIfConditionDiagnosticId, MonitorOrWaitSignalReporter.MonitorPulseDiagnosticId);
 
         public sealed override FixAllProvider GetFixAllProvider()
         {

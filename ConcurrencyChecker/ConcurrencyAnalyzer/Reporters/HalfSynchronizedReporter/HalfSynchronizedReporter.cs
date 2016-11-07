@@ -13,10 +13,10 @@ namespace ConcurrencyAnalyzer.Reporters.HalfSynchronizedReporter
         public const string HalfSynchronizedChildDiagnosticId = "HSC001";
         public const string UnsynchronizedPropertyId = "HSC002";
 
-        public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.AnalyzerTitle), Resources.ResourceManager, typeof(Resources));
+        public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.HalfSynchronizedTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormatHalfSynchronized = new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormatHalfSynchronized), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormatUnsychronizedProperty = new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormatUnsynchronizedProperty), Resources.ResourceManager, typeof(Resources));
-        public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
+        public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.HalfSynchronizedDescription), Resources.ResourceManager, typeof(Resources));
         public const string Category = "Synchronization";
 
         private static void DiagnoseMethod(MethodDeclarationSyntax method, ClassRepresentation classRepresentation, ICollection<Diagnostic> reports)

@@ -62,24 +62,6 @@ namespace ConcurrencyAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type names should be all uppercase..
-        /// </summary>
-        internal static string AnalyzerDescription {
-            get {
-                return ResourceManager.GetString("AnalyzerDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Type name &apos;{0}&apos; contains lowercase letters.
-        /// </summary>
-        internal static string AnalyzerMessageFormat {
-            get {
-                return ResourceManager.GetString("AnalyzerMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The result of this Computation is potentially never awaited.
         /// </summary>
         internal static string AnalyzerMessageFormatFireAndForget {
@@ -112,15 +94,6 @@ namespace ConcurrencyAnalyzer {
         internal static string AnalyzerMessageFormatUnsynchronizedProperty {
             get {
                 return ResourceManager.GetString("AnalyzerMessageFormatUnsynchronizedProperty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Type name contains lowercase letters.
-        /// </summary>
-        internal static string AnalyzerTitle {
-            get {
-                return ResourceManager.GetString("AnalyzerTitle", resourceCulture);
             }
         }
         
@@ -202,6 +175,24 @@ namespace ConcurrencyAnalyzer {
         internal static string FSAnalyzerTitle {
             get {
                 return ResourceManager.GetString("FSAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Member of a class should synchronize the same invocations..
+        /// </summary>
+        internal static string HalfSynchronizedDescription {
+            get {
+                return ResourceManager.GetString("HalfSynchronizedDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization should be absolute..
+        /// </summary>
+        internal static string HalfSynchronizedTitle {
+            get {
+                return ResourceManager.GetString("HalfSynchronizedTitle", resourceCulture);
             }
         }
         

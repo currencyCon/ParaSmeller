@@ -14,7 +14,8 @@ namespace ConcurrencyAnalyzer.Reporters
             {Smell.PrimitiveSynchronization, new PrimitiveSynchronizationReporter.PrimitiveSynchronizationReporter()},
             {Smell.FireAndForget, new FireAndForgetReporter.FireAndForgetReporter() },
             {Smell.Finalizer, new FinalizerReporter.FinalizerReporter() },
-            {Smell.HalfSynchronized, new HalfSynchronizedReporter.HalfSynchronizedReporter() }
+            {Smell.HalfSynchronized, new HalfSynchronizedReporter.HalfSynchronizedReporter() },
+            {Smell.MonitorWaitOrSignal, new MonitorOrWaitSignalReporter.MonitorOrWaitSignalReporter() }
         };
 
         public async Task<ICollection<Diagnostic>> Report(Compilation compilation)
