@@ -33,6 +33,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BaseAnalyzer.cs" />
+    <Compile Include="Configuration\Configuration.cs" />
+    <Compile Include="Configuration\ConfigurationManager.cs" />
     <Compile Include="EasterEgg\TapirAnalyzer.cs" />
     <Compile Include="EasterEgg\TapirCodeFixProvider.cs" />
     <Compile Include="ExplicitThreadsChecker\ExplicitThreadsAnalyzer.cs" />

@@ -43,7 +43,7 @@
     <Compile Include="Reporters\HalfSynchronizedReporter\HalfSynchronizedReporter.cs" />
     <Compile Include="Reporters\HalfSynchronizedReporter\SynchronizationInspector.cs" />
     <Compile Include="Reporters\MonitorOrWaitSignalReporter\MonitorOrWaitSignalReporter.cs" />
-    <Compile Include="Reporters\Reporter.cs" />
+    <Compile Include="Reporters\IReporter.cs" />
     <Compile Include="Diagnostics\Diagnostic.cs" />
     <Compile Include="Diagnostics\Smell.cs" />
     <Compile Include="Locks\LockChecker.cs" />

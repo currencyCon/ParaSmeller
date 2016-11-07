@@ -126,7 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ConcurrencyAnalyzer\ConcurrencyAnalyzer.csproj">
-      <Project>{09CF3DCC-1DAF-4180-A2E2-BA41BC7E1AD3}</Project>
+      <Project>{09cf3dcc-1daf-4180-a2e2-ba41bc7e1ad3}</Project>
       <Name>ConcurrencyAnalyzer</Name>
     </ProjectReference>
     <ProjectReference Include="..\ConcurrencyChecker\ConcurrencyChecker.csproj">
