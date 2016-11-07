@@ -1,5 +1,5 @@
-﻿using ConcurrencyAnalyzer.Reporters.HalfSynchronizedReporter;
-using ConcurrencyChecker.HalfSynchronizedChecker;
+﻿using ConcurrencyAnalyzer.Reporters;
+using ConcurrencyChecker.CodeFixProviders;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;

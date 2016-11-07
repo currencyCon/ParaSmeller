@@ -1,4 +1,4 @@
-﻿using ConcurrencyChecker.MonitorWaitOrSignal;
+﻿using ConcurrencyChecker.CodeFixProviders;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;

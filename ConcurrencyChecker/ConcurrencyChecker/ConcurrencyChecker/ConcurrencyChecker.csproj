@@ -32,26 +32,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BaseAnalyzer.cs" />
+    <Compile Include="Analyzer\AllAnalyzer.cs" />
+    <Compile Include="Analyzer\Rules.cs" />
+    <Compile Include="Analyzer\BaseAnalyzer.cs" />
     <Compile Include="EasterEgg\TapirAnalyzer.cs" />
-    <Compile Include="EasterEgg\TapirCodeFixProvider.cs" />
-    <Compile Include="ExplicitThreadsChecker\ExplicitThreadsAnalyzer.cs" />
-    <Compile Include="FinalizerChecker\FinalizerSynchronizationAnalyzer.cs" />
-    <Compile Include="FireAndForgetChecker\FireAndForgetCheckerAnalyzer.cs" />
-    <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerCodeFixProvider.cs" />
-    <Compile Include="HalfSynchronizedChecker\HalfSynchronizedCheckerAnalyzer.cs" />
-    <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalCodeFixProvider.cs" />
-    <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalAnalyzer.cs" />
-    <Compile Include="NestedSynchronizedMethodClassChecker\NestedSynchronizedMethodClassAnalyzer.cs" />
-    <Compile Include="OverAsynchrony\OverAsynchronyAnalyzer.cs" />
-    <Compile Include="PrimitiveSynchronizationChecker\PrimitiveSynchronizationAnalyzer.cs" />
+    <Compile Include="CodeFixProviders\TapirCodeFixProvider.cs" />
+    <Compile Include="CodeFixProviders\HalfSynchronizedCheckerCodeFixProvider.cs" />
+    <Compile Include="CodeFixProviders\MonitorWaitOrSignalCodeFixProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TentativelyResourceReference\TentativelyResourceReferenceAnalyzer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

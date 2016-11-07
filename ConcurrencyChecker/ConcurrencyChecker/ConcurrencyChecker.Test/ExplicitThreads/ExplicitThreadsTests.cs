@@ -1,5 +1,4 @@
-﻿using ConcurrencyAnalyzer.Reporters.ExplicitThreadsReporter;
-using ConcurrencyChecker.ExplicitThreadsChecker;
+﻿using ConcurrencyAnalyzer.Reporters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -15,7 +14,7 @@ namespace ConcurrencyChecker.Test.ExplicitThreads
         [TestMethod]
         public void TestThreadDiagnostics()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace ExplicitThreadsSmell
@@ -58,7 +57,7 @@ namespace ExplicitThreadsSmell
         [TestMethod]
         public void TestMultiDiagnostics()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace ExplicitThreadsSmell
@@ -112,7 +111,7 @@ namespace ExplicitThreadsSmell
         [TestMethod]
         public void TestThreadCodeSmellMethod()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace ExplicitThreadsSmell
@@ -143,7 +142,7 @@ namespace ExplicitThreadsSmell
         [TestMethod]
         public void TestThreadCodeSmellLambda()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace ExplicitThreadsSmell
@@ -174,7 +173,7 @@ namespace ExplicitThreadsSmell
         [TestMethod]
         public void TestMultilineCodeSmell()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace ExplicitThreadsSmell

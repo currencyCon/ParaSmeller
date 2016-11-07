@@ -102,11 +102,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExplicitThreads\ExplicitThreadsAnalyzer.cs" />
     <Compile Include="ExplicitThreads\ExplicitThreadsTests.cs" />
+    <Compile Include="Finalizer\FinalizerSynchronizationAnalyzer.cs" />
     <Compile Include="Finalizer\UnsynchronizedFinalizersTests.cs" />
+    <Compile Include="FireAndForget\FireAndForgetCheckerAnalyzer.cs" />
+    <Compile Include="HalfSynchronizedClass\HalfSynchronizedCheckerAnalyzer.cs" />
+    <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalAnalyzer.cs" />
     <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalUnitTests.cs" />
     <Compile Include="FireAndForget\FireAndForgetCheckerTests.cs" />
+    <Compile Include="NestedSynchronizedMethodClass\NestedSynchronizedMethodClassAnalyzer.cs" />
+    <Compile Include="OverAsynchrony\OverAsynchronyAnalyzer.cs" />
     <Compile Include="OverAsynchrony\OverAsynchronyUnitTests.cs" />
+    <Compile Include="PrimitiveSynchronization\PrimitiveSynchronizationAnalyzer.cs" />
+    <Compile Include="TentativelyResourceReference\TentativelyResourceReferenceAnalyzer.cs" />
     <Compile Include="TentativelyResourceReference\TentativelyResourceReferenceLoopsOnlyTests.cs" />
     <Compile Include="TentativelyResourceReference\TentativelyResourceReferenceTests.cs" />
     <Compile Include="PrimitiveSynchronization\PrimitiveSynchronizationTests.cs" />

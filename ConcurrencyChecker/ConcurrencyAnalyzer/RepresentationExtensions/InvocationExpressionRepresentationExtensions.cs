@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ConcurrencyAnalyzer.RepresentationExtensions
 {
