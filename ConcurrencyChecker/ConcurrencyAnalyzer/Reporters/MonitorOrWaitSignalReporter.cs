@@ -16,7 +16,7 @@ namespace ConcurrencyAnalyzer.Reporters
         private const string MonitorClass = "Monitor";
         private const string MonitorPulseMethod = "Pulse";
         private const string MonitorWaitMethod = "Wait";
-
+          
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.MWSAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormatIf = new LocalizableResourceString(nameof(Resources.MWSIfAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormatPulse = new LocalizableResourceString(nameof(Resources.MWSPulseAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
