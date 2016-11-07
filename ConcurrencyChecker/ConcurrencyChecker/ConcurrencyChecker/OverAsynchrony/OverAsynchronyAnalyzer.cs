@@ -1,112 +1,24 @@
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
-using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.RepresentationFactories;
+using ConcurrencyAnalyzer.Diagnostics;
+using ConcurrencyAnalyzer.Reporters.OverAsynchronyReporter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ConcurrencyChecker.OverAsynchrony
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class OverAsynchronyAnalyzer : DiagnosticAnalyzer
+    public class OverAsynchronyAnalyzer : BaseAnalyzer
     {
-        private const string Category = "Synchronization";
-        public const string DiagnosticId = "OA001";
-        public const string DiagnosticIdNestedAsync = "OA002";
-        public const int MaxDepthAsync = 2;
 
-        private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.OAAnalyzerTitle), Resources.ResourceManager, typeof (Resources));
-        private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.OAAnalyzerMessageFormat), Resources.ResourceManager, typeof (Resources));
-        private static readonly LocalizableString MessageFormatNestedAsync = new LocalizableResourceString(nameof(Resources.OAAnalyzerMessageFormatNestedAsync), Resources.ResourceManager, typeof(Resources));
-        private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.OAAnalyzerDescription), Resources.ResourceManager, typeof (Resources));
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, true, Description);
-        private static readonly DiagnosticDescriptor RuleNestedAsync = new DiagnosticDescriptor(DiagnosticIdNestedAsync, Title, MessageFormatNestedAsync, Category, DiagnosticSeverity.Warning, true, Description);
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(OverAsynchronyReporter.DiagnosticId, OverAsynchronyReporter.Title, OverAsynchronyReporter.MessageFormat, OverAsynchronyReporter.Category, DiagnosticSeverity.Warning, true, OverAsynchronyReporter.Description);
+        private static readonly DiagnosticDescriptor RuleNestedAsync = new DiagnosticDescriptor(OverAsynchronyReporter.DiagnosticIdNestedAsync, OverAsynchronyReporter.Title, OverAsynchronyReporter.MessageFormatNestedAsync, OverAsynchronyReporter.Category, DiagnosticSeverity.Warning, true, OverAsynchronyReporter.Description);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule, RuleNestedAsync);
 
-        public override void Initialize(AnalysisContext context)
+
+        protected override Smell SelectSmell()
         {
-            context.RegisterCompilationAction(CheckForPrivateAsyncs);
+            return Smell.OverAsynchrony;
         }
-
-        private static async void CheckForPrivateAsyncs(CompilationAnalysisContext context)
-        {
-            var solutionModel = await SolutionRepresentationFactory.Create(context.Compilation);
-
-            foreach (var clazz in solutionModel.Classes)
-            {
-                foreach (var method in clazz.Methods)
-                {
-                    CheckForPrivateAsync(method, context);
-                    if (CheckForNestedAsync(method, context, 0))
-                    {
-                        var diagnostic = Diagnostic.Create(RuleNestedAsync, method.Implementation.GetLocation(), MaxDepthAsync+1);
-                        context.ReportDiagnostic(diagnostic);
-                    }
-                }
-            }
-        }
-
-        private static List<InvocationExpressionRepresentation> AllInvocations(MethodRepresentation method)
-        {
-            if(method.Blocks.Count == 0) return new List<InvocationExpressionRepresentation>();
-
-            List<InvocationExpressionRepresentation> expressionRepresentations = new List<InvocationExpressionRepresentation>();
-            foreach (var block in method.Blocks)
-            {
-                expressionRepresentations.AddRange(block.InvocationExpressions);
-                expressionRepresentations.AddRange(AllInvocations(block.Blocks.ToList()));
-            }
-
-            return expressionRepresentations;
-        }
-
-        private static List<InvocationExpressionRepresentation> AllInvocations(ICollection<IBody> blocks)
-        {
-            List<InvocationExpressionRepresentation> expressionRepresentations = new List<InvocationExpressionRepresentation>();
-            foreach (var block in blocks)
-            {
-                expressionRepresentations.AddRange(block.InvocationExpressions);
-                expressionRepresentations.AddRange(AllInvocations(block.Blocks.ToList()));
-            }
-            return expressionRepresentations;
-        }
-
-        private static bool CheckForNestedAsync(MethodRepresentation method, CompilationAnalysisContext context, int counter)
-        {
-            var symbol = (IMethodSymbol)context.Compilation.GetSemanticModel(method.Implementation.SyntaxTree).GetDeclaredSymbol(method.Implementation);
-            
-            if (symbol.IsAsync)
-            {
-                if (counter >= MaxDepthAsync)
-                {
-                    return true;
-                }
-                counter++;
-                var invocations = AllInvocations(method);
-                foreach (var invocation in invocations.Where(i => i.InvokedImplementation is MethodRepresentation).Select(i => i.InvokedImplementation as MethodRepresentation))
-                {
-                    if (CheckForNestedAsync(invocation, context, counter))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-        
-        private static void CheckForPrivateAsync(MethodRepresentation method, CompilationAnalysisContext context)
-        {
-            var symbol = (IMethodSymbol)context.Compilation.GetSemanticModel(method.Implementation.SyntaxTree).GetDeclaredSymbol(method.Implementation);
-
-            if(symbol.IsAsync && symbol.DeclaredAccessibility != Accessibility.Public)
-            {
-                var diagnostic = Diagnostic.Create(Rule, method.Implementation.GetLocation());
-                context.ReportDiagnostic(diagnostic);
-            }
-        }
-        
     }
 }

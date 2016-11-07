@@ -1,4 +1,5 @@
-﻿using ConcurrencyChecker.TentativelyResourceReference;
+﻿using ConcurrencyAnalyzer.Reporters.TentativelyResourceReferenceReporter;
+using ConcurrencyChecker.TentativelyResourceReference;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -31,8 +32,8 @@ namespace Test
 }";
             var expected1 = new DiagnosticResult
             {
-                Id = TentativelyResourceReferenceAnalyzer.DiagnosticId,
-                Message = TentativelyResourceReferenceAnalyzer.MessageFormatTentativelyResourceReference.ToString(),
+                Id = TentativelyResourceReferenceReporter.DiagnosticId,
+                Message = TentativelyResourceReferenceReporter.MessageFormatTentativelyResourceReference.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -42,8 +43,8 @@ namespace Test
 
             var expected2 = new DiagnosticResult
             {
-                Id = TentativelyResourceReferenceAnalyzer.DiagnosticId,
-                Message = TentativelyResourceReferenceAnalyzer.MessageFormatTentativelyResourceReference.ToString(),
+                Id = TentativelyResourceReferenceReporter.DiagnosticId,
+                Message = TentativelyResourceReferenceReporter.MessageFormatTentativelyResourceReference.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -90,8 +91,8 @@ namespace Test
 }";
             var expected = new DiagnosticResult
             {
-                Id = TentativelyResourceReferenceAnalyzer.DiagnosticId,
-                Message = TentativelyResourceReferenceAnalyzer.MessageFormatTentativelyResourceReference.ToString(),
+                Id = TentativelyResourceReferenceReporter.DiagnosticId,
+                Message = TentativelyResourceReferenceReporter.MessageFormatTentativelyResourceReference.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -132,8 +133,8 @@ namespace Test
 }";
             var expected = new DiagnosticResult
             {
-                Id = TentativelyResourceReferenceAnalyzer.DiagnosticId,
-                Message = TentativelyResourceReferenceAnalyzer.MessageFormatTentativelyResourceReference.ToString(),
+                Id = TentativelyResourceReferenceReporter.DiagnosticId,
+                Message = TentativelyResourceReferenceReporter.MessageFormatTentativelyResourceReference.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -174,8 +175,8 @@ namespace Test
 }";
             var expected = new DiagnosticResult
             {
-                Id = TentativelyResourceReferenceAnalyzer.DiagnosticId,
-                Message = TentativelyResourceReferenceAnalyzer.MessageFormatTentativelyResourceReference.ToString(),
+                Id = TentativelyResourceReferenceReporter.DiagnosticId,
+                Message = TentativelyResourceReferenceReporter.MessageFormatTentativelyResourceReference.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -212,8 +213,8 @@ namespace Test
 }";
             var expected = new DiagnosticResult
             {
-                Id = TentativelyResourceReferenceAnalyzer.DiagnosticId,
-                Message = TentativelyResourceReferenceAnalyzer.MessageFormatTentativelyResourceReference.ToString(),
+                Id = TentativelyResourceReferenceReporter.DiagnosticId,
+                Message = TentativelyResourceReferenceReporter.MessageFormatTentativelyResourceReference.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {

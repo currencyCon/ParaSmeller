@@ -1,4 +1,5 @@
-﻿using ConcurrencyChecker.ExplicitThreadsChecker;
+﻿using ConcurrencyAnalyzer.Reporters.ExplicitThreadsReporter;
+using ConcurrencyChecker.ExplicitThreadsChecker;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -30,8 +31,8 @@ namespace ExplicitThreadsSmell
 }";
             var expected1 = new DiagnosticResult
             {
-                Id = ExplicitThreadsAnalyzer.DiagnosticId,
-                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
+                Id = ExplicitThreadsReporter.DiagnosticId,
+                Message = ExplicitThreadsReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -41,8 +42,8 @@ namespace ExplicitThreadsSmell
 
             var expected2 = new DiagnosticResult
             {
-                Id = ExplicitThreadsAnalyzer.DiagnosticId,
-                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
+                Id = ExplicitThreadsReporter.DiagnosticId,
+                Message = ExplicitThreadsReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -84,8 +85,8 @@ namespace ExplicitThreadsSmell
 
             var expected1 = new DiagnosticResult
             {
-                Id = ExplicitThreadsAnalyzer.DiagnosticId,
-                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
+                Id = ExplicitThreadsReporter.DiagnosticId,
+                Message = ExplicitThreadsReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -95,8 +96,8 @@ namespace ExplicitThreadsSmell
 
             var expected2 = new DiagnosticResult
             {
-                Id = ExplicitThreadsAnalyzer.DiagnosticId,
-                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
+                Id = ExplicitThreadsReporter.DiagnosticId,
+                Message = ExplicitThreadsReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -126,8 +127,8 @@ namespace ExplicitThreadsSmell
 }";
             var expected = new DiagnosticResult
             {
-                Id = ExplicitThreadsAnalyzer.DiagnosticId,
-                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
+                Id = ExplicitThreadsReporter.DiagnosticId,
+                Message = ExplicitThreadsReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -157,8 +158,8 @@ namespace ExplicitThreadsSmell
 }";
             var expected = new DiagnosticResult
             {
-                Id = ExplicitThreadsAnalyzer.DiagnosticId,
-                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
+                Id = ExplicitThreadsReporter.DiagnosticId,
+                Message = ExplicitThreadsReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -190,8 +191,8 @@ namespace ExplicitThreadsSmell
 }";
             var expected1 = new DiagnosticResult
             {
-                Id = ExplicitThreadsAnalyzer.DiagnosticId,
-                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
+                Id = ExplicitThreadsReporter.DiagnosticId,
+                Message = ExplicitThreadsReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -201,8 +202,8 @@ namespace ExplicitThreadsSmell
 
             var expected2 = new DiagnosticResult
             {
-                Id = ExplicitThreadsAnalyzer.DiagnosticId,
-                Message = ExplicitThreadsAnalyzer.MessageFormat.ToString(),
+                Id = ExplicitThreadsReporter.DiagnosticId,
+                Message = ExplicitThreadsReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {

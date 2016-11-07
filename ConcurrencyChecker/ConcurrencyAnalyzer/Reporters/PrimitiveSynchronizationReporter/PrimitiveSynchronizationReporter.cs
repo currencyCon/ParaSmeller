@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
@@ -9,7 +8,7 @@ using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
 
 namespace ConcurrencyAnalyzer.Reporters.PrimitiveSynchronizationReporter
 {
-    public class PrimitiveSynchronizationReporter: IReporter
+    public class PrimitiveSynchronizationReporter: BaseReporter
     {
         public const string Category = "Synchronization";
         public const string PrimitiveSynchronizationDiagnosticId = "PS001";
@@ -30,51 +29,45 @@ namespace ConcurrencyAnalyzer.Reporters.PrimitiveSynchronizationReporter
         public static readonly LocalizableString MessageFormatPrimitiveSynchronization = new LocalizableResourceString(nameof(Resources.PrimitiveSynchronizationAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.PSAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 
-
-        public ICollection<Diagnostic> Report(SolutionRepresentation solutionRepresentation)
+        private void CheckForUnallowedDeclaration(ClassRepresentation clazz)
         {
-            var reports = new List<Diagnostic>();
-            foreach (var clazz in solutionRepresentation.Classes)
+            var fieldDeclarations = clazz.Implementation.GetChildren<FieldDeclarationSyntax>();
+            foreach (var fieldDeclarationSyntax in fieldDeclarations)
             {
-                var fieldDeclarations = clazz.Implementation.GetChildren<FieldDeclarationSyntax>();
-                foreach (var fieldDeclarationSyntax in fieldDeclarations)
-                {
-                    CheckForUnallowedDeclaration(fieldDeclarationSyntax, reports);
-                }
-                foreach (var member in clazz.Members)
-                {
-                    CheckForNotAllowedApiUsages(member, reports);
-                }
+                CheckForUnallowedDeclaration(fieldDeclarationSyntax);
             }
-            return reports;
         }
 
-
-        private static void CheckForNotAllowedApiUsages(IMember member, ICollection<Diagnostic> reports)
+        private void CheckForNotAllowedApiUsages(IMember member)
         {
             var invocationsToReport = member.InvocationExpressions.Where(e => NotAllowedApIs.Contains(e.OriginalDefinition));
             foreach (var invocationToReport in invocationsToReport)
             {
-                reports.Add(ReportPrimitiveSynchronizationDiagnostic(invocationToReport.Implementation));
+                Reports.Add(ReportPrimitiveSynchronizationDiagnostic(invocationToReport.Implementation));
             }
             var accessesToReport = member.GetChildren<MemberAccessExpressionSyntax>().Where(e => NotAllowedApiClasses.Contains(e.Expression.ToString()));
             foreach (var accessToReport in accessesToReport)
             {
-                reports.Add(ReportPrimitiveSynchronizationDiagnostic(accessToReport));
+                Reports.Add(ReportPrimitiveSynchronizationDiagnostic(accessToReport));
             }
         }
 
-        private static void CheckForUnallowedDeclaration(BaseFieldDeclarationSyntax fieldDeclarationSyntax, ICollection<Diagnostic> reports)
+        private void CheckForUnallowedDeclaration(BaseFieldDeclarationSyntax fieldDeclarationSyntax)
         {
             if (NotAllowedTypes.Contains(fieldDeclarationSyntax.Declaration.Type.ToString()) ||fieldDeclarationSyntax.Modifiers.Any(e => NotAllowedModifiers.Contains(e.Text)))
             {
-                reports.Add(ReportPrimitiveSynchronizationDiagnostic(fieldDeclarationSyntax));
+                Reports.Add(ReportPrimitiveSynchronizationDiagnostic(fieldDeclarationSyntax));
             }
         }
 
         private static Diagnostic ReportPrimitiveSynchronizationDiagnostic(SyntaxNode syntaxnode)
         {
             return new Diagnostic(PrimitiveSynchronizationDiagnosticId, Title, MessageFormatPrimitiveSynchronization, Description, Category, syntaxnode.GetLocation());
+        }
+        public override void Register()
+        {
+            RegisterMemberReport(CheckForNotAllowedApiUsages);
+            RegisterClassReport(CheckForUnallowedDeclaration);
         }
     }
 }

@@ -10,6 +10,7 @@
         MonitorWaitOrSignal,
         NestedSynchronization,
         OverAsynchrony,
-        TenativelyRessource
+        TenativelyRessource,
+        Tapir
     }
 }

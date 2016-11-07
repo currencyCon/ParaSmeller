@@ -1,6 +1,4 @@
-﻿
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
 using Microsoft.CodeAnalysis;
@@ -9,7 +7,7 @@ using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
 
 namespace ConcurrencyAnalyzer.Reporters.FireAndForgetReporter
 {
-    public class FireAndForgetReporter: IReporter
+    public class FireAndForgetReporter: BaseReporter
     {
         public const string FireAndForgetCallId = "FaF001";
         private const string ThreadStartDefintion = "System.Threading.Tasks.Task.Run";
@@ -19,31 +17,23 @@ namespace ConcurrencyAnalyzer.Reporters.FireAndForgetReporter
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         public const string Category = "Synchronization";
 
-        private static void InspectClassForUnawaitedTasks(ClassRepresentation clazz, List<Diagnostic> reports)
-        {
-            foreach (var memberWithBody in clazz.Members)
-            {
-                InspectMemberForUnawaitedTasks(memberWithBody, reports);
-            }
-        }
-
-        private static void InspectMemberForUnawaitedTasks(IMember member, List<Diagnostic> reports)
+        private void InspectMemberForUnawaitedTasks(IMember member)
         {
             foreach (var invocationExpressionRepresentation in member.InvocationExpressions)
             {
                 if (invocationExpressionRepresentation.OriginalDefinition == ThreadStartDefintion)
                 {
-                    CheckForSingleInvocation(invocationExpressionRepresentation, reports);
-                    CheckForLostAssignment(invocationExpressionRepresentation, member, reports);
+                    CheckForSingleInvocation(invocationExpressionRepresentation);
+                    CheckForLostAssignment(invocationExpressionRepresentation, member);
                 }
             }
         }
 
-        private static void CheckForLostAssignment(InvocationExpressionRepresentation invocationExpressionRepresentation, IMember member, List<Diagnostic> reports)
+        private void CheckForLostAssignment(InvocationExpressionRepresentation invocationExpressionRepresentation, IMember member)
         {
             if (AssignmentIsLost(invocationExpressionRepresentation, member))
             {
-                reports.Add(ReportFireAndForget(invocationExpressionRepresentation.Implementation));
+                Reports.Add(ReportFireAndForget(invocationExpressionRepresentation.Implementation));
             }
         }
 
@@ -113,11 +103,11 @@ namespace ConcurrencyAnalyzer.Reporters.FireAndForgetReporter
             return AssignmentIsAwaitedInInvocatedMember(member, variableName);
         }
 
-        private static void CheckForSingleInvocation(InvocationExpressionRepresentation invocationExpressionRepresentation, List<Diagnostic> reports)
+        private void CheckForSingleInvocation(InvocationExpressionRepresentation invocationExpressionRepresentation)
         {
             if (invocationExpressionRepresentation.GetFirstParent<ExpressionStatementSyntax>() != null)
             {
-                reports.Add(ReportFireAndForget(invocationExpressionRepresentation.Implementation));
+                Reports.Add(ReportFireAndForget(invocationExpressionRepresentation.Implementation));
             }
         }
 
@@ -127,14 +117,10 @@ namespace ConcurrencyAnalyzer.Reporters.FireAndForgetReporter
             return new Diagnostic(FireAndForgetCallId, Title, MessageFormatFireAndForghet, Description, Category, threadInvocation.GetLocation());
 
         }
-        public ICollection<Diagnostic> Report(SolutionRepresentation solutionRepresentation)
+
+        public override void Register()
         {
-            var reports = new List<Diagnostic>();
-            foreach (var clazz in solutionRepresentation.Classes)
-            {
-                InspectClassForUnawaitedTasks(clazz, reports);
-            }
-            return reports;
+            RegisterMemberReport(InspectMemberForUnawaitedTasks);
         }
     }
 }
