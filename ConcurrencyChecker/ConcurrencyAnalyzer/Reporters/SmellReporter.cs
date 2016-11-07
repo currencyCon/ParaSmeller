@@ -9,13 +9,17 @@ namespace ConcurrencyAnalyzer.Reporters
 {
     public class SmellReporter
     {
-        private static readonly Dictionary<Smell, IReporter> Reporters = new Dictionary<Smell, IReporter>
+        private static readonly Dictionary<Smell, BaseReporter> Reporters = new Dictionary<Smell, BaseReporter>
         {
             {Smell.PrimitiveSynchronization, new PrimitiveSynchronizationReporter.PrimitiveSynchronizationReporter()},
             {Smell.FireAndForget, new FireAndForgetReporter.FireAndForgetReporter() },
             {Smell.Finalizer, new FinalizerReporter.FinalizerReporter() },
             {Smell.HalfSynchronized, new HalfSynchronizedReporter.HalfSynchronizedReporter() },
-            {Smell.MonitorWaitOrSignal, new MonitorOrWaitSignalReporter.MonitorOrWaitSignalReporter() }
+            {Smell.MonitorWaitOrSignal, new MonitorOrWaitSignalReporter.MonitorOrWaitSignalReporter() },
+            {Smell.ExplicitThreads, new ExplicitThreadsReporter.ExplicitThreadsReporter()},
+            {Smell.NestedSynchronization, new NestedSynchronizedMethodClassReporter.NestedSynchronizedMethodClassReporter() },
+            {Smell.OverAsynchrony, new OverAsynchronyReporter.OverAsynchronyReporter() },
+            {Smell.TenativelyRessource, new TentativelyResourceReferenceReporter.TentativelyResourceReferenceReporter() }
         };
 
         public async Task<ICollection<Diagnostic>> Report(Compilation compilation)

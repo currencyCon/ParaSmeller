@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using ConcurrencyAnalyzer.Representation;
+﻿using ConcurrencyAnalyzer.Representation;
 using ConcurrencyChecker.HalfSynchronizedChecker;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
 
 namespace ConcurrencyAnalyzer.Reporters.HalfSynchronizedReporter
 {
-    public class HalfSynchronizedReporter: IReporter
+    public class HalfSynchronizedReporter: BaseReporter
     {
         public const string HalfSynchronizedChildDiagnosticId = "HSC001";
         public const string UnsynchronizedPropertyId = "HSC002";
@@ -19,19 +17,19 @@ namespace ConcurrencyAnalyzer.Reporters.HalfSynchronizedReporter
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.HalfSynchronizedDescription), Resources.ResourceManager, typeof(Resources));
         public const string Category = "Synchronization";
 
-        private static void DiagnoseMethod(MethodDeclarationSyntax method, ClassRepresentation classRepresentation, ICollection<Diagnostic> reports)
+        private void DiagnoseMethod(MethodRepresentation method)
         {
-            if (SynchronizationInspector.MethodHasHalfSynchronizedProperties(method, classRepresentation))
+            if (SynchronizationInspector.MethodHasHalfSynchronizedProperties(method.Implementation, method.ContainingClass))
             {
-                reports.Add(ReportHalfSynchronizationDiagnostic(method, "Property", ""));
+                Reports.Add(ReportHalfSynchronizationDiagnostic(method.Implementation, "Property", ""));
             }
         }
 
-        private static void DiagnoseProperty(PropertyRepresentation property, ClassRepresentation classRepresentation, ICollection<Diagnostic> reports)
+        private void DiagnoseProperty(PropertyRepresentation property)
         {
-            if (SynchronizationInspector.PropertyNeedsSynchronization(property, classRepresentation))
+            if (SynchronizationInspector.PropertyNeedsSynchronization(property, property.ContainingClass))
             {
-                reports.Add(ReportUnsynchronizationPropertyDiagnostic(property.Implementation));
+                Reports.Add(ReportUnsynchronizationPropertyDiagnostic(property.Implementation));
             }
         }
 
@@ -46,21 +44,10 @@ namespace ConcurrencyAnalyzer.Reporters.HalfSynchronizedReporter
             object[] messageArguments = { elementType, elementTypeName };
             return new Diagnostic(HalfSynchronizedChildDiagnosticId, Title, MessageFormatHalfSynchronized, Description, Category, propertyDeclarationSyntax.GetLocation(), messageArguments);
         }
-        public ICollection<Diagnostic> Report(SolutionRepresentation solutionRepresentation)
+        public override void Register()
         {
-            var reports = new List<Diagnostic>();
-            foreach (var clazz in solutionRepresentation.Classes)
-            {
-                foreach (var methodRepresentation in clazz.Methods)
-                {
-                    DiagnoseMethod(methodRepresentation.Implementation, clazz, reports);
-                }
-                foreach (var propertyRepresentation in clazz.Properties)
-                {
-                    DiagnoseProperty(propertyRepresentation, clazz, reports);
-                }
-            }
-            return reports;
+            RegisterMethodReport(DiagnoseMethod);
+            RegisterPropertyReport(DiagnoseProperty);
         }
     }
 }

@@ -14,6 +14,7 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly SyntaxToken Name;
         public readonly ICollection<IMember> Members;
 		public readonly DestructorDeclarationSyntax Destructor;
+        public readonly SemanticModel SemanticModel;
         private const int ThresholdMaxDepthAsync = 3;
 
         public ICollection<MethodRepresentation> SynchronizedMethods { get; set; }
@@ -24,9 +25,10 @@ namespace ConcurrencyAnalyzer.Representation
         public ICollection<PropertyRepresentation> Properties => Members.OfType<PropertyRepresentation>().ToList();
         public readonly ICollection<FieldDeclarationSyntax> Fields;
 
-        public ClassRepresentation(ClassDeclarationSyntax classDeclarationSyntax)
+        public ClassRepresentation(ClassDeclarationSyntax classDeclarationSyntax, SemanticModel semanticModel)
         {
             Name = classDeclarationSyntax.Identifier;
+            SemanticModel = semanticModel;
             Members = new List<IMember>();
             Implementation = classDeclarationSyntax;
             Destructor = Implementation.GetFirstChild<DestructorDeclarationSyntax>();

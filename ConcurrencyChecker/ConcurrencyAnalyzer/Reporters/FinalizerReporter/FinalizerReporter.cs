@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
@@ -8,7 +7,7 @@ using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
 
 namespace ConcurrencyAnalyzer.Reporters.FinalizerReporter
 {
-    public class FinalizerReporter: IReporter
+    public class FinalizerReporter: BaseReporter
     {
         public const string Category = "Synchronization";
         public const string FinalizerSynchronizationDiagnosticId = "PS001";
@@ -18,18 +17,18 @@ namespace ConcurrencyAnalyzer.Reporters.FinalizerReporter
 
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.FSAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 
-        private static void CheckClassForUnsynchronizedFinalizers(ClassRepresentation classRepresentation, ICollection<Diagnostic> reports)
+        private void CheckClassForUnsynchronizedFinalizers(ClassRepresentation classRepresentation)
         {
             if (classRepresentation.Destructor == null)
             {
                 return;
             }
-            CheckForUnsynchronizedFields(classRepresentation, reports);
-            CheckForUnsynchronizedProperties(classRepresentation, reports);
-            CheckIfAllSynchronizedFieldsUseSameStaticLock(classRepresentation, reports);
+            CheckForUnsynchronizedFields(classRepresentation);
+            CheckForUnsynchronizedProperties(classRepresentation);
+            CheckIfAllSynchronizedFieldsUseSameStaticLock(classRepresentation);
         }
 
-        private static void CheckIfAllSynchronizedFieldsUseSameStaticLock(ClassRepresentation classRepresentation, ICollection<Diagnostic> reports)
+        private void CheckIfAllSynchronizedFieldsUseSameStaticLock(ClassRepresentation classRepresentation)
         {
             var fieldsUsedInDestructorSynchronized = classRepresentation.Destructor.GetChildren<IdentifierNameSyntax>().
                 Where(e => e.GetParents<LockStatementSyntax>().Any() &&
@@ -47,22 +46,22 @@ namespace ConcurrencyAnalyzer.Reporters.FinalizerReporter
                     var destructorLocks = fieldUsedInDestructor.GetParents<LockStatementSyntax>().ToList();
                     if (!destructorLocks.Select(e => e.Expression.ToString()).Contains(fieldDeclarationLock.Expression.ToString()))
                     {
-                        reports.Add(ReportUnsynchronizedField(field));
-                        reports.Add(ReportUnsynchronizedField(fieldUsedInDestructor));
+                        Reports.Add(ReportUnsynchronizedField(field));
+                        Reports.Add(ReportUnsynchronizedField(fieldUsedInDestructor));
                     }
                     if (!classRepresentation.IsStaticDefinedLockObject(fieldDeclarationLock))
                     {
-                        reports.Add(ReportUnsynchronizedField(field));
+                        Reports.Add(ReportUnsynchronizedField(field));
                     }
                     if (!destructorLocks.Any(classRepresentation.IsStaticDefinedLockObject))
                     {
-                        reports.Add(ReportUnsynchronizedField(fieldUsedInDestructor));
+                        Reports.Add(ReportUnsynchronizedField(fieldUsedInDestructor));
                     }
                 }
             }
         }
 
-        private static void CheckForUnsynchronizedProperties(ClassRepresentation classRepresentation, ICollection<Diagnostic> reports)
+        private void CheckForUnsynchronizedProperties(ClassRepresentation classRepresentation)
         {
             var membersUsedInDestructor = classRepresentation.Destructor.GetChildren<IdentifierNameSyntax>().ToList();
             foreach (var memberUsedInDestructor in membersUsedInDestructor)
@@ -71,17 +70,17 @@ namespace ConcurrencyAnalyzer.Reporters.FinalizerReporter
                 {
                     if (unsynchronizedProperty.Identifier.Text == memberUsedInDestructor.Identifier.ToString())
                     {
-                        reports.Add(ReportUnsynchronizedField(unsynchronizedProperty));
+                        Reports.Add(ReportUnsynchronizedField(unsynchronizedProperty));
                         if (!memberUsedInDestructor.GetParents<LockStatementSyntax>().Any())
                         {
-                            reports.Add(ReportUnsynchronizedField(memberUsedInDestructor));
+                            Reports.Add(ReportUnsynchronizedField(memberUsedInDestructor));
                         }
                     }
                 }
             }
         }
 
-        private static void CheckForUnsynchronizedFields(ClassRepresentation classRepresentation, ICollection<Diagnostic> reports)
+        private void CheckForUnsynchronizedFields(ClassRepresentation classRepresentation)
         {
             var fieldsUsedInDestructorUnsynchronized = classRepresentation.Destructor.GetChildren<IdentifierNameSyntax>().Where(e => !e.GetParents<LockStatementSyntax>().Any()).ToList();
             foreach (var fieldUsedInDestructor in fieldsUsedInDestructorUnsynchronized)
@@ -90,8 +89,8 @@ namespace ConcurrencyAnalyzer.Reporters.FinalizerReporter
                 {
                     if (field.DeclaresVariable(fieldUsedInDestructor.Identifier.Text))
                     {
-                        reports.Add(ReportUnsynchronizedField(field));
-                        reports.Add(ReportUnsynchronizedField(fieldUsedInDestructor));
+                        Reports.Add(ReportUnsynchronizedField(field));
+                        Reports.Add(ReportUnsynchronizedField(fieldUsedInDestructor));
                     }
                 }
             }
@@ -102,14 +101,10 @@ namespace ConcurrencyAnalyzer.Reporters.FinalizerReporter
             return new Diagnostic(FinalizerSynchronizationDiagnosticId, Title, MessageFormatFinalizerSynchronization, Description, Category, syntaxnode.GetLocation());
 
         }
-        public ICollection<Diagnostic> Report(SolutionRepresentation solutionRepresentation)
+
+        public override void Register()
         {
-            var reports = new List<Diagnostic>();
-            foreach (var clazz in solutionRepresentation.Classes)
-            {
-                CheckClassForUnsynchronizedFinalizers(clazz, reports);
-            }
-            return reports;
+            RegisterClassReport(CheckClassForUnsynchronizedFinalizers);
         }
     }
 }

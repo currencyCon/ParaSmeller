@@ -28,9 +28,9 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
             return invocationExpressionRepresentation.Implementation.GetParents<TParents>();
         }
 
-        public static IMethodSymbol GetMethodSymbol(this InvocationExpressionRepresentation invocationExpressionRepresentation, CompilationAnalysisContext context)
+        public static IMethodSymbol GetMethodSymbol(this InvocationExpressionRepresentation invocationExpressionRepresentation, SemanticModel semanticModel)
         {
-            return invocationExpressionRepresentation.Implementation.GetMethodSymbol(context);
+            return invocationExpressionRepresentation.Implementation.GetMethodSymbol(semanticModel);
         }
 
         

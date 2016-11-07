@@ -76,11 +76,11 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
             return field.DeclaresVariable(variableName) && !modifiers.Except(field.Modifiers.Select(e => e.Text)).Any();
         }
 
-        public static IMethodSymbol GetMethodSymbol(this SyntaxNode syntaxNode, CompilationAnalysisContext context)
+        public static IMethodSymbol GetMethodSymbol(this SyntaxNode syntaxNode, SemanticModel semanticModel)
         {
             try
             {
-                var symbol = context.Compilation.GetSemanticModel(syntaxNode.SyntaxTree).GetSymbolInfo(syntaxNode);
+                var symbol = semanticModel.GetSymbolInfo(syntaxNode);
                 return (IMethodSymbol) symbol.Symbol;
             }
             catch (Exception)
@@ -88,19 +88,5 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
                 return null;
             }
         }
-
-        public static INamedTypeSymbol GetNamedSymbol(this SyntaxNode syntaxNode, CompilationAnalysisContext context)
-        {
-            try
-            {
-                var symbol = context.Compilation.GetSemanticModel(syntaxNode.SyntaxTree).GetSymbolInfo(syntaxNode);
-                return (INamedTypeSymbol) symbol.Symbol;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-        
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ConcurrencyAnalyzer.Diagnostics;
 using ConcurrencyAnalyzer.Reporters;
 using Microsoft.CodeAnalysis;
@@ -9,13 +9,22 @@ namespace ConcurrencyChecker
 {
     public abstract class BaseAnalyzer: DiagnosticAnalyzer
     {
-        protected static async Task ReportDiagnostics(CompilationAnalysisContext context, Smell smell)
+        protected static void ReportDiagnostics(CompilationAnalysisContext context, ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics)
         {
-            var smellReporter = new SmellReporter();
-            var diagnostics = await smellReporter.Report(context.Compilation, smell);
+          
             foreach (var diagnostic in diagnostics)
             {
-                context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor(diagnostic.Id, diagnostic.Title, diagnostic.MessageFormat, diagnostic.Category, DiagnosticSeverity.Warning, true, diagnostic.Description), diagnostic.Location));
+                var diag = new DiagnosticDescriptor(diagnostic.Id, diagnostic.Title, diagnostic.MessageFormat,
+                    diagnostic.Category, DiagnosticSeverity.Warning, true, diagnostic.Description);
+                if (diagnostic.Params != null)
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(diag, diagnostic.Location, diagnostic.Params));
+                }
+                else
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(diag, diagnostic.Location));
+                }
+                
             }
         }
 
@@ -26,7 +35,9 @@ namespace ConcurrencyChecker
 
         private async void RegisterDiagnostics(CompilationAnalysisContext context)
         {
-            await ReportDiagnostics(context, SelectSmell());
+            var smellReporter = new SmellReporter();
+            var diagnostics = await smellReporter.Report(context.Compilation, SelectSmell());
+            ReportDiagnostics(context, diagnostics);
         }
 
         protected abstract Smell SelectSmell();

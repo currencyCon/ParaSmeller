@@ -11,7 +11,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
     {
         public static ClassRepresentation Create(ClassDeclarationSyntax syntaxTree, SemanticModel semanticModel)
         {
-            var classRepresentation = new ClassRepresentation(syntaxTree);
+            var classRepresentation = new ClassRepresentation(syntaxTree, semanticModel);
             AddMethods(classRepresentation, semanticModel);
             AddProperties(classRepresentation, semanticModel);
             InitMembers(classRepresentation);

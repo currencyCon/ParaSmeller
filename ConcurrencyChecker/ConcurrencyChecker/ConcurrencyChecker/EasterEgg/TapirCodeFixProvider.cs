@@ -3,6 +3,7 @@ using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ConcurrencyAnalyzer.Reporters.TapirReporter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,7 +17,7 @@ namespace ConcurrencyChecker.EasterEgg
     {
         private const string Title = "Add a tapir";
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TapirrAnalyzer.DiagnosticId);
+        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TapirReporter.DiagnosticId);
 
         public sealed override FixAllProvider GetFixAllProvider()
         {

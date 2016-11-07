@@ -1,53 +1,21 @@
 using System.Collections.Immutable;
-using System.Linq;
-using ConcurrencyAnalyzer.RepresentationFactories;
-using ConcurrencyAnalyzer.SyntaxNodeUtils;
+using ConcurrencyAnalyzer.Diagnostics;
+using ConcurrencyAnalyzer.Reporters.ExplicitThreadsReporter;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ConcurrencyChecker.ExplicitThreadsChecker
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ExplicitThreadsAnalyzer : DiagnosticAnalyzer
+    public class ExplicitThreadsAnalyzer : BaseAnalyzer
     {
-        public const string DiagnosticId = "ETC001";
-        private const string ThreadDefintion = "System.Threading.Thread";
-        private const string Category = "ParallelCorrectness";
-
-        private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.ETCAnalyzerTitle), Resources.ResourceManager, typeof (Resources));
-        public static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.ETCAnalyzerMessageFormat), Resources.ResourceManager, typeof (Resources));
-        private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.ETCAnalyzerDescription), Resources.ResourceManager, typeof (Resources));
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, true, Description);
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(ExplicitThreadsReporter.DiagnosticId, ExplicitThreadsReporter.Title, ExplicitThreadsReporter.MessageFormat, ExplicitThreadsReporter.Category, DiagnosticSeverity.Warning, true, ExplicitThreadsReporter.Description);
         
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
+        protected override Smell SelectSmell()
         {
-            context.RegisterCompilationAction(CheckForThreads);
+            return Smell.ExplicitThreads;
         }
-
-        private static async void CheckForThreads(CompilationAnalysisContext context)
-        {
-            var solutionModel = await SolutionRepresentationFactory.Create(context.Compilation);
-            foreach (var classRepresentation in solutionModel.Classes)
-            {
-                foreach (var identifierName in classRepresentation.Implementation.DescendantNodes().OfType<IdentifierNameSyntax>())
-                {
-                    AnalyzeIdentifier(identifierName, context);
-                }
-            }
-        }
-
-        private static void AnalyzeIdentifier(IdentifierNameSyntax node, CompilationAnalysisContext context)
-        {
-            var root = node.GetNamedSymbol(context);
-            if (root?.OriginalDefinition?.ToString() == ThreadDefintion)
-            {
-                var diagn = Diagnostic.Create(Rule, node.Parent.GetLocation());
-                context.ReportDiagnostic(diagn);
-            }
-        }
-        
     }
 }

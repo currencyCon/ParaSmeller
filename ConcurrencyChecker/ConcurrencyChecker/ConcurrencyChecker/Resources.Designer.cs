@@ -62,105 +62,6 @@ namespace ConcurrencyChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;new Thread&apos; should be replaced with Task.Run.
-        /// </summary>
-        internal static string AnalyzerMessageFormatSingleLine {
-            get {
-                return ResourceManager.GetString("AnalyzerMessageFormatSingleLine", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Threads should be replaced with Task.
-        /// </summary>
-        internal static string ETCAnalyzerDescription {
-            get {
-                return ResourceManager.GetString("ETCAnalyzerDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Threads should be replaced with Task.
-        /// </summary>
-        internal static string ETCAnalyzerMessageFormat {
-            get {
-                return ResourceManager.GetString("ETCAnalyzerMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Threads shouldn&apos;t be used.
-        /// </summary>
-        internal static string ETCAnalyzerTitle {
-            get {
-                return ResourceManager.GetString("ETCAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No Deadlocks should occur in Code.
-        /// </summary>
-        internal static string NSMCAnalyzerDescription {
-            get {
-                return ResourceManager.GetString("NSMCAnalyzerDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Possible Deadlock with double Locking.
-        /// </summary>
-        internal static string NSMCAnalyzerMessageFormat {
-            get {
-                return ResourceManager.GetString("NSMCAnalyzerMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to NestedSynchronizedMethod Calls.
-        /// </summary>
-        internal static string NSMCAnalyzerTitle {
-            get {
-                return ResourceManager.GetString("NSMCAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Over async desc.
-        /// </summary>
-        internal static string OAAnalyzerDescription {
-            get {
-                return ResourceManager.GetString("OAAnalyzerDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to async shouldn&apos;t be used in private methods.
-        /// </summary>
-        internal static string OAAnalyzerMessageFormat {
-            get {
-                return ResourceManager.GetString("OAAnalyzerMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Async shoudn&apos;t be nested {0} times.
-        /// </summary>
-        internal static string OAAnalyzerMessageFormatNestedAsync {
-            get {
-                return ResourceManager.GetString("OAAnalyzerMessageFormatNestedAsync", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Over Async.
-        /// </summary>
-        internal static string OAAnalyzerTitle {
-            get {
-                return ResourceManager.GetString("OAAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Tapirs shouldn&apos;t be alone.
         /// </summary>
         internal static string TapirAnalyzerDescription {
@@ -184,33 +85,6 @@ namespace ConcurrencyChecker {
         internal static string TapirAnalyzerTitle {
             get {
                 return ResourceManager.GetString("TapirAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Timeouts can lead to starvation2.
-        /// </summary>
-        internal static string TRRAnalyzerDescription {
-            get {
-                return ResourceManager.GetString("TRRAnalyzerDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Timeouts can lead to starvation.
-        /// </summary>
-        internal static string TRRAnalyzerMessageFormat {
-            get {
-                return ResourceManager.GetString("TRRAnalyzerMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Starvation possible.
-        /// </summary>
-        internal static string TRRAnalyzerTitle {
-            get {
-                return ResourceManager.GetString("TRRAnalyzerTitle", resourceCulture);
             }
         }
     }
