@@ -92,21 +92,25 @@
       <HintPath>..\..\packages\System.Reflection.Metadata.1.0.21\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
       <Private>false</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExplicitThreads\ExplicitThreadsAnalyzer.cs" />
     <Compile Include="ExplicitThreads\ExplicitThreadsTests.cs" />
+    <Compile Include="Finalizer\FinalizerSynchronizationAnalyzer.cs" />
     <Compile Include="Finalizer\UnsynchronizedFinalizersTests.cs" />
+    <Compile Include="FireAndForget\FireAndForgetCheckerAnalyzer.cs" />
+    <Compile Include="HalfSynchronizedClass\HalfSynchronizedCheckerAnalyzer.cs" />
+    <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalAnalyzer.cs" />
     <Compile Include="MonitorWaitOrSignal\MonitorWaitOrSignalUnitTests.cs" />
     <Compile Include="FireAndForget\FireAndForgetCheckerTests.cs" />
+    <Compile Include="NestedSynchronizedMethodClass\NestedSynchronizedMethodClassAnalyzer.cs" />
+    <Compile Include="OverAsynchrony\OverAsynchronyAnalyzer.cs" />
     <Compile Include="OverAsynchrony\OverAsynchronyUnitTests.cs" />
+    <Compile Include="PrimitiveSynchronization\PrimitiveSynchronizationAnalyzer.cs" />
+    <Compile Include="TentativelyResourceReference\TentativelyResourceReferenceAnalyzer.cs" />
     <Compile Include="TentativelyResourceReference\TentativelyResourceReferenceLoopsOnlyTests.cs" />
     <Compile Include="TentativelyResourceReference\TentativelyResourceReferenceTests.cs" />
     <Compile Include="PrimitiveSynchronization\PrimitiveSynchronizationTests.cs" />

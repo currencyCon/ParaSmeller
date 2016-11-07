@@ -1,5 +1,4 @@
-﻿using ConcurrencyAnalyzer.Reporters.FinalizerReporter;
-using ConcurrencyChecker.FinalizerChecker;
+﻿using ConcurrencyAnalyzer.Reporters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

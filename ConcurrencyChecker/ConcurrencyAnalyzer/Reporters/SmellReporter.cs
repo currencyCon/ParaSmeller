@@ -11,15 +11,15 @@ namespace ConcurrencyAnalyzer.Reporters
     {
         private static readonly Dictionary<Smell, BaseReporter> Reporters = new Dictionary<Smell, BaseReporter>
         {
-            {Smell.PrimitiveSynchronization, new PrimitiveSynchronizationReporter.PrimitiveSynchronizationReporter()},
-            {Smell.FireAndForget, new FireAndForgetReporter.FireAndForgetReporter() },
-            {Smell.Finalizer, new FinalizerReporter.FinalizerReporter() },
-            {Smell.HalfSynchronized, new HalfSynchronizedReporter.HalfSynchronizedReporter() },
-            {Smell.MonitorWaitOrSignal, new MonitorOrWaitSignalReporter.MonitorOrWaitSignalReporter() },
-            {Smell.ExplicitThreads, new ExplicitThreadsReporter.ExplicitThreadsReporter()},
-            {Smell.NestedSynchronization, new NestedSynchronizedMethodClassReporter.NestedSynchronizedMethodClassReporter() },
-            {Smell.OverAsynchrony, new OverAsynchronyReporter.OverAsynchronyReporter() },
-            {Smell.TenativelyRessource, new TentativelyResourceReferenceReporter.TentativelyResourceReferenceReporter() }
+            {Smell.PrimitiveSynchronization, new PrimitiveSynchronizationReporter()},
+            {Smell.FireAndForget, new FireAndForgetReporter() },
+            {Smell.Finalizer, new FinalizerReporter() },
+            {Smell.HalfSynchronized, new HalfSynchronizedReporter() },
+            {Smell.MonitorWaitOrSignal, new MonitorOrWaitSignalReporter() },
+            {Smell.ExplicitThreads, new ExplicitThreadsReporter()},
+            {Smell.NestedSynchronization, new NestedSynchronizedMethodClassReporter() },
+            {Smell.OverAsynchrony, new OverAsynchronyReporter() },
+            {Smell.TenativelyRessource, new TentativelyResourceReferenceReporter() }
         };
 
         public async Task<ICollection<Diagnostic>> Report(Compilation compilation)
@@ -33,10 +33,20 @@ namespace ConcurrencyAnalyzer.Reporters
             return diagnostics;
         }
 
-        public async Task<ICollection<Diagnostic>> Report(Compilation compilation, Smell smell)
+        public async Task<ICollection<Diagnostic>> Report(Compilation compilation, ICollection<Smell> smells)
         {
             var solutionModel = await SolutionRepresentationFactory.Create(compilation);
-            return Reporters[smell].Report(solutionModel);
+            var diagnostics = new List<Diagnostic>();
+            foreach (var smell in smells)
+            {
+                diagnostics.AddRange(Reporters[smell].Report(solutionModel));
+            }
+            return diagnostics;
+        }
+
+        public async Task<ICollection<Diagnostic>> Report(Compilation compilation, Smell smell)
+        {
+            return await Report(compilation, new List<Smell>{smell});
         }
     }
 }

@@ -5,18 +5,17 @@ using ConcurrencyChecker.Analyzer;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace ConcurrencyChecker.EasterEgg
+namespace ConcurrencyChecker.Test.OverAsynchrony
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class TapirrAnalyzer : BaseAnalyzer
+    public class OverAsynchronyAnalyzer : BaseAnalyzer
     {
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rules.TapirRule);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rules.PrivateAsyncRule, Rules.NestedAsyncRule);
 
 
         protected override ICollection<Smell> SelectSmell()
         {
-            return new List<Smell> { Smell.Tapir};
+            return new List<Smell> { Smell.OverAsynchrony};
         }
-
     }
 }
