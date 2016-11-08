@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.RepresentationExtensions;
+using ConcurrencyAnalyzer.SemanticAnalysis;
 using Microsoft.CodeAnalysis;
 using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
 
@@ -31,7 +31,7 @@ namespace ConcurrencyAnalyzer.Reporters
             var invocationsToReport = member.Blocks.ToList()[0].InvocationExpressions.Where(e => NotAllowedApis.Contains(e.OriginalDefinition));
             foreach (var invocationToReport in invocationsToReport)
             {
-                var symbol = invocationToReport.GetMethodSymbol(member.ContainingClass.SemanticModel);
+                var symbol = SymbolInspector.GetSpecializedSymbol<IMethodSymbol>(invocationToReport.Implementation, member.ContainingClass.SemanticModel);
 
                 if (ContainsTimeout(symbol))
                 {

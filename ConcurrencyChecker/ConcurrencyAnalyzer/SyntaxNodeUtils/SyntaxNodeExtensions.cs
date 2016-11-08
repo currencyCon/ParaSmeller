@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -14,10 +13,6 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
         }
         public static IEnumerable<TChildren> GetChildren<TChildren>(this SyntaxNode node)
         {
-            if (node == null)
-            {
-                return new List<TChildren>();
-            }
             return node.DescendantNodesAndSelf().OfType<TChildren>();
         }
 
@@ -33,10 +28,6 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
 
         public static IEnumerable<TParents> GetParents<TParents>(this SyntaxNode node)
         {
-            if (node == null)
-            {
-                return new List<TParents>();
-            }
             return node.AncestorsAndSelf().OfType<TParents>();
         }
 
@@ -55,16 +46,6 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
             return node.GetChildren<MemberAccessExpressionSyntax>().Where(e => e.Expression.ToString() == className && e.Name.ToString() == methodName);
         }
 
-        public static IEnumerable<VariableDeclaratorSyntax> GetLocalDeclaredVariables(this SyntaxNode root)
-        {
-            return root.DescendantNodes().OfType<LocalDeclarationStatementSyntax>().SelectMany(b => b.DescendantNodes().OfType<VariableDeclaratorSyntax>());
-        }
-
-        public static VariableDeclaratorSyntax FindVariableDeclaration(this IEnumerable<VariableDeclaratorSyntax> variables, string variableName)
-        {
-            return variables.First(c => c.Identifier.ToString() == variableName);
-        }
-
         public static bool DeclaresVariable(this FieldDeclarationSyntax field, string variableName)
         {
             return field.Declaration.Variables.Any(e => e.Identifier.Text == variableName);        
@@ -73,19 +54,6 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
         public static bool DeclaresVariable(this FieldDeclarationSyntax field, string variableName, string[] modifiers)
         {
             return field.DeclaresVariable(variableName) && !modifiers.Except(field.Modifiers.Select(e => e.Text)).Any();
-        }
-
-        public static IMethodSymbol GetMethodSymbol(this SyntaxNode syntaxNode, SemanticModel semanticModel)
-        {
-            try
-            {
-                var symbol = semanticModel.GetSymbolInfo(syntaxNode);
-                return (IMethodSymbol) symbol.Symbol;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
     }
 }

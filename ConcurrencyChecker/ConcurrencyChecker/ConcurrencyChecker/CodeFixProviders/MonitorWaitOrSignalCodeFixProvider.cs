@@ -49,18 +49,16 @@ namespace ConcurrencyChecker.CodeFixProviders
             var whileLoop = SyntaxFactory.WhileStatement(node.Condition, node.Statement);
             var newRoot = root.ReplaceNode(node, whileLoop);
             var newDocument = document.WithSyntaxRoot(newRoot);
-
             return newDocument;
         }
 
-        private async Task<Document> ReplacePulseWithPulseAll(Document document, SyntaxNode node, CancellationToken cancellationToken)
+        private static async Task<Document> ReplacePulseWithPulseAll(Document document, SyntaxNode node, CancellationToken cancellationToken)
         {
             var root = await document.GetSyntaxRootAsync(cancellationToken);
             var identifier = node.GetChildren<IdentifierNameSyntax>().First(e => e.Identifier.ToString() == MonitorPulseMethod);
             var pulseAll = SyntaxFactory.IdentifierName(MonitorPulseAllMethod);
             var newRoot = root.ReplaceNode(identifier, pulseAll);
             var newDocument = document.WithSyntaxRoot(newRoot);
-
             return newDocument;
         }
     }

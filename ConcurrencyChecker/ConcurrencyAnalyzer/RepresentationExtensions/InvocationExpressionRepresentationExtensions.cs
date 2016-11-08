@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using ConcurrencyAnalyzer.Representation;
+using ConcurrencyAnalyzer.SemanticAnalysis;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 
@@ -29,9 +30,7 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
 
         public static IMethodSymbol GetMethodSymbol(this InvocationExpressionRepresentation invocationExpressionRepresentation, SemanticModel semanticModel)
         {
-            return invocationExpressionRepresentation.Implementation.GetMethodSymbol(semanticModel);
+            return SymbolInspector.GetSpecializedSymbol<IMethodSymbol>(invocationExpressionRepresentation.Implementation, semanticModel);
         }
-
-        
     }
 }

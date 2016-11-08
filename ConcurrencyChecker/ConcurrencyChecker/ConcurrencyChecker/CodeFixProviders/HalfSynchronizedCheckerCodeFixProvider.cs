@@ -43,7 +43,7 @@ namespace ConcurrencyChecker.CodeFixProviders
             else if (syntaxNode is PropertyDeclarationSyntax)
             {
                 context.RegisterCodeFix(
-                    CodeAction.Create(Title, c => SynchronizeProperty(context.Document, (PropertyDeclarationSyntax)syntaxNode, c), equivalenceKey: Title), context.Diagnostics.First(a => a.Id == HalfSynchronizedReporter.UnsynchronizedPropertyId));
+                    CodeAction.Create(Title, c => SynchronizeProperty(context.Document, (PropertyDeclarationSyntax)syntaxNode, c), Title), context.Diagnostics.First(a => a.Id == HalfSynchronizedReporter.UnsynchronizedPropertyId));
             }
         }
 
