@@ -35,9 +35,6 @@
     <Compile Include="Analyzer\AllAnalyzer.cs" />
     <Compile Include="Analyzer\Rules.cs" />
     <Compile Include="Analyzer\BaseAnalyzer.cs" />
-    <Compile Include="Configuration\Configuration.cs" />
-    <Compile Include="Configuration\ConfigurationManager.cs" />
-    <Compile Include="EasterEgg\TapirAnalyzer.cs" />
     <Compile Include="CodeFixProviders\TapirCodeFixProvider.cs" />
     <Compile Include="CodeFixProviders\HalfSynchronizedCheckerCodeFixProvider.cs" />
     <Compile Include="CodeFixProviders\MonitorWaitOrSignalCodeFixProvider.cs" />
