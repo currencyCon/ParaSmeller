@@ -11,7 +11,6 @@ namespace ConcurrencyChecker.Vsix
     public class ConcurrencyCheckerSettings : DialogPage
     {
         public List<Smell> Smells => Enum.GetValues(typeof(Smell)).Cast<Smell>().ToList();
-        private int _maxDepthAsync = 3;
 
         public string SelectedSmellsStr
         {
@@ -21,11 +20,7 @@ namespace ConcurrencyChecker.Vsix
         
         public List<string> SelectedSmells { get; set; }
 
-        public int MaxDepthAsync
-        {
-            get { return _maxDepthAsync; }
-            set { _maxDepthAsync = value; }
-        }
+        public int MaxDepthAsync { get; set; } = 3;
 
         protected override IWin32Window Window
         {

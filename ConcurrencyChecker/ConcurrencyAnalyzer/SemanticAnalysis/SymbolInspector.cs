@@ -5,9 +5,8 @@ using Microsoft.CodeAnalysis;
 
 namespace ConcurrencyAnalyzer.SemanticAnalysis
 {
-    public class SymbolInspector
+    public static class SymbolInspector
     {
-
         public static TSymbolKind GetSpecializedSymbol<TSymbolKind>(SyntaxNode syntaxNode, SemanticModel semanticModel) where TSymbolKind : ISymbol
         {
             try
