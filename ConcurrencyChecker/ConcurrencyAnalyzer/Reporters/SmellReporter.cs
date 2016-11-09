@@ -19,7 +19,8 @@ namespace ConcurrencyAnalyzer.Reporters
             {Smell.ExplicitThreads, new ExplicitThreadsReporter()},
             {Smell.NestedSynchronization, new NestedSynchronizedMethodClassReporter() },
             {Smell.OverAsynchrony, new OverAsynchronyReporter() },
-            {Smell.TenativelyRessource, new TentativelyResourceReferenceReporter() }
+            {Smell.TenativelyRessource, new TentativelyResourceReferenceReporter() },
+            {Smell.Tapir, new TapirReporter() }
         };
 
         public async Task<ICollection<Diagnostic>> Report(Compilation compilation)
