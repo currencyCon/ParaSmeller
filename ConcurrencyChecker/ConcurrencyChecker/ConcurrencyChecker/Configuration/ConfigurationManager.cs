@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Composition;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Diagnostics;
 
 namespace ConcurrencyChecker.Configuration
@@ -41,7 +38,7 @@ namespace ConcurrencyChecker.Configuration
         }
 
 
-        public static List<string> Convert(String str)
+        public static List<string> Convert(string str)
         {
             if (str == null) return new List<string>();
             return str.Split(';').ToList();
