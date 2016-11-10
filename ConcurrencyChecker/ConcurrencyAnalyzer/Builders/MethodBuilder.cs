@@ -20,11 +20,5 @@ namespace ConcurrencyAnalyzer.Builders
             var newMethod = method.ReplaceNode(method, method.WithBody(lockStatementBlock));
             return newMethod;
         }
-
-        public static MethodDeclarationSyntax BuildLockedMethod(MethodDeclarationSyntax method)
-        {
-            return BuildLockedMethod(method, LockBuilder.DefaultLockObject());
-        }
-
     }
 }

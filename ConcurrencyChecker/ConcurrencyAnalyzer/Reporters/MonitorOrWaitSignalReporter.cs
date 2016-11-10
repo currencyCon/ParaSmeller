@@ -33,7 +33,7 @@ namespace ConcurrencyAnalyzer.Reporters
             }
         }
 
-        private void CheckWaitInsideLock(IMember method)
+        private void CheckWaitInsideLock(Member method)
         {
             foreach (var monitorWaitExpression in method.GetLockStatements().SelectMany(e => e.GetInvocationExpression(MonitorClass, MonitorWaitMethod)))
             {
@@ -41,7 +41,7 @@ namespace ConcurrencyAnalyzer.Reporters
             }
         }
 
-        private void CheckFunctionCallers(IMember method)
+        private void CheckFunctionCallers(Member method)
         {
             foreach (var invocationExpression in method.ContainingClass.Implementation.GetChildren<InvocationExpressionSyntax>().Where(i => i.Expression.ToString() == method.Name.ToString()))
             {

@@ -17,7 +17,7 @@ namespace ConcurrencyAnalyzer.Reporters
         public static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.WaitingConditionsTasksAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.WCTAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 
-        private  void CheckForLockUsage(IMember member)
+        private  void CheckForLockUsage(Member member)
         {
             var invocationsInThreads = member.GetAllInvocations().Where(e => e.IsInvokedInTask);
             foreach (var invocationExpressionRepresentation in invocationsInThreads)

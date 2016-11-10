@@ -19,7 +19,7 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
             return synchronizedElement.GetChildren<LockStatementSyntax>();
         }
 
-        public static IEnumerable<IdentifierNameSyntax> GetIdentifiersInLocks(IEnumerable<IBody> bodies)
+        public static IEnumerable<IdentifierNameSyntax> GetIdentifiersInLocks(IEnumerable<Body> bodies)
         {
             IEnumerable<IdentifierNameSyntax> identifiers = new List<IdentifierNameSyntax>();
             foreach (var body in bodies)
@@ -37,7 +37,7 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
             return identifiers;
         }
 
-        public static IEnumerable<InvocationExpressionRepresentation> GetInvocationsInLocks(IEnumerable<IBody> bodies)
+        public static IEnumerable<InvocationExpressionRepresentation> GetInvocationsInLocks(IEnumerable<Body> bodies)
         {
             IEnumerable<InvocationExpressionRepresentation> invocations = new List<InvocationExpressionRepresentation>();
             foreach (var body in bodies)

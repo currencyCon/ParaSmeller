@@ -12,7 +12,7 @@ namespace ConcurrencyAnalyzer.Reporters
         private readonly ICollection<Action<ClassRepresentation>> _classReports = new List<Action<ClassRepresentation>>();
         private readonly ICollection<Action<MethodRepresentation>> _methodReports = new List<Action<MethodRepresentation>>();
         private readonly ICollection<Action<PropertyRepresentation>> _propertyReports = new List<Action<PropertyRepresentation>>();
-        private readonly ICollection<Action<IMember>> _memberReports = new List<Action<IMember>>();
+        private readonly ICollection<Action<Member>> _memberReports = new List<Action<Member>>();
         public readonly ICollection<Diagnostic> Reports = new List<Diagnostic>();
         public abstract void Register();
 
@@ -36,7 +36,7 @@ namespace ConcurrencyAnalyzer.Reporters
         {
             _propertyReports.Add(propertyReport);
         }
-        public void RegisterMemberReport(Action<IMember> memberReport)
+        public void RegisterMemberReport(Action<Member> memberReport)
         {
             _memberReports.Add(memberReport);
         }

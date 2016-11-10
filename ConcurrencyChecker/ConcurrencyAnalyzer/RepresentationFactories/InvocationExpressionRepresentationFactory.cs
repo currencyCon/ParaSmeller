@@ -11,7 +11,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
     public static class InvocationExpressionRepresentationFactory
     {
 
-        public static InvocationExpressionRepresentation Create(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody)
+        public static InvocationExpressionRepresentation Create(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody)
         {
             if (invocationExpressionSyntax.Expression is IdentifierNameSyntax)
             {
@@ -26,7 +26,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         }
 
         private static InvocationExpressionRepresentation CreateSelfInvocation(
-            InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody)
+            InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody)
         {
             var invocationExpression = (IdentifierNameSyntax)invocationExpressionSyntax.Expression;
             var invocationTarget = invocationExpression;
@@ -36,7 +36,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
 
         private static InvocationExpressionRepresentation CreateRemoteInvocation(
-            InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody)
+            InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody)
         {
             var invocationExpression = (MemberAccessExpressionSyntax) invocationExpressionSyntax.Expression;
             var invocationTarget = invocationExpression.Name;
@@ -44,7 +44,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         }
 
         private static InvocationExpressionRepresentation CreateInvocationWithSymbolInfo(
-    InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, IBody containingBody,
+    InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody,
     SimpleNameSyntax invocationTarget)
         {
             var symbolInfo = SymbolInformationBuilder.Create(invocationTarget, semanticModel);
@@ -52,7 +52,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         }
 
         private static InvocationExpressionRepresentation CreateInvocation(
-            InvocationExpressionSyntax invocationExpressionSyntax, IBody containingBody, SimpleNameSyntax invocationTarget, SymbolInformation symbolInfo)
+            InvocationExpressionSyntax invocationExpressionSyntax, Body containingBody, SimpleNameSyntax invocationTarget, SymbolInformation symbolInfo)
         {
             var invocationIsSynchronized = containingBody?.Implementation.IsSynchronized() ?? false;
             var invocation = new InvocationExpressionRepresentation(invocationIsSynchronized, symbolInfo, invocationExpressionSyntax, containingBody, invocationTarget, invocationExpressionSyntax.Parent is ParenthesizedLambdaExpressionSyntax);

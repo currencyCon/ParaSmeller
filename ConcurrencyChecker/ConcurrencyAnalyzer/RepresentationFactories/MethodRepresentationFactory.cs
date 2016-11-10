@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.SyntaxNodeUtils;
+﻿using ConcurrencyAnalyzer.Representation;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -13,7 +11,6 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         {
             var methodRepresentation = new MethodRepresentation(methodDeclarationSyntax, classRepresentation);
             AddBaseBody(methodRepresentation, semanticModel);
-            AddDirectInvcocations(methodRepresentation, semanticModel);
             return methodRepresentation;
         }
 
@@ -22,19 +19,6 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             var baseBody = BlockRepresentationFactory.Create(methodRepresentation.Implementation.Body,
                 methodRepresentation, semanticModel);
             methodRepresentation.Blocks.Add(baseBody);
-        }
-
-        private static void AddDirectInvcocations(MethodRepresentation methodRepresentation, SemanticModel semanticModel)
-        {
-            foreach (var invocationExpressionSyntax in methodRepresentation.Implementation.Body.Statements.Where(IsTopLevelStatement).SelectMany(e => e.GetChildren<InvocationExpressionSyntax>()))
-            {
-                methodRepresentation.InvocationExpressions.Add(InvocationExpressionRepresentationFactory.Create(invocationExpressionSyntax, semanticModel, methodRepresentation.Blocks.First()));
-            }
-        }
-
-        private static bool IsTopLevelStatement(StatementSyntax e)
-        {
-            return !(e is LockStatementSyntax) && ! (e is BlockSyntax);
         }
     }
 }

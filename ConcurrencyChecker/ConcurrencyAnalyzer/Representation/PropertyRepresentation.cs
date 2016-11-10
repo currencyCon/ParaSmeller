@@ -1,39 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Representation
 {
-    public class PropertyRepresentation : IMember
+    public class PropertyRepresentation : Member
     {
         private const string GetKeyWord = "get";
         private const string SetKeyWord = "set";
-
-        public ICollection<InvocationExpressionRepresentation> InvocationExpressions { get; set; }
-        public ClassRepresentation ContainingClass { get; set; }
-        public ICollection<IBody> Blocks { get; set; }
-        public SyntaxToken Name { get; set; }
-        public ICollection<InvocationExpressionRepresentation> Callers { get; set; }
-        public ICollection<InvocationExpressionRepresentation> GetAllInvocations()
-        {
-            var invocations = InvocationExpressions.ToList();
-            foreach (var block in Blocks)
-            {
-                invocations.AddRange(block.GetAllInvocations());
-            }
-            return invocations;
-        }
-
+       
         public PropertyDeclarationSyntax Implementation { get; set; }
         public BlockSyntax Getter { get; set; }
         public BlockSyntax Setter { get; set; }
 
-
         public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation)
         {
             InvocationExpressions = new List<InvocationExpressionRepresentation>();
-            Blocks = new List<IBody>();
+            Blocks = new List<Body>();
             Callers = new List<InvocationExpressionRepresentation>();
             Implementation = propertyDeclarationSyntax;
             Name = Implementation.Identifier;
@@ -46,7 +29,7 @@ namespace ConcurrencyAnalyzer.Representation
                 e => e.Keyword.ToString() == SetKeyWord)?.Body;
         }
 
-        public bool IsFullySynchronized()
+        public override bool IsFullySynchronized()
         {
             return AllAccessorsAreSynchronized();
         }
@@ -68,7 +51,7 @@ namespace ConcurrencyAnalyzer.Representation
             return isFullySynchronized;
         }
 
-        private static bool AccessorIsFullySynchronized(IBody block)
+        private static bool AccessorIsFullySynchronized(Body block)
         {
             return block.Blocks.Count == 1 && block.Blocks.First().IsSynchronized;
         }

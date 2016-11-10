@@ -26,12 +26,7 @@ namespace ConcurrencyAnalyzer.Builders
                     );
             return synchronizedProperty;
         }
-
-        public static PropertyDeclarationSyntax BuildPropertyWithSynchronizedBackingField(PropertyDeclarationSyntax property, BaseFieldDeclarationSyntax backingField)
-        {
-            return BuildPropertyWithSynchronizedBackingField(property, backingField, LockBuilder.DefaultLockObject());
-        }
-
+        
         private static AccessorDeclarationSyntax DefaultSetter(BaseFieldDeclarationSyntax backingField, ExpressionSyntax lockObject)
         {
             var indention = SyntaxFactory.IdentifierName(backingField.Declaration.Variables.First().Identifier.ToString());

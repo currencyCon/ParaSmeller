@@ -18,31 +18,6 @@ namespace ConcurrencyAnalyzer.Reporters
         public static readonly LocalizableString MessageFormatNestedAsync = new LocalizableResourceString(nameof(Resources.OAAnalyzerMessageFormatNestedAsync), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.OAAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 
-        private static IEnumerable<InvocationExpressionRepresentation> AllInvocations(IMember member)
-        {
-            if (member.Blocks.Count == 0) return new List<InvocationExpressionRepresentation>();
-
-            var expressionRepresentations = new List<InvocationExpressionRepresentation>();
-            foreach (var block in member.Blocks)
-            {
-                expressionRepresentations.AddRange(block.InvocationExpressions);
-                expressionRepresentations.AddRange(AllInvocations(block.Blocks.ToList()));
-            }
-
-            return expressionRepresentations;
-        }
-
-        private static IEnumerable<InvocationExpressionRepresentation> AllInvocations(IEnumerable<IBody> blocks)
-        {
-            var expressionRepresentations = new List<InvocationExpressionRepresentation>();
-            foreach (var block in blocks)
-            {
-                expressionRepresentations.AddRange(block.InvocationExpressions);
-                expressionRepresentations.AddRange(AllInvocations(block.Blocks.ToList()));
-            }
-            return expressionRepresentations;
-        }
-
         private static bool CheckForNestedAsync(MethodRepresentation method, int counter)
         {
             var symbol = method.ContainingClass.SemanticModel.GetDeclaredSymbol(method.Implementation) as IMethodSymbol;
@@ -54,7 +29,7 @@ namespace ConcurrencyAnalyzer.Reporters
                     return true;
                 }
                 counter++;
-                var invocations = AllInvocations(method);
+                var invocations = method.GetAllInvocations();
                 foreach (var invocation in invocations.Where(i => i.InvokedImplementation is MethodRepresentation).Select(i => i.InvokedImplementation as MethodRepresentation))
                 {
                     if (CheckForNestedAsync(invocation, counter))

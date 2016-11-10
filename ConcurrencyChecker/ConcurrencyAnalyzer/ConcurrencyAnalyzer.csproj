@@ -66,8 +66,8 @@
     <Compile Include="RepresentationFactories\PropertyRepresentationFactory.cs" />
     <Compile Include="RepresentationFactories\SolutionRepresentationFactory.cs" />
     <Compile Include="Representation\ClassRepresentation.cs" />
-    <Compile Include="Representation\IBody.cs" />
-    <Compile Include="Representation\IMember.cs" />
+    <Compile Include="Representation\Body.cs" />
+    <Compile Include="Representation\Member.cs" />
     <Compile Include="Representation\InvocationExpressionRepresentation.cs" />
     <Compile Include="Representation\LockBlock.cs" />
     <Compile Include="Representation\MethodRepresentation.cs" />

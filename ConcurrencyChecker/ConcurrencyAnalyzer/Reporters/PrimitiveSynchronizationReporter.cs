@@ -38,9 +38,9 @@ namespace ConcurrencyAnalyzer.Reporters
             }
         }
 
-        private void CheckForNotAllowedApiUsages(IMember member)
+        private void CheckForNotAllowedApiUsages(Member member)
         {
-            var invocationsToReport = member.InvocationExpressions.Where(e => NotAllowedApIs.Contains(e.OriginalDefinition));
+            var invocationsToReport = member.GetAllInvocations().Where(e => NotAllowedApIs.Contains(e.OriginalDefinition));
             foreach (var invocationToReport in invocationsToReport)
             {
                 Reports.Add(ReportPrimitiveSynchronizationDiagnostic(invocationToReport.Implementation));

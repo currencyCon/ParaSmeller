@@ -12,7 +12,7 @@ namespace ConcurrencyAnalyzer.Representation
     {
         public readonly ClassDeclarationSyntax Implementation;
         public readonly SyntaxToken Name;
-        public readonly ICollection<IMember> Members;
+        public readonly ICollection<Member> Members;
 		public readonly DestructorDeclarationSyntax Destructor;
         public readonly SemanticModel SemanticModel;
         
@@ -28,7 +28,7 @@ namespace ConcurrencyAnalyzer.Representation
         {
             Name = classDeclarationSyntax.Identifier;
             SemanticModel = semanticModel;
-            Members = new List<IMember>();
+            Members = new List<Member>();
             Implementation = classDeclarationSyntax;
             Destructor = Implementation.GetFirstChild<DestructorDeclarationSyntax>();
             Fields = Implementation.GetChildren<FieldDeclarationSyntax>().ToList();
@@ -54,20 +54,10 @@ namespace ConcurrencyAnalyzer.Representation
             }
             return lockExpressions.GroupBy(i => i).OrderByDescending(group => group.Count()).Select(group => group.Key).First();
         }
-
-        public bool HasSynchronizedMember()
+        
+        public  List<Member> GetMembersWithMultipleLocks()
         {
-            return Members.Any(e => e.IsFullySynchronized());
-        }
-
-        public IMember GetMemberByName(string memberName)
-        {
-            return Members.FirstOrDefault(e => e.Name.ToString() == memberName);
-        }
-
-        public  List<IMember> GetMembersWithMultipleLocks()
-        {
-            var members = new List<IMember>();
+            var members = new List<Member>();
             foreach (var memberWithBody in Members)
             {
                 foreach (var block in memberWithBody.Blocks)
@@ -79,7 +69,7 @@ namespace ConcurrencyAnalyzer.Representation
             return members;
         }
 
-        private static void GetNextDeeperLock(IBody block, ICollection<IMember> members, IMember member)
+        private static void GetNextDeeperLock(Body block, ICollection<Member> members, Member member)
         {
             if (!members.Contains(member))
             {
