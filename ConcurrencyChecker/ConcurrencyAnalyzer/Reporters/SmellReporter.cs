@@ -20,7 +20,7 @@ namespace ConcurrencyAnalyzer.Reporters
             {Smell.NestedSynchronization, new NestedSynchronizedMethodClassReporter() },
             {Smell.OverAsynchrony, new OverAsynchronyReporter() },
             {Smell.TenativelyRessource, new TentativelyResourceReferenceReporter() },
-            {Smell.WaitingConditionsTasks, new WaitingConditionsTasksReporter() }
+            {Smell.WaitingConditionsTasks, new WaitingConditionsTasksReporter() }, 
             {Smell.Tapir, new TapirReporter() }
         };
 
