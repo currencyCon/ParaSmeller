@@ -21,6 +21,7 @@ namespace ConcurrencyAnalyzer.Reporters
             {Smell.OverAsynchrony, new OverAsynchronyReporter() },
             {Smell.TenativelyRessource, new TentativelyResourceReferenceReporter() },
             {Smell.WaitingConditionsTasks, new WaitingConditionsTasksReporter() }
+            {Smell.Tapir, new TapirReporter() }
         };
 
         public async Task<ICollection<Diagnostic>> Report(Compilation compilation)

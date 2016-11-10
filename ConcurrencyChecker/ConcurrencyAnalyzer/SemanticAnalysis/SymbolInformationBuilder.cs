@@ -9,7 +9,7 @@ namespace ConcurrencyAnalyzer.SemanticAnalysis
         public static SymbolInformation Create(SimpleNameSyntax simpleNameSyntax, SemanticModel semanticModel)
         {
             var symbolInfo = semanticModel.GetSymbolInfo(simpleNameSyntax);
-            var symbol = GetSymbol(symbolInfo);
+            var symbol = symbolInfo.Symbol;
             return new SymbolInformation
             {
                 ClassName = symbol == null? DefaultSymbolValues.ClassName : GetClassName(symbol),
@@ -17,19 +17,7 @@ namespace ConcurrencyAnalyzer.SemanticAnalysis
                 Type = symbol == null ? DefaultSymbolValues.Type : GetType(symbol)
             };
         }
-
-        private static ISymbol GetSymbol(SymbolInfo symbolInfo)
-        {
-            if (symbolInfo.Symbol is IMethodSymbol)
-            {
-                return (IMethodSymbol)symbolInfo.Symbol;
-            }
-            if (symbolInfo.Symbol is IPropertySymbol)
-            {
-                return (IPropertySymbol)symbolInfo.Symbol;
-            }
-            return null;
-        }
+        
         private static SymbolKind GetType(ISymbol symbol)
         {
             return symbol.Kind;
