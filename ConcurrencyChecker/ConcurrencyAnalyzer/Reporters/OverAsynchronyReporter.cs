@@ -11,7 +11,7 @@ namespace ConcurrencyAnalyzer.Reporters
         public const string Category = "Synchronization";
         public const string DiagnosticId = "OA001";
         public const string DiagnosticIdNestedAsync = "OA002";
-        public const int MaxDepthAsync = 2;
+        public const int DepthAsyncTillWarning = 2;
 
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.OAAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.OAAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
@@ -49,7 +49,7 @@ namespace ConcurrencyAnalyzer.Reporters
             
             if (symbol != null && symbol.IsAsync)
             {
-                if (counter >= MaxDepthAsync)
+                if (counter >= DepthAsyncTillWarning)
                 {
                     return true;
                 }
@@ -87,7 +87,7 @@ namespace ConcurrencyAnalyzer.Reporters
             if (CheckForNestedAsync(method, 0))
             {
                 Reports.Add(new Diagnostic(DiagnosticIdNestedAsync, Title, MessageFormatNestedAsync, Description, Category,
-                    method.Implementation.GetLocation(), new object[] {MaxDepthAsync + 1}));
+                    method.Implementation.GetLocation(), new object[] {DepthAsyncTillWarning + 1}));
             }
         }
     }

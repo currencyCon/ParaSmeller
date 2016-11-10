@@ -15,8 +15,7 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly ICollection<IMember> Members;
 		public readonly DestructorDeclarationSyntax Destructor;
         public readonly SemanticModel SemanticModel;
-        private const int ThresholdMaxDepthAsync = 3;
-
+        
         public ICollection<MethodRepresentation> SynchronizedMethods { get; set; }
         public ICollection<MethodRepresentation> UnSynchronizedMethods { get; set; }
         public ICollection<PropertyRepresentation> SynchronizedProperties { get; set; }
@@ -69,36 +68,27 @@ namespace ConcurrencyAnalyzer.Representation
         public  List<IMember> GetMembersWithMultipleLocks()
         {
             var members = new List<IMember>();
-            var counter = 1;
             foreach (var memberWithBody in Members)
             {
                 foreach (var block in memberWithBody.Blocks)
                 {
-                    if (block is LockBlock)
-                    {
-                        counter++;
-                    }
-                    GetNextDeeperLock(block, members, counter, memberWithBody);
+                    GetNextDeeperLock(block, members, memberWithBody);
                 }
             }
 
             return members;
         }
 
-        private static void GetNextDeeperLock(IBody block, ICollection<IMember> members, int counter, IMember member)
+        private static void GetNextDeeperLock(IBody block, ICollection<IMember> members, IMember member)
         {
-            if (counter == ThresholdMaxDepthAsync && !members.Contains(member))
+            if (!members.Contains(member))
             {
                 members.Add(member);
             }
 
             foreach (var subBlock in block.Blocks)
             {
-                if (subBlock is LockBlock)
-                {
-                    counter++;
-                }
-                GetNextDeeperLock(subBlock, members, counter, member);
+                GetNextDeeperLock(subBlock, members, member);
             }
         }
 
