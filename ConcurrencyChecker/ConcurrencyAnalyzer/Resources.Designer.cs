@@ -375,5 +375,32 @@ namespace ConcurrencyAnalyzer {
                 return ResourceManager.GetString("TRRAnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This Tasks uses Synchronization Mechanisms. Be sure to not introduce Deadlocks or similiar hazards when working with multiple Tasks..
+        /// </summary>
+        internal static string WaitingConditionsTasksAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("WaitingConditionsTasksAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This Tasks uses Synchronization Mechanisms. Be sure to not introduce Deadlocks or similiar hazards when working with multiple Tasks..
+        /// </summary>
+        internal static string WCTAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("WCTAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting Conditions between Tasks.
+        /// </summary>
+        internal static string WCTAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("WCTAnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }

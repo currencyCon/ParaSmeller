@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 
 namespace ConcurrencyAnalyzer.Representation
@@ -18,6 +19,15 @@ namespace ConcurrencyAnalyzer.Representation
             ContainingMember = member;
             InvocationExpressions = new List<InvocationExpressionRepresentation>();
             Blocks = new List<IBody>();
+        }
+        public ICollection<InvocationExpressionRepresentation> GetAllInvocations()
+        {
+            var invocations = InvocationExpressions.ToList();
+            foreach (var block in Blocks)
+            {
+                invocations.AddRange(block.GetAllInvocations());
+            }
+            return invocations;
         }
     }
 }

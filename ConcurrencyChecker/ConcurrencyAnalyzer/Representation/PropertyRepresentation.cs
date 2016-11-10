@@ -15,6 +15,16 @@ namespace ConcurrencyAnalyzer.Representation
         public ICollection<IBody> Blocks { get; set; }
         public SyntaxToken Name { get; set; }
         public ICollection<InvocationExpressionRepresentation> Callers { get; set; }
+        public ICollection<InvocationExpressionRepresentation> GetAllInvocations()
+        {
+            var invocations = InvocationExpressions.ToList();
+            foreach (var block in Blocks)
+            {
+                invocations.AddRange(block.GetAllInvocations());
+            }
+            return invocations;
+        }
+
         public PropertyDeclarationSyntax Implementation { get; set; }
         public BlockSyntax Getter { get; set; }
         public BlockSyntax Setter { get; set; }

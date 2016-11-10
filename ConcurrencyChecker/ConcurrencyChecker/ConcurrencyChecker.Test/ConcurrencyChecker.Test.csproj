@@ -124,6 +124,8 @@
     <Compile Include="Helpers\DiagnosticResult.cs" />
     <Compile Include="Helpers\DiagnosticVerifier.Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WaitingConditionsThreads\WaitingConditionsTasksAnalyzer.cs" />
+    <Compile Include="WaitingConditionsThreads\WaitingConditionsTasksTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

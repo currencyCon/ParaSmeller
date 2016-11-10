@@ -1,25 +1,21 @@
-﻿namespace ConcurrencyChecker.Test.TestCodeTester
-{
-    public class SynchronizedFinalizer
-    {
-        public static int Counter;
-        private readonly object LockObjectA = new object();
-        private readonly object LockObjectB = new object();
+﻿using System.Threading.Tasks;
 
-        public SynchronizedFinalizer()
+namespace ConcurrencyChecker.Test.TestCodeTester
+{
+    public class SynchronizedThread
+    {
+        public static object LockObject = new object();
+        public static void DoTask()
         {
-            lock (LockObjectA)
+            lock (LockObject)
             {
-                Counter++;
+                var c = 2;
             }
         }
 
-        ~SynchronizedFinalizer()
+        public static void Main()
         {
-            lock (LockObjectB)
-            {
-                Counter--;
-            }
+            Task.Run(()=> DoTask());
         }
     }
 }

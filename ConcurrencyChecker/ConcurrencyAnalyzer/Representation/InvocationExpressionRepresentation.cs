@@ -17,8 +17,9 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly SymbolKind Type;
         public readonly List<IdentifierNameSyntax> Arguments;
         public readonly string OriginalDefinition;
+        public readonly bool IsInvokedInTask;
 
-        public InvocationExpressionRepresentation(bool isSynchronized, SymbolInformation symbolInfo, InvocationExpressionSyntax implementation, IBody containingBody, SimpleNameSyntax invocationTarget)
+        public InvocationExpressionRepresentation(bool isSynchronized, SymbolInformation symbolInfo, InvocationExpressionSyntax implementation, IBody containingBody, SimpleNameSyntax invocationTarget, bool isInvokedInTask)
         {
             IsSynchronized = isSynchronized;
             Arguments = new List<IdentifierNameSyntax>();
@@ -28,6 +29,7 @@ namespace ConcurrencyAnalyzer.Representation
             Implementation = implementation;
             ContainingBody = containingBody;
             InvocationTargetName = invocationTarget;
+            IsInvokedInTask = isInvokedInTask;
         }
     }
 }

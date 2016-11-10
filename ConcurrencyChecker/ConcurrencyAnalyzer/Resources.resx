@@ -235,4 +235,13 @@
   <data name="FSAnalyzerDescription" xml:space="preserve">
     <value>Finalizers run asynchronous to the rest of the code. Access to Members in Finalizers should therefore be synchronized. </value>
   </data>
+ <data name="WCTAnalyzerTitle" xml:space="preserve">
+    <value>Waiting Conditions between Tasks</value>
+  </data>
+  <data name="WaitingConditionsTasksAnalyzerMessageFormat" xml:space="preserve">
+    <value>This Tasks uses Synchronization Mechanisms. Be sure to not introduce Deadlocks or similiar hazards when working with multiple Tasks.</value>
+  </data>
+  <data name="WCTAnalyzerDescription" xml:space="preserve">
+    <value>This Tasks uses Synchronization Mechanisms. Be sure to not introduce Deadlocks or similiar hazards when working with multiple Tasks.</value>
+  </data>
 </root>

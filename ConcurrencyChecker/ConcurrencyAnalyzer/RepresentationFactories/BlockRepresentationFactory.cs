@@ -41,10 +41,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         {
             foreach (var invocationExpressionSyntax in body.Implementation.GetChildren<InvocationExpressionSyntax>())
             {
-                if (!(invocationExpressionSyntax.Parent is ParenthesizedLambdaExpressionSyntax))
-                {
-                    body.InvocationExpressions.Add(InvocationExpressionRepresentationFactory.Create(invocationExpressionSyntax, semanticModel, body));
-                }
+                body.InvocationExpressions.Add(InvocationExpressionRepresentationFactory.Create(invocationExpressionSyntax, semanticModel, body));
             }
         } 
     }

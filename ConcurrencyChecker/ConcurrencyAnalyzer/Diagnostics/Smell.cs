@@ -11,6 +11,7 @@
         NestedSynchronization,
         OverAsynchrony,
         TenativelyRessource,
-        Tapir
+        Tapir,
+        WaitingConditionsTasks
     }
 }

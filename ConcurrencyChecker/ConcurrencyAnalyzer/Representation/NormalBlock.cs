@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 
 namespace ConcurrencyAnalyzer.Representation
@@ -11,13 +12,21 @@ namespace ConcurrencyAnalyzer.Representation
         public ICollection<InvocationExpressionRepresentation> InvocationExpressions { get; set; }
         public ICollection<IBody> Blocks { get; set; }
         public bool IsSynchronized => false;
-
         public NormalBlock(IMember member, SyntaxNode implementation)
         {
             ContainingMember = member;
             Implementation = implementation;
             InvocationExpressions = new List<InvocationExpressionRepresentation>();
             Blocks = new List<IBody>();
+        }
+        public ICollection<InvocationExpressionRepresentation> GetAllInvocations()
+        {
+            var invocations = InvocationExpressions.ToList();
+            foreach (var block in Blocks)
+            {
+                invocations.AddRange(block.GetAllInvocations());
+            }
+            return invocations;
         }
     }
 }

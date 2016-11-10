@@ -28,10 +28,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         {
             foreach (var invocationExpressionSyntax in methodRepresentation.Implementation.Body.Statements.Where(IsTopLevelStatement).SelectMany(e => e.GetChildren<InvocationExpressionSyntax>()))
             {
-                if (!(invocationExpressionSyntax.Parent is ParenthesizedLambdaExpressionSyntax))
-                {
-                    methodRepresentation.InvocationExpressions.Add(InvocationExpressionRepresentationFactory.Create(invocationExpressionSyntax, semanticModel, methodRepresentation.Blocks.First()));
-                }
+                methodRepresentation.InvocationExpressions.Add(InvocationExpressionRepresentationFactory.Create(invocationExpressionSyntax, semanticModel, methodRepresentation.Blocks.First()));
             }
         }
 

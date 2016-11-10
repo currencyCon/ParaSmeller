@@ -55,7 +55,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             InvocationExpressionSyntax invocationExpressionSyntax, IBody containingBody, SimpleNameSyntax invocationTarget, SymbolInformation symbolInfo)
         {
             var invocationIsSynchronized = containingBody?.Implementation.IsSynchronized() ?? false;
-            var invocation = new InvocationExpressionRepresentation(invocationIsSynchronized, symbolInfo, invocationExpressionSyntax, containingBody, invocationTarget);
+            var invocation = new InvocationExpressionRepresentation(invocationIsSynchronized, symbolInfo, invocationExpressionSyntax, containingBody, invocationTarget, invocationExpressionSyntax.Parent is ParenthesizedLambdaExpressionSyntax);
             var arguments =
                 invocationExpressionSyntax.ArgumentList.Arguments.SelectMany(e => e.GetChildren<IdentifierNameSyntax>())
                     .ToList();

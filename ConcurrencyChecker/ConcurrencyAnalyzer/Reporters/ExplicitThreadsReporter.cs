@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using ConcurrencyAnalyzer.Representation;
+﻿using ConcurrencyAnalyzer.Representation;
+using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
@@ -33,7 +33,7 @@ namespace ConcurrencyAnalyzer.Reporters
         }
         private void ReportThreadUsage(ClassRepresentation classRepresentation)
         {
-            foreach (var identifierName in classRepresentation.Implementation.DescendantNodes().OfType<IdentifierNameSyntax>())
+            foreach (var identifierName in classRepresentation.Implementation.GetChildren<IdentifierNameSyntax>())
             {
                 AnalyzeIdentifier(identifierName, classRepresentation);
             }

@@ -10,5 +10,6 @@ namespace ConcurrencyAnalyzer.Representation
         ICollection<InvocationExpressionRepresentation> InvocationExpressions { get; set; }
         ICollection<IBody> Blocks { get; set; }
         bool IsSynchronized { get; }
+        ICollection<InvocationExpressionRepresentation> GetAllInvocations();
     }
 }
