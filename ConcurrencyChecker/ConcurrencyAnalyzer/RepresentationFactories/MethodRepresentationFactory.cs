@@ -16,9 +16,12 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
         private static void AddBaseBody(MethodRepresentation methodRepresentation, SemanticModel semanticModel)
         {
-            var baseBody = BlockRepresentationFactory.Create(methodRepresentation.Implementation.Body,
-                methodRepresentation, semanticModel);
-            methodRepresentation.Blocks.Add(baseBody);
+            if (methodRepresentation.Implementation.Body != null)
+            {
+                var baseBody = BlockRepresentationFactory.Create(methodRepresentation.Implementation.Body,
+                    methodRepresentation, semanticModel);
+                methodRepresentation.Blocks.Add(baseBody);
+            }
         }
     }
 }
