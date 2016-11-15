@@ -17,9 +17,9 @@ namespace ConcurrencyAnalyzer.Reporters
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         public const string Category = "Synchronization";
 
-        private void InspectMemberForUnawaitedTasks(IMember member)
+        private void InspectMemberForUnawaitedTasks(Member member)
         {
-            foreach (var invocationExpressionRepresentation in member.InvocationExpressions)
+            foreach (var invocationExpressionRepresentation in member.GetAllInvocations())
             {
                 if (invocationExpressionRepresentation.OriginalDefinition == ThreadStartDefintion)
                 {
@@ -29,7 +29,7 @@ namespace ConcurrencyAnalyzer.Reporters
             }
         }
 
-        private void CheckForLostAssignment(InvocationExpressionRepresentation invocationExpressionRepresentation, IMember member)
+        private void CheckForLostAssignment(InvocationExpressionRepresentation invocationExpressionRepresentation, Member member)
         {
             if (AssignmentIsLost(invocationExpressionRepresentation, member))
             {
@@ -37,13 +37,13 @@ namespace ConcurrencyAnalyzer.Reporters
             }
         }
 
-        private static bool AssignmentIsLost(InvocationExpressionRepresentation invocationExpressionRepresentation, IMember member)
+        private static bool AssignmentIsLost(InvocationExpressionRepresentation invocationExpressionRepresentation, Member member)
         {
             return invocationExpressionRepresentation.GetFirstParent<EqualsValueClauseSyntax>() != null &&
                    !AssignmentIsAwaited(invocationExpressionRepresentation, member);
         }
 
-        private static bool AssignmentIsAwaited(InvocationExpressionRepresentation invocationExpressionRepresentation, IMember member)
+        private static bool AssignmentIsAwaited(InvocationExpressionRepresentation invocationExpressionRepresentation, Member member)
         {
             var assignment = invocationExpressionRepresentation.GetFirstParent<VariableDeclaratorSyntax>();
             if (assignment == null)
@@ -54,9 +54,9 @@ namespace ConcurrencyAnalyzer.Reporters
             return TaskIsAwaited(member, variableName);
         }
 
-        private static bool AssignmentIsAwaitedInInvocatedMember(IMember member, string variableName)
+        private static bool AssignmentIsAwaitedInInvocatedMember(Member member, string variableName)
         {
-            var invocationExpressions = member.Blocks.FirstOrDefault().InvocationExpressions;
+            var invocationExpressions = member.GetAllInvocations();
             foreach (var invocationExpressionRepresentation in invocationExpressions)
             {
                 if (invocationExpressionRepresentation.Type == SymbolKind.Method &&
@@ -88,7 +88,7 @@ namespace ConcurrencyAnalyzer.Reporters
             return taskIsWaited;
         }
 
-        private static bool TaskIsAwaited(IMember member, string variableName)
+        private static bool TaskIsAwaited(Member member, string variableName)
         {
             var simpleMemberAccesses = member.GetChildren<MemberAccessExpressionSyntax>();
             foreach (var memberAccessExpressionSyntax in simpleMemberAccesses)

@@ -8,7 +8,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 {
     public static class BlockRepresentationFactory
     {
-        public static IBody Create(StatementSyntax statementSyntax, IMember parent, SemanticModel semanticModel)
+        public static Body Create(StatementSyntax statementSyntax, Member parent, SemanticModel semanticModel)
         {
             if (statementSyntax is LockStatementSyntax)
             {
@@ -24,25 +24,43 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             throw new NotImplementedException($"Unknow Blocktype: {statementSyntax.ToFullString()}");
         }
 
-        private static IBody WithChildBodies(IMember parent, SemanticModel semanticModel, IBody block)
+        private static Body WithChildBodies(Member parent, SemanticModel semanticModel, Body block)
         {
-            AddInvocations(block, semanticModel);
+            
             foreach (var syntaxNode in block.Implementation.GetDirectChildren<StatementSyntax>())
             {
                 if (syntaxNode is LockStatementSyntax || syntaxNode is BlockSyntax)
                 {
                     block.Blocks.Add(Create(syntaxNode, parent, semanticModel));
                 }
+
+                AddInvocations(syntaxNode, block, semanticModel);
             }
             return block;
         }
 
-        private static void  AddInvocations(IBody body, SemanticModel semanticModel)
+        private static void  AddInvocations(SyntaxNode node, Body body, SemanticModel semanticModel)
         {
-            foreach (var invocationExpressionSyntax in body.Implementation.GetChildren<InvocationExpressionSyntax>())
+            foreach (var invocationExpressionSyntax in node.GetChildren<InvocationExpressionSyntax>())
             {
-                body.InvocationExpressions.Add(InvocationExpressionRepresentationFactory.Create(invocationExpressionSyntax, semanticModel, body));
+                if (IsNotInsertedInBody(body, invocationExpressionSyntax))
+                {
+                    body.InvocationExpressions.Add(InvocationExpressionRepresentationFactory.Create(invocationExpressionSyntax, semanticModel, body));
+                }
             }
-        } 
+        }
+
+        private static bool IsNotInsertedInBody(Body body, InvocationExpressionSyntax invocationExpressionSyntax)
+        {
+            foreach (var invocationExpressionRepresentation in body.GetAllInvocations())
+            {
+                if (invocationExpressionRepresentation.Implementation.GetLocation() == invocationExpressionSyntax.GetLocation())
+                {
+                    return false;
+                }    
+            }
+            
+            return true;
+        }
     }
 }

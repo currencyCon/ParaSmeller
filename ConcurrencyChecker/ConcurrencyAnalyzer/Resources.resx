@@ -149,18 +149,15 @@
     <value>'new Thread' should be replaced with Task.Run</value>
   </data>
   <data name="ETCAnalyzerDescription" xml:space="preserve">
-    <value>All Thread.Start should be replaced with Task.Run</value>
+    <value>Threads should be replaced with Task</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="ETCAnalyzerMessageFormat" xml:space="preserve">
-    <value>'{0}' should be replaced with Task.Run</value>
+    <value>Threads should be replaced with Task</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
-  <data name="ETCAnalyzerMessageFormatSingleLine" xml:space="preserve">
-    <value>'new Thread' should be replaced with Task.Run</value>
-  </data>
   <data name="ETCAnalyzerTitle" xml:space="preserve">
-    <value>Thread.Start shouldn't be used</value>
+    <value>Threads shouldn't be used</value>
     <comment>The title of the diagnostic.</comment>
   </data>
   <data name="NSMCAnalyzerDescription" xml:space="preserve">
@@ -235,7 +232,7 @@
   <data name="FSAnalyzerDescription" xml:space="preserve">
     <value>Finalizers run asynchronous to the rest of the code. Access to Members in Finalizers should therefore be synchronized. </value>
   </data>
- <data name="WCTAnalyzerTitle" xml:space="preserve">
+  <data name="WCTAnalyzerTitle" xml:space="preserve">
     <value>Waiting Conditions between Tasks</value>
   </data>
   <data name="WaitingConditionsTasksAnalyzerMessageFormat" xml:space="preserve">

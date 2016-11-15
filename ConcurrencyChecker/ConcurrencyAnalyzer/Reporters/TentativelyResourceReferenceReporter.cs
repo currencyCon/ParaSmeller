@@ -26,9 +26,9 @@ namespace ConcurrencyAnalyzer.Reporters
         public static readonly LocalizableString MessageFormatTentativelyResourceReference = new LocalizableResourceString(nameof(Resources.TRRAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.TRRAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 
-        private void CheckForNotAllowedApiUsages(IMember member)
+        private void CheckForNotAllowedApiUsages(Member member)
         {
-            var invocationsToReport = member.Blocks.ToList()[0].InvocationExpressions.Where(e => NotAllowedApis.Contains(e.OriginalDefinition));
+            var invocationsToReport = member.GetAllInvocations().Where(e => NotAllowedApis.Contains(e.OriginalDefinition));
             foreach (var invocationToReport in invocationsToReport)
             {
                 var symbol = SymbolInspector.GetSpecializedSymbol<IMethodSymbol>(invocationToReport.Implementation, member.ContainingClass.SemanticModel);

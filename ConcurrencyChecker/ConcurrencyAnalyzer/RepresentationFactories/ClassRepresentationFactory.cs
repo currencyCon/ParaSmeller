@@ -27,7 +27,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         }
 
         private static ICollection<TMember> GetMembers<TMember>(ClassRepresentation classRepresentation,
-            bool synchronized) where TMember : class, IMember
+            bool synchronized) where TMember : Member
         {
             var members = classRepresentation.Members.Where(e => e is TMember);
             if (synchronized)

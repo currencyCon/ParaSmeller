@@ -9,7 +9,7 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
     public static class MemberExtensions
     {
         
-        public static List<string> GetAllLockArguments(this IMember member)
+        public static List<string> GetAllLockArguments(this Member member)
         {
             var lockObjects = new List<string>();
 
@@ -26,7 +26,7 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
         }
 
         
-        private static void AppendLockArguments(IBody block, ICollection<string> lockObjects)
+        private static void AppendLockArguments(Body block, ICollection<string> lockObjects)
         {
             if (block is LockBlock)
             {
@@ -38,12 +38,12 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
             }
         }
 
-        public static IEnumerable<LockStatementSyntax> GetLockStatements(this IMember member)
+        public static IEnumerable<LockStatementSyntax> GetLockStatements(this Member member)
         {
             return GetLockStatements(member.Blocks);
         }
 
-        public static List<LockStatementSyntax> GetLockStatements(IEnumerable<IBody> bodies)
+        public static List<LockStatementSyntax> GetLockStatements(IEnumerable<Body> bodies)
         {
             var lockStatementSyntaxs = new List<LockStatementSyntax>();
             foreach (var body in bodies)
@@ -57,34 +57,9 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
             return lockStatementSyntaxs;
         }
 
-        public static TChild GetFirstChild<TChild>(this IMember member)
-        {
-            return member.GetChildren<TChild>().FirstOrDefault();
-        }
-
-        public static IEnumerable<TChildren> GetChildren<TChildren>(this IMember member)
+        public static IEnumerable<TChildren> GetChildren<TChildren>(this Member member)
         {
             return member.Blocks.SelectMany(e => e.Implementation.GetChildren<TChildren>());
-        }
-
-        public static TParent GetFirstParent<TParent>(this IMember member)
-        {
-            var body = member.Blocks.FirstOrDefault();
-            if (body?.Implementation != null)
-            {
-                return body.Implementation.GetFirstParent<TParent>();
-            }
-            return default(TParent);
-        }
-
-        public static IEnumerable<TParents> GetParents<TParents>(this IMember member)
-        {
-            var body = member.Blocks.FirstOrDefault();
-            if (body?.Implementation != null)
-            {
-                return body.Implementation.GetParents<TParents>();
-            }
-            return new List<TParents>();
         }
     }
 }
