@@ -26,8 +26,7 @@ namespace ConcurrencyChecker.Vsix
         {
             get
             {
-                ConcurrencyCheckerSettingsUi page = new ConcurrencyCheckerSettingsUi();
-                page.optionsPage = this;
+                var page = new ConcurrencyCheckerSettingsUi {OptionsPage = this};
                 page.Initialize();
                 return page;
             }

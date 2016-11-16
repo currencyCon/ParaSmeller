@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ConcurrencyAnalyzer.Builders;
-using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -14,10 +12,10 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly SyntaxToken Name;
         public readonly ICollection<Member> Members;
 		public readonly SemanticModel SemanticModel;
-        
+        public readonly INamedTypeSymbol NamedTypeSymbol;
+
         public ICollection<MethodRepresentation> Methods => Members.OfType<MethodRepresentation>().ToList();
         public ICollection<PropertyRepresentation> Properties => Members.OfType<PropertyRepresentation>().ToList();
-        public INamedTypeSymbol NamedTypeSymbol { get; set; }
 
         public InterfaceRepresentation(InterfaceDeclarationSyntax interfaceDeclarationSyntax, SemanticModel semanticModel)
         {

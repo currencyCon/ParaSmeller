@@ -40,18 +40,15 @@ namespace ConcurrencyChecker.Analyzer
             if (SelectSmell().Any())
             {
                 var smellReporter = new SmellReporter();
-                ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics;
-                diagnostics = await smellReporter.Report(context.Compilation, SelectSmell());
+                var diagnostics = await smellReporter.Report(context.Compilation, SelectSmell());
                 ReportDiagnostics(context, diagnostics);
 
             }
             else
             {
                 var smellReporter = new SmellReporter();
-                ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics;
-                diagnostics = await smellReporter.Report(context.Compilation);
+                var diagnostics = await smellReporter.Report(context.Compilation);
                 ReportDiagnostics(context, diagnostics);
-
             }
         }
 

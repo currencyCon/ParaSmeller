@@ -1,5 +1,4 @@
 ﻿using ConcurrencyChecker.Analyzer;
-using ConcurrencyChecker.Test.NestedSynchronizedMethodClass;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;

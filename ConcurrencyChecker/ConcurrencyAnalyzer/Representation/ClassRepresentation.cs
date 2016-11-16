@@ -15,15 +15,15 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly ICollection<Member> Members;
 		public readonly DestructorDeclarationSyntax Destructor;
         public readonly SemanticModel SemanticModel;
-        
+        public readonly ICollection<FieldDeclarationSyntax> Fields;
+        public readonly INamedTypeSymbol NamedTypeSymbol;
+
         public ICollection<MethodRepresentation> SynchronizedMethods { get; set; }
         public ICollection<MethodRepresentation> UnSynchronizedMethods { get; set; }
         public ICollection<PropertyRepresentation> SynchronizedProperties { get; set; }
         public ICollection<PropertyRepresentation> UnSynchronizedProperties { get; set; }
         public ICollection<MethodRepresentation> Methods => Members.OfType<MethodRepresentation>().ToList();
         public ICollection<PropertyRepresentation> Properties => Members.OfType<PropertyRepresentation>().ToList();
-        public readonly ICollection<FieldDeclarationSyntax> Fields;
-        public INamedTypeSymbol NamedTypeSymbol { get; set; }
 
         public ClassRepresentation(ClassDeclarationSyntax classDeclarationSyntax, SemanticModel semanticModel)
         {

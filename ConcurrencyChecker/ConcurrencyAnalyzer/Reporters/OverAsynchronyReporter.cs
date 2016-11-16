@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using ConcurrencyAnalyzer.Representation;
 using Microsoft.CodeAnalysis;
 using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;

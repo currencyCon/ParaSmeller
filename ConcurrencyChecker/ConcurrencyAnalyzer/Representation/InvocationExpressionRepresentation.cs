@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ConcurrencyAnalyzer.SemanticAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -13,13 +12,13 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly bool IsSynchronized;
         public readonly InvocationExpressionSyntax Implementation;
         public readonly Body ContainingBody;
-        public ICollection<Member> InvokedImplementations { get; }
         public readonly SymbolKind Type;
         public readonly List<IdentifierNameSyntax> Arguments;
         public readonly string OriginalDefinition;
         public readonly string Defintion;
         public readonly bool IsInvokedInTask;
-
+        public readonly ICollection<Member> InvokedImplementations;
+        
         public InvocationExpressionRepresentation(bool isSynchronized, SymbolInformation symbolInfo, InvocationExpressionSyntax implementation, Body containingBody, SimpleNameSyntax invocationTarget, bool isInvokedInTask)
         {
             IsSynchronized = isSynchronized;

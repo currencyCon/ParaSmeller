@@ -150,49 +150,6 @@ namespace Test
             VerifyCSharpDiagnostic(test, expected);
         }
 
-
-
-        [TestMethod]
-        public void BarrierSignalAndWaitTest()
-        {
-            const string test = @"
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Security.Permissions;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Security;
-
-namespace Test
-{
-    public class Race
-    {
-        var barrier = new System.Threading.Barrier(10);  
-
-        public void Round()
-        {    
-            barrier.SignalAndWait(10);
-        }
-    }
-}";
-            var expected = new DiagnosticResult
-            {
-                Id = TentativelyResourceReferenceReporter.DiagnosticId,
-                Message = TentativelyResourceReferenceReporter.MessageFormatTentativelyResourceReference.ToString(),
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[] {
-                            new DiagnosticResultLocation("Test0.cs", 14, 13)
-                        }
-            };
-
-            //Missing some references, in VS this test is working -.-
-            //VerifyCSharpDiagnostic(test, expected);
-        }
-
         [TestMethod]
         public void SpinLockTryEnterTest()
         {

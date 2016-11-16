@@ -8,7 +8,6 @@ namespace ConcurrencyAnalyzer.Diagnostics
     {
         public readonly string Id;
         public readonly LocalizableString Title; 
-
         public readonly LocalizableString MessageFormat;
         public readonly LocalizableString Description;
         public readonly string Category;
@@ -27,25 +26,14 @@ namespace ConcurrencyAnalyzer.Diagnostics
         }
 
         public Diagnostic(string id, LocalizableString title, LocalizableString messageFormat, LocalizableString description,
-    string category, Location location, object[] par)
+            string category, Location location, object[] par): this(id, title, messageFormat, description, category, location)
         {
-            Id = id;
-            Title = title;
-            MessageFormat = messageFormat;
-            Description = description;
-            Category = category;
-            Location = location;
             Params = par;
         }
 
         public Diagnostic(string id, LocalizableString title, LocalizableString messageFormat, LocalizableString description,
-string category, Location location)
+            string category, Location location): this(id, title, messageFormat, description, category)
         {
-            Id = id;
-            Title = title;
-            MessageFormat = messageFormat;
-            Description = description;
-            Category = category;
             Location = location;
         }
     }

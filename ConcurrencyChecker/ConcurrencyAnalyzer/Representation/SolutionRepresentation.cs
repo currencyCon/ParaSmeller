@@ -18,5 +18,19 @@ namespace ConcurrencyAnalyzer.Representation
             ClassMap = new Dictionary<string, ClassRepresentation>();
             InterfaceMap = new Dictionary<string, InterfaceRepresentation>();
         }
+
+        public ClassRepresentation GetClass(string className)
+        {
+            ClassRepresentation clazz;
+            ClassMap.TryGetValue(className, out clazz);
+            return clazz;
+        }
+
+        public InterfaceRepresentation GetInterface(string interfaceName)
+        {
+            InterfaceRepresentation interfacee;
+            InterfaceMap.TryGetValue(interfaceName, out interfacee);
+            return interfacee;
+        }
     }
 }

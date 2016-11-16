@@ -11,6 +11,13 @@ namespace ConcurrencyAnalyzer.Representation
         public ICollection<InvocationExpressionRepresentation> InvocationExpressions { get; set; }
         public ICollection<Body> Blocks { get; set; }
         public abstract bool IsSynchronized { get; }
+        protected Body(Member member, SyntaxNode implementation)
+        {
+            Implementation = implementation;
+            ContainingMember = member;
+            InvocationExpressions = new List<InvocationExpressionRepresentation>();
+            Blocks = new List<Body>();
+        }
         public ICollection<InvocationExpressionRepresentation> GetAllInvocations()
         {
             var invocations = InvocationExpressions.ToList();

@@ -9,7 +9,7 @@ namespace ConcurrencyAnalyzer.Reporters
 {
     public class SmellReporter
     {
-        private readonly Dictionary<Smell, BaseReporter> Reporters = new Dictionary<Smell, BaseReporter>
+        private readonly Dictionary<Smell, BaseReporter> _reporters = new Dictionary<Smell, BaseReporter>
         {
             {Smell.PrimitiveSynchronization, new PrimitiveSynchronizationReporter()},
             {Smell.FireAndForget, new FireAndForgetReporter() },
@@ -23,34 +23,45 @@ namespace ConcurrencyAnalyzer.Reporters
             {Smell.WaitingConditionsTasks, new WaitingConditionsTasksReporter() },
             {Smell.Tapir, new TapirReporter() }
         };
+        private readonly ICollection<Smell> _defaultSmellCollection = new List<Smell>
+        {
+            Smell.PrimitiveSynchronization,
+            Smell.FireAndForget,
+            Smell.Finalizer,
+            Smell.HalfSynchronized,
+            Smell.MonitorWaitOrSignal,
+            Smell.ExplicitThreads,
+            Smell.NestedSynchronization,
+            Smell.OverAsynchrony,
+            Smell.TenativelyRessource,
+            Smell.WaitingConditionsTasks,
+            Smell.Tapir
+        };
 
         public async Task<ICollection<Diagnostic>> Report(Compilation compilation)
         {
-            var solutionModel = await SolutionRepresentationFactory.Create(compilation);
-            var diagnostics = new List<Diagnostic>();
-            foreach (var reporter in Reporters.Values)
-            {
-                Logger.DebugLog("Executing Reporter:" + reporter.GetType().Name);
-                diagnostics.AddRange(reporter.Report(solutionModel));
-            }
-            AnalysisFinished();
-            return diagnostics;
+            return await ReportInternal(compilation, _defaultSmellCollection);
         }
 
         public async Task<ICollection<Diagnostic>> Report(Compilation compilation, ICollection<Smell> smells)
+        {
+            return await ReportInternal(compilation, smells);
+        }
+
+        private async Task<ICollection<Diagnostic>> ReportInternal(Compilation compilation, IEnumerable<Smell> smells)
         {
             var solutionModel = await SolutionRepresentationFactory.Create(compilation);
             var diagnostics = new List<Diagnostic>();
             foreach (var smell in smells)
             {
-                Logger.DebugLog("Executing Reporter:" + Reporters[smell].GetType().Name);
-                diagnostics.AddRange(Reporters[smell].Report(solutionModel));
+                Logger.DebugLog("Executing Reporter:" + _reporters[smell].GetType().Name);
+                diagnostics.AddRange(_reporters[smell].Report(solutionModel));
             }
-            AnalysisFinished();
+            ReportAnalysisEnd();
             return diagnostics;
         }
-        
-        private static void AnalysisFinished()
+
+        private static void ReportAnalysisEnd()
         {
             Logger.DebugLog("=================");
             Logger.DebugLog("Analysis finished");

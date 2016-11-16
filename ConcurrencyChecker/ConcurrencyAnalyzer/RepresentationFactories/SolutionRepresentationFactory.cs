@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Representation;
@@ -31,7 +29,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             {
                 var memberWithBodies = clazz.Members;
                 var memberBlocks = memberWithBodies.SelectMany(a => a.Blocks).ToList();
-                var invocations = memberBlocks.SelectMany(GetInvocations).ToList();
+                var invocations = memberBlocks.SelectMany(e => e.GetAllInvocations()).ToList();
                 foreach (var invocationExpressionRepresentation in invocations)
                 { 
                     foreach (var memberWithBody in memberWithBodies)
@@ -51,8 +49,8 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             Logger.DebugLog("ConnectInvocations");
             var memberWithBodies = solution.Classes.SelectMany(e => e.Members).ToList();
             var memberBlocks = memberWithBodies.SelectMany(a => a.Blocks).ToList();
-            var invocations = memberBlocks.SelectMany(GetInvocations).ToList();
-            int counter = 0;
+            var invocations = memberBlocks.SelectMany(e => e.GetAllInvocations()).ToList();
+            var counter = 0;
             var total = invocations.Count;
             Logger.DebugLog($"Total Invocations {total}");
             foreach (var invocationExpressionRepresentation in invocations)
@@ -63,12 +61,6 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                     {
                         invocationExpressionRepresentation.InvokedImplementations.Add(memberWithBody);
                     }
-                }
-
-                if (invocationExpressionRepresentation.InvokedImplementations.Count == 0)
-                {
-                    //Logger.DebugLog($"ERROR: Wrong Matching of impl:{invocationExpressionRepresentation.Implementation.ToString()}");
-                    //throw new NotImplementedException($"Wrong Matching of impl:{invocationExpressionRepresentation.Implementation.ToString()}");
                 }
                 Logger.DebugLog($"Current Invocation {counter} / {total}");
                 counter++;
@@ -81,9 +73,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             {
                 return true;
             }
-            var semanticModel = memberWithBody.ContainingClass.SemanticModel;
-            var classTypeSymbol = semanticModel.GetDeclaredSymbol(memberWithBody.ContainingClass.Implementation) as INamedTypeSymbol;
-            var hierarchieChecker = new HierarchieChecker(classTypeSymbol);
+            var hierarchieChecker = new HierarchieChecker(memberWithBody.ContainingClass.NamedTypeSymbol);
             
             if (CheckInheritatedClasses(invocationExpressionRepresentation, solution, hierarchieChecker))
             {
@@ -100,18 +90,15 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
         private static bool CheckInheritatedInterfaces(InvocationExpressionRepresentation invocationExpressionRepresentation, SolutionRepresentation solution, HierarchieChecker hierarchieChecker)
         {
-            foreach (var upperInterface in hierarchieChecker.InheritanceFromInterfaces)
+            foreach (var parentInterface in hierarchieChecker.InheritanceFromInterfaces)
             {
-                var interfaceName = upperInterface.ToString();
-                var clazz = GetInterface(interfaceName, solution);
-                if (clazz != null)
+                var clazz = solution.GetInterface(parentInterface.ToString());
+                if (clazz == null) continue;
+                foreach (var member in clazz.Members)
                 {
-                    foreach (var member in clazz.Members)
+                    if (member.OriginalDefinition == invocationExpressionRepresentation.Defintion)
                     {
-                        if (member.OriginalDefinition == invocationExpressionRepresentation.Defintion)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
@@ -125,7 +112,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             foreach (var upperClass in hierarchieChecker.InheritanceFromClass)
             {
                 var className = upperClass.ToString();
-                var clazz = GetClass(className, solution);
+                var clazz = solution.GetClass(className);
                 if (clazz != null)
                 {
                     foreach (var member in clazz.Members)
@@ -139,41 +126,16 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             }
             return false;
         }
-        
-        private static InterfaceRepresentation GetInterface(string interfaceName, SolutionRepresentation solution)
-        {
-            InterfaceRepresentation interfacee = null;
-            solution.InterfaceMap.TryGetValue(interfaceName, out interfacee);
-            return interfacee;
-        }
-        
-        private static ClassRepresentation GetClass(string className, SolutionRepresentation solution)
-        {
-            ClassRepresentation clazz = null;
-            solution.ClassMap.TryGetValue(className, out clazz);
-            return clazz;
-        }
-
-        private static IEnumerable<InvocationExpressionRepresentation> GetInvocations(Body body)
-        {
-            IEnumerable<InvocationExpressionRepresentation> invocations = new List<InvocationExpressionRepresentation>();
-            invocations = invocations.Concat(body.InvocationExpressions);
-            foreach (var block in body.Blocks)
-            {
-                invocations = invocations.Concat(GetInvocations(block));
-            }
-            return invocations;
-        }
 
         private static async Task AddSyntaxTrees(SolutionRepresentation solution, Compilation compilation)
         {
-            int total = compilation.SyntaxTrees.ToList().Count;
+            var total = compilation.SyntaxTrees.ToList().Count;
             Logger.DebugLog("Total Compilations: " + total);
 
-            int countClasses = await CountClassAndInterface(compilation); ;
+            var countClasses = await CountTypes(compilation);
             Logger.DebugLog("Total Classes & Interfaces: " + countClasses);
 
-            int counter = 0;
+            var counter = 0;
             foreach (var syntaxTree in compilation.SyntaxTrees)
             {
                 var semanticModel = compilation.GetSemanticModel(syntaxTree);
@@ -217,17 +179,21 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             }
         }
 
-        private static async Task<int> CountClassAndInterface(Compilation compilation)
+        private static async Task<int> CountTypes(Compilation compilation)
         {
-            int countClasses = 0;
+            var countClasses = 0;
             foreach (var syntaxTree in compilation.SyntaxTrees)
             {
-                var classes = await SyntaxNodeFilter.GetClasses(syntaxTree);
-                var interfaces = await SyntaxNodeFilter.GetInterfaces(syntaxTree);
-                countClasses += classes.ToList().Count + interfaces.ToList().Count;
+                countClasses += await CountTypes(syntaxTree);
             }
             return countClasses;
         }
 
+        private static async Task<int> CountTypes(SyntaxTree syntaxTree)
+        {
+            var classes = await SyntaxNodeFilter.GetClasses(syntaxTree);
+            var interfaces = await SyntaxNodeFilter.GetInterfaces(syntaxTree);
+            return classes.ToList().Count + interfaces.ToList().Count;
+        }
     }
 }
