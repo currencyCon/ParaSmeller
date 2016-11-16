@@ -22,7 +22,7 @@ namespace ConcurrencyAnalyzer.Reporters
             var invocationsInThreads = member.GetAllInvocations().Where(e => e.IsInvokedInTask);
             foreach (var invocationExpressionRepresentation in invocationsInThreads)
             {
-                if (invocationExpressionRepresentation.InvokedImplementation != null && invocationExpressionRepresentation.InvokedImplementation.GetChildren<LockStatementSyntax>().Any())
+                if (invocationExpressionRepresentation.InvokedImplementations.Count > 0 && invocationExpressionRepresentation.InvokedImplementations.SelectMany(s => s.GetChildren<LockStatementSyntax>()).Any())
                 {
                     Reports.Add(ReportSyncMechanismInTask(invocationExpressionRepresentation.Implementation));
                 }

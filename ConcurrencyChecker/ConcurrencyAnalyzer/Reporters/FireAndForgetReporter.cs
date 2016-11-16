@@ -63,11 +63,12 @@ namespace ConcurrencyAnalyzer.Reporters
                     invocationExpressionRepresentation.Arguments.Select(e => e.Identifier.Text)
                         .Contains(variableName))
                 {
-                    var calledMethod =
-                        invocationExpressionRepresentation.InvokedImplementation as MethodRepresentation;
-                    if (calledMethod != null)
+                    foreach (var calledMethod in invocationExpressionRepresentation.InvokedImplementations.OfType<MethodRepresentation>())
                     {
-                        return IsAwaitedInMethod(calledMethod);
+                        if (calledMethod != null)
+                        {
+                            return IsAwaitedInMethod(calledMethod);
+                        }
                     }
                 }
             }

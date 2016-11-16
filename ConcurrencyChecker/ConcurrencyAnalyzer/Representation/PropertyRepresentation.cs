@@ -12,8 +12,7 @@ namespace ConcurrencyAnalyzer.Representation
         public PropertyDeclarationSyntax Implementation { get; set; }
         public BlockSyntax Getter { get; set; }
         public BlockSyntax Setter { get; set; }
-
-        public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation)
+        public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation, string originalDefintion)
         {
             InvocationExpressions = new List<InvocationExpressionRepresentation>();
             Blocks = new List<Body>();
@@ -32,6 +31,7 @@ namespace ConcurrencyAnalyzer.Representation
             Setter =
             propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(
                 e => e.Keyword.ToString() == SetKeyWord)?.Body;
+            OriginalDefinition = originalDefintion;
         }
 
         public override bool IsFullySynchronized()

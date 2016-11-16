@@ -14,6 +14,7 @@ namespace ConcurrencyAnalyzer.SemanticAnalysis
             {
                 ClassName = symbol == null? DefaultSymbolValues.ClassName : GetClassName(symbol),
                 OriginalDefinition = symbol == null ? DefaultSymbolValues.OriginalDefinition : GetOriginalDefinition(symbol),
+                Definition = symbol == null ? DefaultSymbolValues.Definition : symbol.OriginalDefinition.ToString(),
                 Type = symbol == null ? DefaultSymbolValues.Type : GetType(symbol)
             };
         }

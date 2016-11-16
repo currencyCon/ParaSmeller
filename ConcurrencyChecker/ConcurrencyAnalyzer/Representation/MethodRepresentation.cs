@@ -8,7 +8,7 @@ namespace ConcurrencyAnalyzer.Representation
     {
         public MethodDeclarationSyntax Implementation { get; set; }
         public ICollection<ParameterSyntax> Parameters { get; set; }
-        public MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, ClassRepresentation classRepresentation)
+        public MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, ClassRepresentation classRepresentation, string originalDefintion)
         {
             Name = methodDeclarationSyntax.Identifier;
             Parameters = methodDeclarationSyntax.ParameterList.Parameters.ToList();
@@ -17,6 +17,7 @@ namespace ConcurrencyAnalyzer.Representation
             Blocks = new List<Body>();
             ContainingClass = classRepresentation;
             Callers = new List<InvocationExpressionRepresentation>();
+            OriginalDefinition = originalDefintion;
         }
 
         public override bool IsFullySynchronized()

@@ -11,7 +11,7 @@ namespace ConcurrencyAnalyzer.Reporters
         public const string Category = "Synchronization";
         public const string DiagnosticId = "OA001";
         public const string DiagnosticIdNestedAsync = "OA002";
-        private const int DepthAsyncTillWarning = 2;
+        public const int DepthAsyncTillWarning = 2;
 
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.OAAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.OAAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
@@ -29,13 +29,17 @@ namespace ConcurrencyAnalyzer.Reporters
                     return true;
                 }
                 counter++;
-                var invocations = method.GetAllInvocations();
-                foreach (var invocation in invocations.Where(i => i.InvokedImplementation is MethodRepresentation).Select(i => i.InvokedImplementation as MethodRepresentation))
+                var allMethodInvocations = method.GetAllInvocations();
+                foreach (var methodInvocation in allMethodInvocations)
                 {
-                    if (CheckForNestedAsync(invocation, counter))
+                    foreach (var invocation in methodInvocation.InvokedImplementations.OfType<MethodRepresentation>())
                     {
-                        return true;
+                        if (CheckForNestedAsync(invocation, counter))
+                        {
+                            return true;
+                        }
                     }
+                    
                 }
             }
             return false;

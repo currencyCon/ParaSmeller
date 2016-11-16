@@ -1,4 +1,5 @@
 ﻿using ConcurrencyAnalyzer.Representation;
+using ConcurrencyAnalyzer.SemanticAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -8,7 +9,8 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
     {
         public static PropertyRepresentation Create(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation, SemanticModel semanticModel)
         {
-            var propertyRepresentation = new PropertyRepresentation(propertyDeclarationSyntax, classRepresentation);
+            var symbolInfo = SymbolInspector.GetDeclaredSymbol<IPropertySymbol>(propertyDeclarationSyntax, semanticModel);
+            var propertyRepresentation = new PropertyRepresentation(propertyDeclarationSyntax, classRepresentation, symbolInfo.OriginalDefinition.ToString());
             AddAccessors(propertyRepresentation, semanticModel);
             return propertyRepresentation;
         }

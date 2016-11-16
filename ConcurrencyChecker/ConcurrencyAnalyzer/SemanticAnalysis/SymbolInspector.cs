@@ -19,5 +19,18 @@ namespace ConcurrencyAnalyzer.SemanticAnalysis
                 return default(TSymbolKind);
             }
         }
+
+        public static TSymbolKind GetDeclaredSymbol<TSymbolKind>(SyntaxNode syntaxNode, SemanticModel semanticModel) where TSymbolKind : ISymbol
+        {
+            try
+            {
+                var symbol = semanticModel.GetDeclaredSymbol(syntaxNode);
+                return (TSymbolKind)symbol;
+            }
+            catch (Exception)
+            {
+                return default(TSymbolKind);
+            }
+        }
     }
 }

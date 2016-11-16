@@ -7,5 +7,6 @@ namespace ConcurrencyAnalyzer.SemanticAnalysis
         public const SymbolKind Type = SymbolKind.NetModule;
         public const string ClassName = "";
         public const string OriginalDefinition = "";
+        public static string Definition = "";
     }
 }

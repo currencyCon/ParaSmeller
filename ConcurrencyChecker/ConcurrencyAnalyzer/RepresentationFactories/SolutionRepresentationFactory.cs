@@ -52,15 +52,17 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             var invocations = memberBlocks.SelectMany(GetInvocations).ToList();
             foreach (var invocationExpressionRepresentation in invocations)
             {
-                invocationExpressionRepresentation.InvokedImplementation =
-                    memberWithBodies.FirstOrDefault(
-                        e =>
-                            e.ContainingClass.Name.ToString() == invocationExpressionRepresentation.CalledClass&&
-                            e.Name.ToString() == invocationExpressionRepresentation.InvocationTargetName.ToString()
-                            );
-                if (invocationExpressionRepresentation.InvokedImplementation == null)
+                foreach (var memberWithBody in memberWithBodies)
                 {
-                    throw new NotImplementedException($"Wrong Matching of impl:{invocationExpressionRepresentation.Implementation.ToString()}");
+                    if (invocationExpressionRepresentation.Defintion == memberWithBody.OriginalDefinition)
+                    {
+                        invocationExpressionRepresentation.InvokedImplementations.Add(memberWithBody);
+                    }
+                }
+
+                if (invocationExpressionRepresentation.InvokedImplementations.Count == 0)
+                {
+                    //throw new NotImplementedException($"Wrong Matching of impl:{invocationExpressionRepresentation.Implementation.ToString()}");
                 }
             }
         }

@@ -33,7 +33,7 @@ namespace ConcurrencyChecker.Test.NestedSynchronizedMethodClass
             var expected = new DiagnosticResult
             {
                 Id = NestedSynchronizedMethodClassReporter.NestedLockingDiagnosticId,
-                Message = "Possible Deadlock with double Locking",
+                Message = NestedSynchronizedMethodClassReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -70,7 +70,7 @@ namespace ConcurrencyChecker.Test.NestedSynchronizedMethodClass
             var expected1 = new DiagnosticResult
             {
                 Id = NestedSynchronizedMethodClassReporter.NestedLockingDiagnosticId,
-                Message = "Possible Deadlock with double Locking",
+                Message = NestedSynchronizedMethodClassReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -81,7 +81,7 @@ namespace ConcurrencyChecker.Test.NestedSynchronizedMethodClass
             var expected2 = new DiagnosticResult
             {
                 Id = NestedSynchronizedMethodClassReporter.NestedLockingDiagnosticId,
-                Message = "Possible Deadlock with double Locking",
+                Message = NestedSynchronizedMethodClassReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -178,7 +178,7 @@ namespace ConcurrencyChecker.Test.NestedSynchronizedMethodClass
             var expected = new DiagnosticResult
             {
                 Id = NestedSynchronizedMethodClassReporter.NestedLockingDiagnosticId,
-                Message = "Possible Deadlock with double Locking",
+                Message = NestedSynchronizedMethodClassReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -220,7 +220,7 @@ namespace ConcurrencyChecker.Test.NestedSynchronizedMethodClass
             var expected = new DiagnosticResult
             {
                 Id = NestedSynchronizedMethodClassReporter.NestedLockingDiagnosticId,
-                Message = "Possible Deadlock with double Locking",
+                Message = NestedSynchronizedMethodClassReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -278,7 +278,7 @@ namespace ConcurrencyChecker.Test.NestedSynchronizedMethodClass
             var expected1 = new DiagnosticResult
             {
                 Id = NestedSynchronizedMethodClassReporter.NestedLockingDiagnosticId2,
-                Message = "Possible Deadlock with double Locking",
+                Message = NestedSynchronizedMethodClassReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -289,7 +289,7 @@ namespace ConcurrencyChecker.Test.NestedSynchronizedMethodClass
             var expected2 = new DiagnosticResult
             {
                 Id = NestedSynchronizedMethodClassReporter.NestedLockingDiagnosticId2,
-                Message = "Possible Deadlock with double Locking",
+                Message = NestedSynchronizedMethodClassReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -350,7 +350,7 @@ namespace ConcurrencyChecker.Test.NestedSynchronizedMethodClass
             var expected1 = new DiagnosticResult
             {
                 Id = NestedSynchronizedMethodClassReporter.NestedLockingDiagnosticId2,
-                Message = "Possible Deadlock with double Locking",
+                Message = NestedSynchronizedMethodClassReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
@@ -361,7 +361,7 @@ namespace ConcurrencyChecker.Test.NestedSynchronizedMethodClass
             var expected2 = new DiagnosticResult
             {
                 Id = NestedSynchronizedMethodClassReporter.NestedLockingDiagnosticId2,
-                Message = "Possible Deadlock with double Locking",
+                Message = NestedSynchronizedMethodClassReporter.MessageFormat.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {

@@ -12,6 +12,8 @@ namespace ConcurrencyAnalyzer.Representation
         public SyntaxToken Name { get; set; }
         public abstract bool IsFullySynchronized();
         public ICollection<InvocationExpressionRepresentation> Callers { get; set; }
+        public string OriginalDefinition { get; set; }
+
         public ICollection<InvocationExpressionRepresentation> GetAllInvocations()
         {
             var invocations = InvocationExpressions.ToList();

@@ -1,4 +1,5 @@
 ﻿using ConcurrencyAnalyzer.Representation;
+using ConcurrencyAnalyzer.SemanticAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -9,7 +10,8 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
         public static MethodRepresentation Create(MethodDeclarationSyntax methodDeclarationSyntax, ClassRepresentation classRepresentation, SemanticModel semanticModel)
         {
-            var methodRepresentation = new MethodRepresentation(methodDeclarationSyntax, classRepresentation);
+            var symbolInfo = SymbolInspector.GetDeclaredSymbol<IMethodSymbol>(methodDeclarationSyntax, semanticModel);
+            var methodRepresentation = new MethodRepresentation(methodDeclarationSyntax, classRepresentation, symbolInfo.OriginalDefinition.ToString());
             AddBaseBody(methodRepresentation, semanticModel);
             return methodRepresentation;
         }
