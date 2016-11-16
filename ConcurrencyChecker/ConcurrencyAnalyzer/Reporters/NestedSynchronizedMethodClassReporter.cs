@@ -110,7 +110,7 @@ namespace ConcurrencyAnalyzer.Reporters
             return parametersOfOwnType;
         }
 
-        public override void Register()
+        protected override void Register()
         {
             RegisterClassReport(CheckAquireMultipleLocks);
             RegisterClassReport(CheckForLockingOnSameType);

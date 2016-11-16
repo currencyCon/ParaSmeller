@@ -39,7 +39,7 @@ namespace ConcurrencyAnalyzer.Reporters
             }
         }
 
-        public override void Register()
+        protected override void Register()
         {
             RegisterClassReport(ReportThreadUsage);
         }

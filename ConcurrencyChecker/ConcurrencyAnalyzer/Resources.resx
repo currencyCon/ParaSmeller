@@ -119,58 +119,42 @@
   </resheader>
   <data name="HalfSynchronizedDescription" xml:space="preserve">
     <value>All Member of a class should synchronize the same invocations.</value>
-    <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="FireAndForgetAnalyzerDescription" xml:space="preserve">
     <value>In almost all cases Fire and Forget Calls should'nt take place.</value>
-    <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
-  <data name="AnalyzerMessageFormatHalfSynchronized" xml:space="preserve">
+  <data name="HalfSynchronizedAnalyzerMessageFormat" xml:space="preserve">
     <value>The {0} {1} is also used in another synchronized Method . Consider synchronizing also this one.</value>
-    <comment>The format-able message the diagnostic displays.</comment>
   </data>
-  <data name="AnalyzerMessageFormatFireAndForget" xml:space="preserve">
+  <data name="FireAndForgetAnalyzerMessageFormat" xml:space="preserve">
     <value>The result of this Computation is potentially never awaited</value>
-    <comment>The format-able message the diagnostic displays.</comment>
   </data>
-  <data name="AnalyzerMessageFormatUnsynchronizedProperty" xml:space="preserve">
+  <data name="UnsynchronizedPropertyAnalyzerMessageFormat" xml:space="preserve">
     <value>The Property is used in a synchronized Member. Consider synchronizing it.</value>
-    <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="HalfSynchronizedTitle" xml:space="preserve">
     <value>Synchronization should be absolute.</value>
-    <comment>The title of the diagnostic.</comment>
   </data>
   <data name="FireAndForgetAnalyzerTitle" xml:space="preserve">
     <value>A Computation in a seperate Thread is not awaited</value>
-    <comment>The title of the diagnostic.</comment>
-  </data>
-  <data name="AnalyzerMessageFormatSingleLine" xml:space="preserve">
-    <value>'new Thread' should be replaced with Task.Run</value>
   </data>
   <data name="ETCAnalyzerDescription" xml:space="preserve">
     <value>Threads should be replaced with Task</value>
-    <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="ETCAnalyzerMessageFormat" xml:space="preserve">
     <value>Threads should be replaced with Task</value>
-    <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="ETCAnalyzerTitle" xml:space="preserve">
     <value>Threads shouldn't be used</value>
-    <comment>The title of the diagnostic.</comment>
   </data>
   <data name="NSMCAnalyzerDescription" xml:space="preserve">
-    <value>No Deadlocks should occur in Code</value>
-    <comment>An optional longer localizable description of the diagnostic.</comment>
+    <value>No deadlocks should occur in code</value>
   </data>
   <data name="NSMCAnalyzerMessageFormat" xml:space="preserve">
-    <value>Possible Deadlock with double Locking</value>
-    <comment>The format-able message the diagnostic displays.</comment>
+    <value>Possible deadlock with double locking</value>
   </data>
   <data name="NSMCAnalyzerTitle" xml:space="preserve">
-    <value>NestedSynchronizedMethod Calls</value>
-    <comment>The title of the diagnostic.</comment>
+    <value>Nested synchronized method calls</value>
   </data>
   <data name="MWSAnalyzerDescription" xml:space="preserve">
     <value>Starvation could happen</value>
@@ -194,13 +178,13 @@
     <value>Tapir :)</value>
   </data>
   <data name="OAAnalyzerDescription" xml:space="preserve">
-    <value>Over async desc</value>
+    <value>Wrong or complicated usage of async</value>
   </data>
   <data name="OAAnalyzerMessageFormat" xml:space="preserve">
     <value>async shouldn't be used in private methods</value>
   </data>
   <data name="OAAnalyzerTitle" xml:space="preserve">
-    <value>Over Async</value>
+    <value>Wrong or complicated usage of async</value>
   </data>
   <data name="OAAnalyzerMessageFormatNestedAsync" xml:space="preserve">
     <value>Async shoudn't be nested {0} times</value>
@@ -208,14 +192,14 @@
   <data name="PSAnalyzerTitle" xml:space="preserve">
     <value>Primitive Synchronization</value>
   </data>
-  <data name="PrimitiveSynchronizationAnalyzerMessageFormat" xml:space="preserve">
+  <data name="PSAnalyzerMessageFormat" xml:space="preserve">
     <value>Consider using more abstract constructs like lock if not implementing a high performant library.</value>
   </data>
   <data name="PSAnalyzerDescription" xml:space="preserve">
     <value>The Synchronization Mechanicms used are very primitive. Consider using a higher form of abstraction. </value>
   </data>
   <data name="TRRAnalyzerDescription" xml:space="preserve">
-    <value>Timeouts can lead to starvation2</value>
+    <value>Timeouts can lead to starvation</value>
   </data>
   <data name="TRRAnalyzerMessageFormat" xml:space="preserve">
     <value>Timeouts can lead to starvation</value>
@@ -235,7 +219,7 @@
   <data name="WCTAnalyzerTitle" xml:space="preserve">
     <value>Waiting Conditions between Tasks</value>
   </data>
-  <data name="WaitingConditionsTasksAnalyzerMessageFormat" xml:space="preserve">
+  <data name="WCTAnalyzerMessageFormat" xml:space="preserve">
     <value>This Tasks uses Synchronization Mechanisms. Be sure to not introduce Deadlocks or similiar hazards when working with multiple Tasks.</value>
   </data>
   <data name="WCTAnalyzerDescription" xml:space="preserve">

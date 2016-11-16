@@ -8,13 +8,13 @@ namespace ConcurrencyAnalyzer.Reporters
     {
         public const string DiagnosticId = "TAPIR001";
         public const string Category = "ParallelCorrectness";
-        public const string TapirClass = "Tapir";
+        private const string TapirClass = "Tapir";
 
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.TapirAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.TapirAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.TapirAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 
-        public override void Register()
+        protected override void Register()
         {
             RegisterClassReport(CheckClassForTapir);
         }

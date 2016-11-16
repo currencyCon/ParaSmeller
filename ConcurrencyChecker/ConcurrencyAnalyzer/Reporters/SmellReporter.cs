@@ -30,8 +30,10 @@ namespace ConcurrencyAnalyzer.Reporters
             var diagnostics = new List<Diagnostic>();
             foreach (var reporter in Reporters.Values)
             {
+                Logger.DebugLog("Executing Reporter:" + reporter.GetType().Name);
                 diagnostics.AddRange(reporter.Report(solutionModel));
             }
+            AnalysisFinished();
             return diagnostics;
         }
 
@@ -41,14 +43,19 @@ namespace ConcurrencyAnalyzer.Reporters
             var diagnostics = new List<Diagnostic>();
             foreach (var smell in smells)
             {
+                Logger.DebugLog("Executing Reporter:" + Reporters[smell].GetType().Name);
                 diagnostics.AddRange(Reporters[smell].Report(solutionModel));
             }
+            AnalysisFinished();
             return diagnostics;
         }
-
-        public async Task<ICollection<Diagnostic>> Report(Compilation compilation, Smell smell)
+        
+        private static void AnalysisFinished()
         {
-            return await Report(compilation, new List<Smell>{smell});
+            Logger.DebugLog("=================");
+            Logger.DebugLog("Analysis finished");
+            Logger.DebugLog("=================");
         }
+
     }
 }

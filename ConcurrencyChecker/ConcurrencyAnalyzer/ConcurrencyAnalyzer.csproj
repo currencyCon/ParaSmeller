@@ -44,6 +44,7 @@
     <Compile Include="Reporters\FireAndForgetReporter.cs" />
     <Compile Include="Reporters\HalfSynchronizedReporter.cs" />
     <Compile Include="Reporters\WaitingConditionsTasksReporter.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="SemanticAnalysis\SymbolInspector.cs" />
     <Compile Include="SemanticAnalysis\SynchronizationInspector.cs" />
     <Compile Include="Reporters\MonitorOrWaitSignalReporter.cs" />

@@ -58,7 +58,7 @@ namespace ConcurrencyAnalyzer.Reporters
             return new Diagnostic(DiagnosticId, Title, MessageFormatTentativelyResourceReference, Description, Category, syntaxnode.GetLocation());
         }
 
-        public override void Register()
+        protected override void Register()
         {
             RegisterMethodReport(CheckForNotAllowedApiUsages);
         }
