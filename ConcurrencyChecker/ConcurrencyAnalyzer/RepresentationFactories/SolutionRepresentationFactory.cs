@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Representation;
@@ -53,6 +54,10 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                             e.ContainingClass.Name.ToString() == invocationExpressionRepresentation.CalledClass&&
                             e.Name.ToString() == invocationExpressionRepresentation.InvocationTargetName.ToString()
                             );
+                if (invocationExpressionRepresentation.InvokedImplementation == null)
+                {
+                    throw new NotImplementedException($"Wrong Matching of impl:{invocationExpressionRepresentation.Implementation.ToString()}");
+                }
             }
         }
 
