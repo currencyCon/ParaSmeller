@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using ConcurrencyAnalyzer;
 using ConcurrencyAnalyzer.Diagnostics;
 using ConcurrencyAnalyzer.Reporters;
 using Microsoft.CodeAnalysis;
@@ -10,9 +13,10 @@ namespace ConcurrencyChecker.Analyzer
 {
     public abstract class BaseAnalyzer: DiagnosticAnalyzer
     {
+        private static readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1);
         protected static void ReportDiagnostics(CompilationAnalysisContext context, ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics)
         {
-          
+            Logger.DebugLog($"Found {diagnostics.Count} diagnostics");
             foreach (var diagnostic in diagnostics)
             {
                 var diag = new DiagnosticDescriptor(diagnostic.Id, diagnostic.Title, diagnostic.MessageFormat,
@@ -36,19 +40,27 @@ namespace ConcurrencyChecker.Analyzer
 
         private async void RegisterDiagnostics(CompilationAnalysisContext context)
         {
-            
-            if (SelectSmell().Any())
+            bool hasLock = await _semaphoreSlim.WaitAsync(new TimeSpan(0,0,0,1));
+            if (hasLock)
             {
-                var smellReporter = new SmellReporter();
-                var diagnostics = await smellReporter.Report(context.Compilation, SelectSmell());
-                ReportDiagnostics(context, diagnostics);
+                Logger.DebugLog("Starting Analyzer");
+                if (SelectSmell().Any())
+                {
+                    var smellReporter = new SmellReporter();
+                    ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics;
+                    diagnostics = await smellReporter.Report(context.Compilation, SelectSmell());
+                    ReportDiagnostics(context, diagnostics);
 
-            }
-            else
-            {
-                var smellReporter = new SmellReporter();
-                var diagnostics = await smellReporter.Report(context.Compilation);
-                ReportDiagnostics(context, diagnostics);
+                }
+                else
+                {
+                    var smellReporter = new SmellReporter();
+                    ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics;
+                    diagnostics = await smellReporter.Report(context.Compilation);
+                    ReportDiagnostics(context, diagnostics);
+                }
+
+                _semaphoreSlim.Release(1);
             }
         }
 

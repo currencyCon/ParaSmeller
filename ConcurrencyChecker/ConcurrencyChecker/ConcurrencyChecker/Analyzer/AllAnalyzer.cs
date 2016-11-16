@@ -22,6 +22,7 @@ namespace ConcurrencyChecker.Analyzer
             Rules.RuleFireAndForgetCallRule, 
             Rules.TapirRule, 
             Rules.TentativelyResourceReferenceRule, 
-            Rules.UnsynchronizedPropertyRule);
+            Rules.UnsynchronizedPropertyRule, 
+            Rules.WaitingConditionsTasksRule);
     }
 }

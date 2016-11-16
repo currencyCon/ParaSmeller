@@ -156,7 +156,15 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 counter++;
                 var classRepresentation = ClassRepresentationFactory.Create(classDeclarationSyntax, semanticModel);
                 solution.Classes.Add(classRepresentation);
-                solution.ClassMap.Add(classRepresentation.NamedTypeSymbol.ToString(), classRepresentation);
+                try
+                {
+                    solution.ClassMap.Add(classRepresentation.NamedTypeSymbol.ToString(), classRepresentation);
+                }
+                catch (Exception)
+                {
+                    var name = classRepresentation.NamedTypeSymbol.ToString();
+                    var test = 01;
+                }
                 if (counter%10 == 0)
                 {
                     Logger.DebugLog(""+counter);
