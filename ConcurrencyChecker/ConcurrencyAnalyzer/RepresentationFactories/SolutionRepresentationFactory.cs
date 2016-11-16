@@ -81,9 +81,9 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             {
                 return true;
             }
-            var semanticModel = memberWithBody.ContainingClass.SemanticModel;
-            var classTypeSymbol = semanticModel.GetDeclaredSymbol(memberWithBody.ContainingClass.Implementation) as INamedTypeSymbol;
-            var hierarchieChecker = new HierarchieChecker(classTypeSymbol);
+
+            //TODO: calculate hierarchie at adding the class to the map
+            var hierarchieChecker = new HierarchieChecker(memberWithBody.ContainingClass.NamedTypeSymbol);
             
             if (CheckInheritatedClasses(invocationExpressionRepresentation, solution, hierarchieChecker))
             {
@@ -194,7 +194,15 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 counter++;
                 var classRepresentation = ClassRepresentationFactory.Create(classDeclarationSyntax, semanticModel);
                 solution.Classes.Add(classRepresentation);
-                solution.ClassMap.Add(classRepresentation.NamedTypeSymbol.ToString(), classRepresentation);
+                try
+                {
+                    solution.ClassMap.Add(classRepresentation.NamedTypeSymbol.ToString(), classRepresentation);
+                }
+                catch (Exception)
+                {
+                    var name = classRepresentation.NamedTypeSymbol.ToString();
+                    var test = 01;
+                }
                 if (counter%10 == 0)
                 {
                     Logger.DebugLog(""+counter);
