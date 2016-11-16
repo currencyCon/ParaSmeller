@@ -21,11 +21,16 @@ namespace ConcurrencyAnalyzer.Representation
             Implementation = propertyDeclarationSyntax;
             Name = Implementation.Identifier;
             ContainingClass = classRepresentation;
+            if (propertyDeclarationSyntax.AccessorList == null)
+            {
+                var z = 2;
+            }
+          
             Getter =
-                propertyDeclarationSyntax.AccessorList.Accessors.FirstOrDefault(
+                propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(
                     e => e.Keyword.ToString() == GetKeyWord)?.Body;
             Setter =
-            propertyDeclarationSyntax.AccessorList.Accessors.FirstOrDefault(
+            propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(
                 e => e.Keyword.ToString() == SetKeyWord)?.Body;
         }
 
