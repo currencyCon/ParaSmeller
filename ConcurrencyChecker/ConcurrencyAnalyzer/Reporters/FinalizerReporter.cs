@@ -10,11 +10,10 @@ namespace ConcurrencyAnalyzer.Reporters
     public class FinalizerReporter: BaseReporter
     {
         public const string Category = "Synchronization";
-        public const string FinalizerSynchronizationDiagnosticId = "PS001";
+        public const string FinalizerSynchronizationDiagnosticId = "FS001";
 
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.FSAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormatFinalizerSynchronization = new LocalizableResourceString(nameof(Resources.FinalizerSynchronizationAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
-
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.FSAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 
         private void CheckClassForUnsynchronizedFinalizers(ClassRepresentation classRepresentation)
@@ -99,7 +98,6 @@ namespace ConcurrencyAnalyzer.Reporters
         private static Diagnostic ReportUnsynchronizedField(SyntaxNode syntaxnode)
         {
             return new Diagnostic(FinalizerSynchronizationDiagnosticId, Title, MessageFormatFinalizerSynchronization, Description, Category, syntaxnode.GetLocation());
-
         }
 
         public override void Register()
