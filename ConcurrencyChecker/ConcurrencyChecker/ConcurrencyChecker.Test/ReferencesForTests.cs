@@ -1,4 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using ConcurrencyChecker.Analyzer;
+using ConcurrencyChecker.Test.NestedSynchronizedMethodClass;
+using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TestHelper;
 
 namespace ConcurrencyChecker.Test
 {
@@ -23,14 +27,108 @@ namespace ConcurrencyChecker.Test
     [DeploymentItem("bin\\debug\\System.Composition.TypedParts.dll")]
     [DeploymentItem("bin\\debug\\System.Reflection.Metadata.dll")]
     [TestClass]
-    public class ReferencesForTests
+    public class ReferencesForTests : CodeFixVerifier
     {
+
+
 
         [TestMethod]
         public void ReferenceTest()
         {
            Assert.IsTrue(true);
         }
-        
+
+        [TestMethod]
+        public void TestWithInterface()
+        {
+            string test = @"
+using System;
+
+namespace ConsoleApplication3
+{
+    public class HausKatze : IKatze
+    {
+        public void Laufen()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    public class NormaleKatze : IKatze
+    {
+        public void Laufen()
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public interface IKatze
+    {
+        void Laufen();
+    }
+
+    public class Main
+    {
+        public void Test(IKatze katze)
+        {
+            katze.Laufen();
+        }
+    }
+}
+
+
+";
+            VerifyCSharpDiagnostic(test);
+        }
+
+
+        [TestMethod]
+        public void TestWithAbstractClass()
+        {
+            string test = @"
+using System;
+
+namespace ConsoleApplication3
+{
+    public class HausKatze : IKatze
+    {
+        public override void Laufen()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    public class NormaleKatze : IKatze
+    {
+        public override void Laufen()
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public abstract class IKatze
+    {
+        public abstract void Laufen();
+    }
+
+    public class Main
+    {
+        public void Test(IKatze katze)
+        {
+            katze.Laufen();
+        }
+    }
+}
+
+
+";
+            VerifyCSharpDiagnostic(test);
+        }
+
+        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
+        {
+            return new AllAnalyzer();
+        }
+
     }
 }

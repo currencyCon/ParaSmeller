@@ -20,6 +20,18 @@ namespace ConcurrencyAnalyzer.Representation
             OriginalDefinition = originalDefintion;
         }
 
+        public MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, string originalDefintion)
+        {
+            Name = methodDeclarationSyntax.Identifier;
+            Parameters = methodDeclarationSyntax.ParameterList.Parameters.ToList();
+            InvocationExpressions = new List<InvocationExpressionRepresentation>();
+            Implementation = methodDeclarationSyntax;
+            Blocks = new List<Body>();
+            ContainingInterface = interfaceRepresentation;
+            Callers = new List<InvocationExpressionRepresentation>();
+            OriginalDefinition = originalDefintion;
+        }
+
         public override bool IsFullySynchronized()
         {
             if (HasStandardMethodBody())

@@ -14,6 +14,12 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
             var root = await syntaxTree.GetRootAsync();
             return root.GetChildren<ClassDeclarationSyntax>();
         }
+        public static async Task<IEnumerable<InterfaceDeclarationSyntax>> GetInterfaces(SyntaxTree syntaxTree)
+        {
+            var root = await syntaxTree.GetRootAsync();
+            return root.GetChildren<InterfaceDeclarationSyntax>();
+        }
+
         public static IEnumerable<LockStatementSyntax> GetLockStatements<TSyntaxElement>(TSyntaxElement synchronizedElement) where TSyntaxElement : SyntaxNode
         {
             return synchronizedElement.GetChildren<LockStatementSyntax>();

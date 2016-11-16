@@ -16,6 +16,14 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             return methodRepresentation;
         }
 
+        public static MethodRepresentation Create(MethodDeclarationSyntax methodDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, SemanticModel semanticModel)
+        {
+            var symbolInfo = SymbolInspector.GetDeclaredSymbol<IMethodSymbol>(methodDeclarationSyntax, semanticModel);
+            var methodRepresentation = new MethodRepresentation(methodDeclarationSyntax, interfaceRepresentation, symbolInfo.OriginalDefinition.ToString());
+            AddBaseBody(methodRepresentation, semanticModel);
+            return methodRepresentation;
+        }
+
         private static void AddBaseBody(MethodRepresentation methodRepresentation, SemanticModel semanticModel)
         {
             if (methodRepresentation.Implementation.Body != null)

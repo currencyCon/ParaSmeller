@@ -15,6 +15,14 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             return propertyRepresentation;
         }
 
+        public static PropertyRepresentation Create(PropertyDeclarationSyntax propertyDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, SemanticModel semanticModel)
+        {
+            var symbolInfo = SymbolInspector.GetDeclaredSymbol<IPropertySymbol>(propertyDeclarationSyntax, semanticModel);
+            var propertyRepresentation = new PropertyRepresentation(propertyDeclarationSyntax, interfaceRepresentation, symbolInfo.OriginalDefinition.ToString());
+            AddAccessors(propertyRepresentation, semanticModel);
+            return propertyRepresentation;
+        }
+
         private static void AddAccessors(PropertyRepresentation propertyRepresentation, SemanticModel semanticModel)
         {
             if (propertyRepresentation.Getter != null)

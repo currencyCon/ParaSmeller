@@ -8,6 +8,7 @@ namespace ConcurrencyAnalyzer.Representation
     {
         public ICollection<InvocationExpressionRepresentation> InvocationExpressions { get; set; }
         public ClassRepresentation ContainingClass { get; set; }
+        public InterfaceRepresentation ContainingInterface { get; set; }
         public ICollection<Body> Blocks { get; set; }
         public SyntaxToken Name { get; set; }
         public abstract bool IsFullySynchronized();

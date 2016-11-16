@@ -20,17 +20,23 @@ namespace ConcurrencyAnalyzer.Representation
             Implementation = propertyDeclarationSyntax;
             Name = Implementation.Identifier;
             ContainingClass = classRepresentation;
-            if (propertyDeclarationSyntax.AccessorList == null)
-            {
-                var z = 2;
-            }
-          
-            Getter =
-                propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(
-                    e => e.Keyword.ToString() == GetKeyWord)?.Body;
-            Setter =
-            propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(
-                e => e.Keyword.ToString() == SetKeyWord)?.Body;
+            
+            Getter = propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(e => e.Keyword.ToString() == GetKeyWord)?.Body;
+            Setter = propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(e => e.Keyword.ToString() == SetKeyWord)?.Body;
+            OriginalDefinition = originalDefintion;
+        }
+
+        public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, string originalDefintion)
+        {
+            InvocationExpressions = new List<InvocationExpressionRepresentation>();
+            Blocks = new List<Body>();
+            Callers = new List<InvocationExpressionRepresentation>();
+            Implementation = propertyDeclarationSyntax;
+            Name = Implementation.Identifier;
+            ContainingInterface = interfaceRepresentation;
+
+            Getter = propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(e => e.Keyword.ToString() == GetKeyWord)?.Body;
+            Setter = propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(e => e.Keyword.ToString() == SetKeyWord)?.Body;
             OriginalDefinition = originalDefintion;
         }
 

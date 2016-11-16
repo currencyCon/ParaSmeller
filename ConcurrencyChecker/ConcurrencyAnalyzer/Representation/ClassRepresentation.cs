@@ -23,6 +23,7 @@ namespace ConcurrencyAnalyzer.Representation
         public ICollection<MethodRepresentation> Methods => Members.OfType<MethodRepresentation>().ToList();
         public ICollection<PropertyRepresentation> Properties => Members.OfType<PropertyRepresentation>().ToList();
         public readonly ICollection<FieldDeclarationSyntax> Fields;
+        public INamedTypeSymbol NamedTypeSymbol { get; set; }
 
         public ClassRepresentation(ClassDeclarationSyntax classDeclarationSyntax, SemanticModel semanticModel)
         {
@@ -32,8 +33,9 @@ namespace ConcurrencyAnalyzer.Representation
             Implementation = classDeclarationSyntax;
             Destructor = Implementation.GetFirstChild<DestructorDeclarationSyntax>();
             Fields = Implementation.GetChildren<FieldDeclarationSyntax>().ToList();
+            NamedTypeSymbol = semanticModel.GetDeclaredSymbol(Implementation) ;
         }
-
+        
         public IEnumerable<IdentifierNameSyntax> GetIdentifiersInLocks()
         {
             IEnumerable<IdentifierNameSyntax> identifiers = new List<IdentifierNameSyntax>();
