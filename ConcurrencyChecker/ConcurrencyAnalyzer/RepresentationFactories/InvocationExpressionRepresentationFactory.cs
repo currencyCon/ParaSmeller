@@ -30,6 +30,10 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             {
                 return CreateElementAccessInvocation(invocationExpressionSyntax, semanticModel, containingBody);
             }
+            if (invocationExpressionSyntax.Expression is ParenthesizedExpressionSyntax)
+            {
+                return CreateParenthesizedInvocation(invocationExpressionSyntax, semanticModel, containingBody);
+            }
             if (invocationExpressionSyntax.Expression is InvocationExpressionSyntax)
             {
                 return Create((InvocationExpressionSyntax)invocationExpressionSyntax.Expression, semanticModel, containingBody);
@@ -44,6 +48,13 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 return CreateSelfInvocation(invocation, semanticModel, containingBody);
             }
             throw new NotImplementedException($"An unexpected Type of invocationExpression was encountered: {invocationExpressionSyntax.ToFullString()}");
+        }
+
+        private static InvocationExpressionRepresentation CreateParenthesizedInvocation(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody)
+        {
+            var invocationExpression = (ParenthesizedExpressionSyntax)invocationExpressionSyntax.Expression;
+            var invocationTarget = invocationExpression;
+            return CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget.GetFirstChild<SimpleNameSyntax>());
         }
 
         private static InvocationExpressionRepresentation CreateElementAccessInvocation(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody)

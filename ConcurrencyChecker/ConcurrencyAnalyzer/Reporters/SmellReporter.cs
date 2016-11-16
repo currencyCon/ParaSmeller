@@ -9,7 +9,7 @@ namespace ConcurrencyAnalyzer.Reporters
 {
     public class SmellReporter
     {
-        private static readonly Dictionary<Smell, BaseReporter> Reporters = new Dictionary<Smell, BaseReporter>
+        private readonly Dictionary<Smell, BaseReporter> Reporters = new Dictionary<Smell, BaseReporter>
         {
             {Smell.PrimitiveSynchronization, new PrimitiveSynchronizationReporter()},
             {Smell.FireAndForget, new FireAndForgetReporter() },
