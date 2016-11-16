@@ -62,42 +62,6 @@ namespace ConcurrencyAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The result of this Computation is potentially never awaited.
-        /// </summary>
-        internal static string AnalyzerMessageFormatFireAndForget {
-            get {
-                return ResourceManager.GetString("AnalyzerMessageFormatFireAndForget", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The {0} {1} is also used in another synchronized Method . Consider synchronizing also this one..
-        /// </summary>
-        internal static string AnalyzerMessageFormatHalfSynchronized {
-            get {
-                return ResourceManager.GetString("AnalyzerMessageFormatHalfSynchronized", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;new Thread&apos; should be replaced with Task.Run.
-        /// </summary>
-        internal static string AnalyzerMessageFormatSingleLine {
-            get {
-                return ResourceManager.GetString("AnalyzerMessageFormatSingleLine", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Property is used in a synchronized Member. Consider synchronizing it..
-        /// </summary>
-        internal static string AnalyzerMessageFormatUnsynchronizedProperty {
-            get {
-                return ResourceManager.GetString("AnalyzerMessageFormatUnsynchronizedProperty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Threads should be replaced with Task.
         /// </summary>
         internal static string ETCAnalyzerDescription {
@@ -143,6 +107,15 @@ namespace ConcurrencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The result of this Computation is potentially never awaited.
+        /// </summary>
+        internal static string FireAndForgetAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("FireAndForgetAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A Computation in a seperate Thread is not awaited.
         /// </summary>
         internal static string FireAndForgetAnalyzerTitle {
@@ -166,6 +139,15 @@ namespace ConcurrencyAnalyzer {
         internal static string FSAnalyzerTitle {
             get {
                 return ResourceManager.GetString("FSAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} {1} is also used in another synchronized Method . Consider synchronizing also this one..
+        /// </summary>
+        internal static string HalfSynchronizedAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("HalfSynchronizedAnalyzerMessageFormat", resourceCulture);
             }
         }
         
@@ -224,7 +206,7 @@ namespace ConcurrencyAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Deadlocks should occur in Code.
+        ///   Looks up a localized string similar to No deadlocks should occur in code.
         /// </summary>
         internal static string NSMCAnalyzerDescription {
             get {
@@ -233,7 +215,7 @@ namespace ConcurrencyAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Possible Deadlock with double Locking.
+        ///   Looks up a localized string similar to Possible deadlock with double locking.
         /// </summary>
         internal static string NSMCAnalyzerMessageFormat {
             get {
@@ -242,7 +224,7 @@ namespace ConcurrencyAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NestedSynchronizedMethod Calls.
+        ///   Looks up a localized string similar to Nested synchronized method calls.
         /// </summary>
         internal static string NSMCAnalyzerTitle {
             get {
@@ -251,7 +233,7 @@ namespace ConcurrencyAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Over async desc.
+        ///   Looks up a localized string similar to Wrong or complicated usage of async.
         /// </summary>
         internal static string OAAnalyzerDescription {
             get {
@@ -278,20 +260,11 @@ namespace ConcurrencyAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Over Async.
+        ///   Looks up a localized string similar to Wrong or complicated usage of async.
         /// </summary>
         internal static string OAAnalyzerTitle {
             get {
                 return ResourceManager.GetString("OAAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Consider using more abstract constructs like lock if not implementing a high performant library..
-        /// </summary>
-        internal static string PrimitiveSynchronizationAnalyzerMessageFormat {
-            get {
-                return ResourceManager.GetString("PrimitiveSynchronizationAnalyzerMessageFormat", resourceCulture);
             }
         }
         
@@ -301,6 +274,15 @@ namespace ConcurrencyAnalyzer {
         internal static string PSAnalyzerDescription {
             get {
                 return ResourceManager.GetString("PSAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using more abstract constructs like lock if not implementing a high performant library..
+        /// </summary>
+        internal static string PSAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("PSAnalyzerMessageFormat", resourceCulture);
             }
         }
         
@@ -341,7 +323,7 @@ namespace ConcurrencyAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Timeouts can lead to starvation2.
+        ///   Looks up a localized string similar to Timeouts can lead to starvation.
         /// </summary>
         internal static string TRRAnalyzerDescription {
             get {
@@ -368,11 +350,11 @@ namespace ConcurrencyAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This Tasks uses Synchronization Mechanisms. Be sure to not introduce Deadlocks or similiar hazards when working with multiple Tasks..
+        ///   Looks up a localized string similar to The Property is used in a synchronized Member. Consider synchronizing it..
         /// </summary>
-        internal static string WaitingConditionsTasksAnalyzerMessageFormat {
+        internal static string UnsynchronizedPropertyAnalyzerMessageFormat {
             get {
-                return ResourceManager.GetString("WaitingConditionsTasksAnalyzerMessageFormat", resourceCulture);
+                return ResourceManager.GetString("UnsynchronizedPropertyAnalyzerMessageFormat", resourceCulture);
             }
         }
         
@@ -382,6 +364,15 @@ namespace ConcurrencyAnalyzer {
         internal static string WCTAnalyzerDescription {
             get {
                 return ResourceManager.GetString("WCTAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This Tasks uses Synchronization Mechanisms. Be sure to not introduce Deadlocks or similiar hazards when working with multiple Tasks..
+        /// </summary>
+        internal static string WCTAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("WCTAnalyzerMessageFormat", resourceCulture);
             }
         }
         

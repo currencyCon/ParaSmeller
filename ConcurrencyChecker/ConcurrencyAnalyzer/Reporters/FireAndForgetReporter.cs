@@ -13,7 +13,7 @@ namespace ConcurrencyAnalyzer.Reporters
         private const string ThreadStartDefintion = "System.Threading.Tasks.Task.Run";
         private const string TaskWaitMethodName = "Wait";
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
-        public static readonly LocalizableString MessageFormatFireAndForghet = new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormatFireAndForget), Resources.ResourceManager, typeof(Resources));
+        public static readonly LocalizableString MessageFormatFireAndForghet = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         public const string Category = "Synchronization";
 
@@ -118,7 +118,7 @@ namespace ConcurrencyAnalyzer.Reporters
 
         }
 
-        public override void Register()
+        protected override void Register()
         {
             RegisterMemberReport(InspectMemberForUnawaitedTasks);
         }

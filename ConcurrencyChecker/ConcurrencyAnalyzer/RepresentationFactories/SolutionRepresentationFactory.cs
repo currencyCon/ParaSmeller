@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Representation;
@@ -13,6 +14,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
     {
         public static async Task<SolutionRepresentation> Create(Compilation compilation)
         {
+            Logger.DebugLog("Creating SolutionRepresentation");
             var solution = new SolutionRepresentation(compilation.AssemblyName.Trim());
             await AddSyntaxTrees(solution, compilation);
             ConnectInvocations(solution);
@@ -22,6 +24,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
         private static void ConnectReverseInvocations(SolutionRepresentation solution)
         {
+            Logger.DebugLog("ConnectReverseInvocations");
             foreach (var clazz in solution.Classes)
             {
                 var memberWithBodies = clazz.Members;
@@ -43,6 +46,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
         private static void ConnectInvocations(SolutionRepresentation solution)
         {
+            Logger.DebugLog("ConnectInvocations");
             var memberWithBodies = solution.Classes.SelectMany(e => e.Members).ToList();
             var memberBlocks = memberWithBodies.SelectMany(a => a.Blocks).ToList();
             var invocations = memberBlocks.SelectMany(GetInvocations).ToList();
@@ -74,20 +78,49 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
         private static async Task AddSyntaxTrees(SolutionRepresentation solution, Compilation compilation)
         {
+            int total = compilation.SyntaxTrees.ToList().Count;
+            Logger.DebugLog("Total Compilations: " + total);
+
+            int countClasses = await CountClasses(compilation); ;
+            Logger.DebugLog("Total Classes: " + countClasses);
+
+            int counter = 0;
             foreach (var syntaxTree in compilation.SyntaxTrees)
             {
                 var semanticModel = compilation.GetSemanticModel(syntaxTree);
                 var classes = await SyntaxNodeFilter.GetClasses(syntaxTree);
-                AddClassRepresentations(solution, classes, semanticModel);
+                AddClassRepresentations(solution, classes, semanticModel, ref counter);
             }
+
+            Logger.DebugLog("AddSyntaxTrees finished");
         }
 
-        private static void AddClassRepresentations(SolutionRepresentation solution, IEnumerable<ClassDeclarationSyntax> classes, SemanticModel semanticModel)
+        
+        private static void AddClassRepresentations(SolutionRepresentation solution, IEnumerable<ClassDeclarationSyntax> classes, SemanticModel semanticModel, ref int counter)
         {
+            
             foreach (var classDeclarationSyntax in classes)
             {
+                counter++;
                 solution.Classes.Add(ClassRepresentationFactory.Create(classDeclarationSyntax, semanticModel));
+                if (counter%10 == 0)
+                {
+                    Logger.DebugLog(""+counter);
+                }
             }
+            
         }
+
+        private static async Task<int> CountClasses(Compilation compilation)
+        {
+            int countClasses = 0;
+            foreach (var syntaxTree in compilation.SyntaxTrees)
+            {
+                var classes = await SyntaxNodeFilter.GetClasses(syntaxTree);
+                countClasses += classes.ToList().Count;
+            }
+            return countClasses;
+        }
+
     }
 }

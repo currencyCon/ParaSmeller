@@ -69,7 +69,7 @@ namespace ConcurrencyAnalyzer.Reporters
             }
         }
 
-        public override void Register()
+        protected override void Register()
         {
             RegisterClassReport(CheckPulse);
             RegisterMethodReport(CheckWaitOutsideLock);

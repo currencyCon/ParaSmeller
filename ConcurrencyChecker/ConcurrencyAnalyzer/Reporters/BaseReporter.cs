@@ -13,10 +13,10 @@ namespace ConcurrencyAnalyzer.Reporters
         private readonly ICollection<Action<MethodRepresentation>> _methodReports = new List<Action<MethodRepresentation>>();
         private readonly ICollection<Action<PropertyRepresentation>> _propertyReports = new List<Action<PropertyRepresentation>>();
         private readonly ICollection<Action<Member>> _memberReports = new List<Action<Member>>();
-        public readonly ICollection<Diagnostic> Reports = new List<Diagnostic>();
-        public abstract void Register();
+        protected readonly ICollection<Diagnostic> Reports = new List<Diagnostic>();
+        protected abstract void Register();
 
-        public void Clear()
+        private void Clear()
         {
             _classReports.Clear();
             _methodReports.Clear();
@@ -24,28 +24,29 @@ namespace ConcurrencyAnalyzer.Reporters
             _memberReports.Clear();
             Reports.Clear();
         }
-        public void RegisterClassReport(Action<ClassRepresentation> classReport)
+
+        protected void RegisterClassReport(Action<ClassRepresentation> classReport)
         {
             lock (this)
             {
                 _classReports.Add(classReport);
             }
         }
-        public void RegisterMethodReport(Action<MethodRepresentation> methodReport)
+        protected void RegisterMethodReport(Action<MethodRepresentation> methodReport)
         {
             lock (this)
             {
                 _methodReports.Add(methodReport);
             }
         }
-        public void RegisterPropertyReport(Action<PropertyRepresentation> propertyReport)
+        protected void RegisterPropertyReport(Action<PropertyRepresentation> propertyReport)
         {
             lock (this)
             {
                 _propertyReports.Add(propertyReport);
             }
         }
-        public void RegisterMemberReport(Action<Member> memberReport)
+        protected void RegisterMemberReport(Action<Member> memberReport)
         {
             lock (this)
             {

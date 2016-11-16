@@ -26,7 +26,7 @@ namespace ConcurrencyAnalyzer.Reporters
         private static readonly string[] NotAllowedApiClasses = { InterlockedKeyword };
 
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.PSAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
-        public static readonly LocalizableString MessageFormatPrimitiveSynchronization = new LocalizableResourceString(nameof(Resources.PrimitiveSynchronizationAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
+        public static readonly LocalizableString MessageFormatPrimitiveSynchronization = new LocalizableResourceString(nameof(Resources.PSAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.PSAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 
         private void CheckForUnallowedDeclaration(ClassRepresentation clazz)
@@ -64,7 +64,8 @@ namespace ConcurrencyAnalyzer.Reporters
         {
             return new Diagnostic(PrimitiveSynchronizationDiagnosticId, Title, MessageFormatPrimitiveSynchronization, Description, Category, syntaxnode.GetLocation());
         }
-        public override void Register()
+
+        protected override void Register()
         {
             RegisterMemberReport(CheckForNotAllowedApiUsages);
             RegisterClassReport(CheckForUnallowedDeclaration);

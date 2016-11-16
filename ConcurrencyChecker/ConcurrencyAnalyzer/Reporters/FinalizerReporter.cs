@@ -100,7 +100,7 @@ namespace ConcurrencyAnalyzer.Reporters
             return new Diagnostic(FinalizerSynchronizationDiagnosticId, Title, MessageFormatFinalizerSynchronization, Description, Category, syntaxnode.GetLocation());
         }
 
-        public override void Register()
+        protected override void Register()
         {
             RegisterClassReport(CheckClassForUnsynchronizedFinalizers);
         }
