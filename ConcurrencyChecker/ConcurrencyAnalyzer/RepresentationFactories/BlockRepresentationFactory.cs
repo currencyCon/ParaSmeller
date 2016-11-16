@@ -2,6 +2,7 @@
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.RepresentationFactories
@@ -50,7 +51,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             }
         }
 
-        private static bool IsNotInsertedInBody(Body body, InvocationExpressionSyntax invocationExpressionSyntax)
+        private static bool IsNotInsertedInBody(Body body, CSharpSyntaxNode invocationExpressionSyntax)
         {
             foreach (var invocationExpressionRepresentation in body.GetAllInvocations())
             {

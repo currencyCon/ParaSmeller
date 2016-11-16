@@ -48,7 +48,6 @@
     <Compile Include="RepresentationFactories\InterfaceRepresentationFactory.cs" />
     <Compile Include="Representation\InterfaceRepresentation.cs" />
     <Compile Include="SemanticAnalysis\SymbolInspector.cs" />
-    <Compile Include="SemanticAnalysis\SynchronizationInspector.cs" />
     <Compile Include="Reporters\MonitorOrWaitSignalReporter.cs" />
     <Compile Include="Reporters\NestedSynchronizedMethodClassReporter.cs" />
     <Compile Include="Reporters\OverAsynchronyReporter.cs" />
@@ -60,7 +59,6 @@
     <Compile Include="Reporters\SmellReporter.cs" />
     <Compile Include="Reporters\TapirReporter.cs" />
     <Compile Include="Reporters\TentativelyResourceReferenceReporter.cs" />
-    <Compile Include="RepresentationExtensions\InvocationExpressionRepresentationExtensions.cs" />
     <Compile Include="RepresentationExtensions\MemberExtensions.cs" />
     <Compile Include="RepresentationFactories\BlockRepresentationFactory.cs" />
     <Compile Include="RepresentationFactories\ClassRepresentationFactory.cs" />

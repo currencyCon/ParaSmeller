@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ConcurrencyAnalyzer.SemanticAnalysis;
+using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -32,6 +33,11 @@ namespace ConcurrencyAnalyzer.Representation
             IsInvokedInTask = isInvokedInTask;
             InvokedImplementations = new List<Member>();
             Defintion = symbolInfo.Definition;
+        }
+
+        public TParent GetFirstParent<TParent>()
+        {
+            return Implementation.GetFirstParent<TParent>();
         }
     }
 }

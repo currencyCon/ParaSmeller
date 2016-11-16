@@ -2,7 +2,6 @@
 
 using System.Linq;
 using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.RepresentationExtensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;

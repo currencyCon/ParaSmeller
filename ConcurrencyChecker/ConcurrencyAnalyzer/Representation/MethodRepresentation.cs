@@ -6,30 +6,22 @@ namespace ConcurrencyAnalyzer.Representation
 {
     public class MethodRepresentation : Member
     {
-        public MethodDeclarationSyntax Implementation { get; set; }
-        public ICollection<ParameterSyntax> Parameters { get; set; }
-        public MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, ClassRepresentation classRepresentation, string originalDefintion)
+        public readonly MethodDeclarationSyntax Implementation;
+        public readonly ICollection<ParameterSyntax> Parameters;
+
+        private MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, string originalDefinition): base(originalDefinition, methodDeclarationSyntax.Identifier)
         {
-            Name = methodDeclarationSyntax.Identifier;
-            Parameters = methodDeclarationSyntax.ParameterList.Parameters.ToList();
-            InvocationExpressions = new List<InvocationExpressionRepresentation>();
             Implementation = methodDeclarationSyntax;
-            Blocks = new List<Body>();
+            Parameters = Implementation.ParameterList.Parameters.ToList();
+        }
+        public MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, ClassRepresentation classRepresentation, string originalDefintion): this(methodDeclarationSyntax, originalDefintion)
+        {
             ContainingClass = classRepresentation;
-            Callers = new List<InvocationExpressionRepresentation>();
-            OriginalDefinition = originalDefintion;
         }
 
-        public MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, string originalDefintion)
+        public MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, string originalDefintion): this(methodDeclarationSyntax, originalDefintion)
         {
-            Name = methodDeclarationSyntax.Identifier;
-            Parameters = methodDeclarationSyntax.ParameterList.Parameters.ToList();
-            InvocationExpressions = new List<InvocationExpressionRepresentation>();
-            Implementation = methodDeclarationSyntax;
-            Blocks = new List<Body>();
             ContainingInterface = interfaceRepresentation;
-            Callers = new List<InvocationExpressionRepresentation>();
-            OriginalDefinition = originalDefintion;
         }
 
         public override bool IsFullySynchronized()
@@ -45,6 +37,12 @@ namespace ConcurrencyAnalyzer.Representation
         private bool HasStandardMethodBody()
         {
             return Blocks.Count == 1 && !Blocks.First().IsSynchronized;
+        }
+
+        public bool MethodHasHalfSynchronizedProperties()
+        {
+            var methodsWithHalfSynchronizedProperties = ContainingClass.GetMethodsWithHalfSynchronizedProperties();
+            return methodsWithHalfSynchronizedProperties.Select(e => e.Name.Text).Contains(Name.Text);
         }
     }
 }

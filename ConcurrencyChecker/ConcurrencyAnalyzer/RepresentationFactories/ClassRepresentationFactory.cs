@@ -30,6 +30,12 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             bool synchronized) where TMember : Member
         {
             var members = classRepresentation.Members.Where(e => e is TMember);
+            members = GetMembers(synchronized, members);
+            return members.Select(e => e as TMember).ToList();
+        }
+
+        private static IEnumerable<Member> GetMembers(bool synchronized, IEnumerable<Member> members)
+        {
             if (synchronized)
             {
                 members = members.Where(e => e.IsFullySynchronized());
@@ -38,7 +44,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             {
                 members = members.Where(e => !e.IsFullySynchronized());
             }
-            return members.Select(e => e as TMember).ToList();
+            return members;
         }
 
         private static void AddProperties(ClassRepresentation classRepresentation, SemanticModel semanticModel)

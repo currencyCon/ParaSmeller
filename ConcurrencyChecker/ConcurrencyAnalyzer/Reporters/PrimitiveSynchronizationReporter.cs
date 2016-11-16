@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;

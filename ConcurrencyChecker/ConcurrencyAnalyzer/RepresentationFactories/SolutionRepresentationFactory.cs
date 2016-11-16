@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Representation;
@@ -44,7 +45,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             }
         }
 
-        private static void ConnectInvocations(SolutionRepresentation solution)
+        public static void ConnectInvocations(SolutionRepresentation solution)
         {
             Logger.DebugLog("ConnectInvocations");
             var memberWithBodies = solution.Classes.SelectMany(e => e.Members).ToList();

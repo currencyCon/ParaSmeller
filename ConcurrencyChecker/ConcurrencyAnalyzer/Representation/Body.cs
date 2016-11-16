@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Representation
 {
@@ -26,6 +27,18 @@ namespace ConcurrencyAnalyzer.Representation
                 invocations.AddRange(block.GetAllInvocations());
             }
             return invocations;
+        }
+
+        public void AppendLockArguments(ICollection<string> lockObjects)
+        {
+            if (IsSynchronized)
+            {
+                lockObjects.Add(((LockStatementSyntax) Implementation).Expression.ToString());
+            }
+            foreach (var subLockBlock in Blocks)
+            {
+                subLockBlock.AppendLockArguments(lockObjects);
+            }
         }
     }
 }

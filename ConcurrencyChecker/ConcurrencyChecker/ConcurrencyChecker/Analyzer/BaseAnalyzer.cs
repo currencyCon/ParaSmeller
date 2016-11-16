@@ -13,7 +13,7 @@ namespace ConcurrencyChecker.Analyzer
 {
     public abstract class BaseAnalyzer: DiagnosticAnalyzer
     {
-        private static readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1);
+        private static readonly SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1);
         protected static void ReportDiagnostics(CompilationAnalysisContext context, ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics)
         {
             Logger.DebugLog($"Found {diagnostics.Count} diagnostics");
@@ -40,33 +40,32 @@ namespace ConcurrencyChecker.Analyzer
 
         private async void RegisterDiagnostics(CompilationAnalysisContext context)
         {
-            bool hasLock = await _semaphoreSlim.WaitAsync(new TimeSpan(0,0,0,1));
+            bool hasLock = await SemaphoreSlim.WaitAsync(new TimeSpan(0,0,0,1));
             if (hasLock)
             {
                 Logger.DebugLog("Starting Analyzer");
                 if (SelectSmell().Any())
                 {
-                    var smellReporter = new SmellReporter();
-                    ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics;
-                    diagnostics = await smellReporter.Report(context.Compilation, SelectSmell());
-                    ReportDiagnostics(context, diagnostics);
-
+                    RegisterDiagnostics(context, SelectSmell());
                 }
                 else
                 {
-                    var smellReporter = new SmellReporter();
-                    ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics;
-                    diagnostics = await smellReporter.Report(context.Compilation);
-                    ReportDiagnostics(context, diagnostics);
+                    RegisterDiagnostics(context, SmellReporter.DefaultSmellCollection);
                 }
-
-                _semaphoreSlim.Release(1);
+                SemaphoreSlim.Release(1);
             }
+        }
+
+        private static async void RegisterDiagnostics(CompilationAnalysisContext context, ICollection<Smell> smells)
+        {
+            var smellReporter = new SmellReporter();
+            var diagnostics = await smellReporter.Report(context.Compilation, smells);
+            ReportDiagnostics(context, diagnostics);
         }
 
         protected virtual ICollection<Smell> SelectSmell()
         {
-            return new List<Smell>();
+            return SmellReporter.DefaultSmellCollection;
         }
     }
 }

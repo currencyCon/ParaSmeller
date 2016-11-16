@@ -11,19 +11,17 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         {
             var symbolInfo = SymbolInspector.GetDeclaredSymbol<IPropertySymbol>(propertyDeclarationSyntax, semanticModel);
             var propertyRepresentation = new PropertyRepresentation(propertyDeclarationSyntax, classRepresentation, symbolInfo.OriginalDefinition.ToString());
-            AddAccessors(propertyRepresentation, semanticModel);
-            return propertyRepresentation;
+            return WithAccessors(propertyRepresentation, semanticModel);
         }
 
         public static PropertyRepresentation Create(PropertyDeclarationSyntax propertyDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, SemanticModel semanticModel)
         {
             var symbolInfo = SymbolInspector.GetDeclaredSymbol<IPropertySymbol>(propertyDeclarationSyntax, semanticModel);
             var propertyRepresentation = new PropertyRepresentation(propertyDeclarationSyntax, interfaceRepresentation, symbolInfo.OriginalDefinition.ToString());
-            AddAccessors(propertyRepresentation, semanticModel);
-            return propertyRepresentation;
+            return WithAccessors(propertyRepresentation, semanticModel);
         }
 
-        private static void AddAccessors(PropertyRepresentation propertyRepresentation, SemanticModel semanticModel)
+        private static PropertyRepresentation WithAccessors(PropertyRepresentation propertyRepresentation, SemanticModel semanticModel)
         {
             if (propertyRepresentation.Getter != null)
             {
@@ -33,6 +31,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             {
                 propertyRepresentation.Blocks.Add(BlockRepresentationFactory.Create(propertyRepresentation.Setter, propertyRepresentation, semanticModel));
             }
+            return propertyRepresentation;
         }
     }
 }

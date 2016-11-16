@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Representation
@@ -8,36 +7,24 @@ namespace ConcurrencyAnalyzer.Representation
     {
         private const string GetKeyWord = "get";
         private const string SetKeyWord = "set";
-       
-        public PropertyDeclarationSyntax Implementation { get; set; }
-        public BlockSyntax Getter { get; set; }
-        public BlockSyntax Setter { get; set; }
-        public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation, string originalDefintion)
+        public readonly BlockSyntax Getter;
+        public readonly BlockSyntax Setter;
+        public readonly PropertyDeclarationSyntax Implementation;
+
+        protected PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, string originalDefinition): base(originalDefinition, propertyDeclarationSyntax.Identifier)
         {
-            InvocationExpressions = new List<InvocationExpressionRepresentation>();
-            Blocks = new List<Body>();
-            Callers = new List<InvocationExpressionRepresentation>();
             Implementation = propertyDeclarationSyntax;
-            Name = Implementation.Identifier;
-            ContainingClass = classRepresentation;
-            
             Getter = propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(e => e.Keyword.ToString() == GetKeyWord)?.Body;
             Setter = propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(e => e.Keyword.ToString() == SetKeyWord)?.Body;
-            OriginalDefinition = originalDefintion;
+        }
+        public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation, string originalDefintion): this(propertyDeclarationSyntax, originalDefintion)
+        {
+            ContainingClass = classRepresentation;
         }
 
-        public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, string originalDefintion)
+        public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, string originalDefintion): this(propertyDeclarationSyntax, originalDefintion)
         {
-            InvocationExpressions = new List<InvocationExpressionRepresentation>();
-            Blocks = new List<Body>();
-            Callers = new List<InvocationExpressionRepresentation>();
-            Implementation = propertyDeclarationSyntax;
-            Name = Implementation.Identifier;
             ContainingInterface = interfaceRepresentation;
-
-            Getter = propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(e => e.Keyword.ToString() == GetKeyWord)?.Body;
-            Setter = propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(e => e.Keyword.ToString() == SetKeyWord)?.Body;
-            OriginalDefinition = originalDefintion;
         }
 
         public override bool IsFullySynchronized()
@@ -65,6 +52,17 @@ namespace ConcurrencyAnalyzer.Representation
         private static bool AccessorIsFullySynchronized(Body block)
         {
             return block.Blocks.Count == 1 && block.Blocks.First().IsSynchronized;
+        }
+
+        public bool NeedsSynchronization()
+        {
+            if (IsFullySynchronized())
+            {
+                return false;
+            }
+            var identifiersInLockStatements = ContainingClass.GetIdentifiersInLocks().Select(e => e.Identifier.ToString());
+            return identifiersInLockStatements.Contains(Implementation.Identifier.Text);
+            
         }
     }
 }

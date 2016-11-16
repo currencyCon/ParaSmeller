@@ -88,5 +88,21 @@ namespace ConcurrencyAnalyzer.Representation
         {
             return Fields.Any(field => field.DeclaresVariable(lockStatement.Expression.ToString(), new[] {SyntaxFactory.Token(SyntaxKind.StaticKeyword).ToString()}));
         }
+
+        public IEnumerable<MethodRepresentation> GetMethodsWithHalfSynchronizedProperties()
+        {
+            var methodsWithHalfSynchronizedProperties = new List<MethodRepresentation>();
+            var identifiersInSyncedMethods = SynchronizedMethods.SelectMany(e => SyntaxNodeFilter.GetIdentifiersInLocks(e.Blocks)).Select(e => e.Identifier.Text);
+            var unsProp = UnSynchronizedProperties.Where(e => identifiersInSyncedMethods.Contains(e.Name.Text)).ToList();
+            foreach (var unsyncedMethod in UnSynchronizedMethods)
+            {
+                var identifiersInMethods = unsyncedMethod.GetChildren<IdentifierNameSyntax>().Select(e => e.Identifier.Text);
+                if (unsProp.Select(e => e.Name.Text).Any(e => identifiersInMethods.Contains(e)))
+                {
+                    methodsWithHalfSynchronizedProperties.Add(unsyncedMethod);
+                }
+            }
+            return methodsWithHalfSynchronizedProperties;
+        }
     }
 }

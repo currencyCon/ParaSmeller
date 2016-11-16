@@ -21,16 +21,19 @@ namespace ConcurrencyAnalyzer.Representation
 
         public ClassRepresentation GetClass(string className)
         {
-            ClassRepresentation clazz;
-            ClassMap.TryGetValue(className, out clazz);
-            return clazz;
+            return GetType(ClassMap, className);
         }
 
         public InterfaceRepresentation GetInterface(string interfaceName)
         {
-            InterfaceRepresentation interfacee;
-            InterfaceMap.TryGetValue(interfaceName, out interfacee);
-            return interfacee;
+            return GetType(InterfaceMap, interfaceName);
+        }
+
+        private static TType GetType<TType>(Dictionary<string, TType> typeMap, string name)
+        {
+            TType type;
+            typeMap.TryGetValue(name, out type);
+            return type;
         }
     }
 }

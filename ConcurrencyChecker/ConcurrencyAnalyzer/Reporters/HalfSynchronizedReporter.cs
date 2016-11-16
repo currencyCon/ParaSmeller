@@ -1,5 +1,4 @@
 ﻿using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.SemanticAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
@@ -19,7 +18,7 @@ namespace ConcurrencyAnalyzer.Reporters
 
         private void DiagnoseMethod(MethodRepresentation method)
         {
-            if (SynchronizationInspector.MethodHasHalfSynchronizedProperties(method.Implementation, method.ContainingClass))
+            if (method.MethodHasHalfSynchronizedProperties())
             {
                 Reports.Add(ReportHalfSynchronizationDiagnostic(method.Implementation, "Property", ""));
             }
@@ -27,7 +26,7 @@ namespace ConcurrencyAnalyzer.Reporters
 
         private void DiagnoseProperty(PropertyRepresentation property)
         {
-            if (SynchronizationInspector.PropertyNeedsSynchronization(property, property.ContainingClass))
+            if (property.NeedsSynchronization())
             {
                 Reports.Add(ReportUnsynchronizationPropertyDiagnostic(property.Implementation));
             }

@@ -9,21 +9,7 @@ namespace ConcurrencyAnalyzer.Reporters
 {
     public class SmellReporter
     {
-        private readonly Dictionary<Smell, BaseReporter> _reporters = new Dictionary<Smell, BaseReporter>
-        {
-            {Smell.PrimitiveSynchronization, new PrimitiveSynchronizationReporter()},
-            {Smell.FireAndForget, new FireAndForgetReporter() },
-            {Smell.Finalizer, new FinalizerReporter() },
-            {Smell.HalfSynchronized, new HalfSynchronizedReporter() },
-            {Smell.MonitorWaitOrSignal, new MonitorOrWaitSignalReporter() },
-            {Smell.ExplicitThreads, new ExplicitThreadsReporter()},
-            {Smell.NestedSynchronization, new NestedSynchronizedMethodClassReporter() },
-            {Smell.OverAsynchrony, new OverAsynchronyReporter() },
-            {Smell.TenativelyRessource, new TentativelyResourceReferenceReporter() },
-            {Smell.WaitingConditionsTasks, new WaitingConditionsTasksReporter() },
-            {Smell.Tapir, new TapirReporter() }
-        };
-        private readonly ICollection<Smell> _defaultSmellCollection = new List<Smell>
+        public static readonly ICollection<Smell> DefaultSmellCollection = new List<Smell>
         {
             Smell.PrimitiveSynchronization,
             Smell.FireAndForget,
@@ -38,17 +24,22 @@ namespace ConcurrencyAnalyzer.Reporters
             Smell.Tapir
         };
 
-        public async Task<ICollection<Diagnostic>> Report(Compilation compilation)
+        private readonly Dictionary<Smell, BaseReporter> _reporters = new Dictionary<Smell, BaseReporter>
         {
-            return await ReportInternal(compilation, _defaultSmellCollection);
-        }
+            {Smell.PrimitiveSynchronization, new PrimitiveSynchronizationReporter()},
+            {Smell.FireAndForget, new FireAndForgetReporter() },
+            {Smell.Finalizer, new FinalizerReporter() },
+            {Smell.HalfSynchronized, new HalfSynchronizedReporter() },
+            {Smell.MonitorWaitOrSignal, new MonitorOrWaitSignalReporter() },
+            {Smell.ExplicitThreads, new ExplicitThreadsReporter()},
+            {Smell.NestedSynchronization, new NestedSynchronizedMethodClassReporter() },
+            {Smell.OverAsynchrony, new OverAsynchronyReporter() },
+            {Smell.TenativelyRessource, new TentativelyResourceReferenceReporter() },
+            {Smell.WaitingConditionsTasks, new WaitingConditionsTasksReporter() },
+            {Smell.Tapir, new TapirReporter() }
+        };
 
         public async Task<ICollection<Diagnostic>> Report(Compilation compilation, ICollection<Smell> smells)
-        {
-            return await ReportInternal(compilation, smells);
-        }
-
-        private async Task<ICollection<Diagnostic>> ReportInternal(Compilation compilation, IEnumerable<Smell> smells)
         {
             var solutionModel = await SolutionRepresentationFactory.Create(compilation);
             var diagnostics = new List<Diagnostic>();

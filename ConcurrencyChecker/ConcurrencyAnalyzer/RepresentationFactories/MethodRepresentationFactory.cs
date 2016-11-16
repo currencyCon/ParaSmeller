@@ -12,19 +12,17 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         {
             var symbolInfo = SymbolInspector.GetDeclaredSymbol<IMethodSymbol>(methodDeclarationSyntax, semanticModel);
             var methodRepresentation = new MethodRepresentation(methodDeclarationSyntax, classRepresentation, symbolInfo.OriginalDefinition.ToString());
-            AddBaseBody(methodRepresentation, semanticModel);
-            return methodRepresentation;
+            return WithBaseBody(methodRepresentation, semanticModel);
         }
 
         public static MethodRepresentation Create(MethodDeclarationSyntax methodDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, SemanticModel semanticModel)
         {
             var symbolInfo = SymbolInspector.GetDeclaredSymbol<IMethodSymbol>(methodDeclarationSyntax, semanticModel);
             var methodRepresentation = new MethodRepresentation(methodDeclarationSyntax, interfaceRepresentation, symbolInfo.OriginalDefinition.ToString());
-            AddBaseBody(methodRepresentation, semanticModel);
-            return methodRepresentation;
+            return WithBaseBody(methodRepresentation, semanticModel);
         }
 
-        private static void AddBaseBody(MethodRepresentation methodRepresentation, SemanticModel semanticModel)
+        private static MethodRepresentation WithBaseBody(MethodRepresentation methodRepresentation, SemanticModel semanticModel)
         {
             if (methodRepresentation.Implementation.Body != null)
             {
@@ -32,6 +30,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                     methodRepresentation, semanticModel);
                 methodRepresentation.Blocks.Add(baseBody);
             }
+            return methodRepresentation;
         }
     }
 }
