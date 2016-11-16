@@ -27,53 +27,69 @@ namespace ConcurrencyAnalyzer.Reporters
 
         protected void RegisterClassReport(Action<ClassRepresentation> classReport)
         {
-            _classReports.Add(classReport);
+            lock (this)
+            {
+                _classReports.Add(classReport);
+            }
         }
         protected void RegisterMethodReport(Action<MethodRepresentation> methodReport)
         {
-            _methodReports.Add(methodReport);
+            lock (this)
+            {
+                _methodReports.Add(methodReport);
+            }
         }
         protected void RegisterPropertyReport(Action<PropertyRepresentation> propertyReport)
         {
-            _propertyReports.Add(propertyReport);
+            lock (this)
+            {
+                _propertyReports.Add(propertyReport);
+            }
         }
         protected void RegisterMemberReport(Action<Member> memberReport)
         {
-            _memberReports.Add(memberReport);
+            lock (this)
+            {
+                _memberReports.Add(memberReport);
+            }
         }
         public ICollection<Diagnostic> Report(SolutionRepresentation solutionRepresentation)
         {
-            Clear();
-            Register();
-            foreach (var clazz in solutionRepresentation.Classes)
+            lock (this)
             {
-                foreach (var classReport in _classReports)
+                Clear();
+                Register();
+                foreach (var clazz in solutionRepresentation.Classes)
                 {
-                    classReport(clazz);
+                    foreach (var classReport in _classReports)
+                    {
+                        classReport(clazz);
+                    }
                 }
-            }
-            foreach (var method in solutionRepresentation.Classes.SelectMany(e => e.Methods))
-            {
-                foreach (var methodReport in _methodReports)
+                foreach (var method in solutionRepresentation.Classes.SelectMany(e => e.Methods))
                 {
-                    methodReport(method);
+                    foreach (var methodReport in _methodReports)
+                    {
+                        methodReport(method);
+                    }
                 }
-            }
-            foreach (var property in solutionRepresentation.Classes.SelectMany(e => e.Properties))
-            {
-                foreach (var propertyReport in _propertyReports)
+                foreach (var property in solutionRepresentation.Classes.SelectMany(e => e.Properties))
                 {
-                    propertyReport(property);
+                    foreach (var propertyReport in _propertyReports)
+                    {
+                        propertyReport(property);
+                    }
                 }
-            }
-            foreach (var member in solutionRepresentation.Classes.SelectMany(e => e.Members))
-            {
-                foreach (var memberReport in _memberReports)
+                foreach (var member in solutionRepresentation.Classes.SelectMany(e => e.Members))
                 {
-                    memberReport(member);
+                    foreach (var memberReport in _memberReports)
+                    {
+                        memberReport(member);
+                    }
                 }
+                return Reports;
             }
-            return Reports;
+
         }
     }
 }

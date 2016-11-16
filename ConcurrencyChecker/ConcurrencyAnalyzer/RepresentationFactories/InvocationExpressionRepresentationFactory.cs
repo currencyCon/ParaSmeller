@@ -22,7 +22,42 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             {
                 return CreateRemoteInvocation(invocationExpressionSyntax, semanticModel, containingBody);
             }
+            if (invocationExpressionSyntax.Expression is GenericNameSyntax)
+            {
+                return CreateGenericInvocation(invocationExpressionSyntax, semanticModel, containingBody);
+            }
+            if (invocationExpressionSyntax.Expression is ElementAccessExpressionSyntax)
+            {
+                return CreateElementAccessInvocation(invocationExpressionSyntax, semanticModel, containingBody);
+            }
+            if (invocationExpressionSyntax.Expression is InvocationExpressionSyntax)
+            {
+                return Create((InvocationExpressionSyntax)invocationExpressionSyntax.Expression, semanticModel, containingBody);
+            }
+            if (invocationExpressionSyntax.Expression is MemberBindingExpressionSyntax)
+            {
+                if (invocationExpressionSyntax.Parent is ConditionalAccessExpressionSyntax)
+                {
+                    return CreateBindingInvocation(invocationExpressionSyntax, semanticModel, containingBody);
+                }
+                var invocation = invocationExpressionSyntax.ArgumentList.GetFirstChild<InvocationExpressionSyntax>();
+                return CreateSelfInvocation(invocation, semanticModel, containingBody);
+            }
             throw new NotImplementedException($"An unexpected Type of invocationExpression was encountered: {invocationExpressionSyntax.ToFullString()}");
+        }
+
+        private static InvocationExpressionRepresentation CreateElementAccessInvocation(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody)
+        {
+            var invocationExpression = (ElementAccessExpressionSyntax) invocationExpressionSyntax.Expression;
+            var invocationTarget = invocationExpression;
+            return CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget.GetFirstChild<SimpleNameSyntax>());
+        }
+
+        private static InvocationExpressionRepresentation CreateGenericInvocation(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody)
+        {
+            var invocationExpression = (GenericNameSyntax) invocationExpressionSyntax.Expression;
+            var invocationTarget = invocationExpression;
+            return CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget);
         }
 
         private static InvocationExpressionRepresentation CreateSelfInvocation(
@@ -43,6 +78,12 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             return CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget);
         }
 
+        private static InvocationExpressionRepresentation CreateBindingInvocation(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody)
+        {
+            var binding = (MemberBindingExpressionSyntax)invocationExpressionSyntax.Expression;
+            var invocationTarget = binding.Name;
+            return CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget);
+        }
         private static InvocationExpressionRepresentation CreateInvocationWithSymbolInfo(
     InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody,
     SimpleNameSyntax invocationTarget)

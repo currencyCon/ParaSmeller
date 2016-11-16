@@ -13,6 +13,10 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
         }
         public static IEnumerable<TChildren> GetChildren<TChildren>(this SyntaxNode node)
         {
+            if (node == null)
+            {
+                return new List<TChildren>();
+            }
             return node.DescendantNodesAndSelf().OfType<TChildren>();
         }
 

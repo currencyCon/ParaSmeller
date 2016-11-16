@@ -36,18 +36,23 @@ namespace ConcurrencyChecker.Analyzer
 
         private async void RegisterDiagnostics(CompilationAnalysisContext context)
         {
-            var smellReporter = new SmellReporter();
-            ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics;
+            
             if (SelectSmell().Any())
             {
+                var smellReporter = new SmellReporter();
+                ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics;
                 diagnostics = await smellReporter.Report(context.Compilation, SelectSmell());
+                ReportDiagnostics(context, diagnostics);
+
             }
             else
             {
+                var smellReporter = new SmellReporter();
+                ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics;
                 diagnostics = await smellReporter.Report(context.Compilation);
+                ReportDiagnostics(context, diagnostics);
 
             }
-            ReportDiagnostics(context, diagnostics);
         }
 
         protected virtual ICollection<Smell> SelectSmell()
