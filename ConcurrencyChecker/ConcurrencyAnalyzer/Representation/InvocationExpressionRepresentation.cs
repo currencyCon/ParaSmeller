@@ -18,7 +18,7 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly string OriginalDefinition;
         public readonly string Defintion;
         public readonly bool IsInvokedInTask;
-        public readonly ICollection<Member> InvokedImplementations;
+        public readonly List<Member> InvokedImplementations;
         
         public InvocationExpressionRepresentation(bool isSynchronized, SymbolInformation symbolInfo, InvocationExpressionSyntax implementation, Body containingBody, SimpleNameSyntax invocationTarget, bool isInvokedInTask)
         {
