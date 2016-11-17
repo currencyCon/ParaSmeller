@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ConcurrencyAnalyzer.SemanticAnalysis;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
@@ -9,6 +10,7 @@ namespace ConcurrencyAnalyzer.Representation
     public class InvocationExpressionRepresentation
     {
         public readonly string CalledClass;
+        public readonly string CalledClassOriginal;
         public readonly SimpleNameSyntax InvocationTargetName;
         public readonly bool IsSynchronized;
         public readonly InvocationExpressionSyntax Implementation;
@@ -33,6 +35,10 @@ namespace ConcurrencyAnalyzer.Representation
             IsInvokedInTask = isInvokedInTask;
             InvokedImplementations = new List<Member>();
             Defintion = symbolInfo.Definition;
+            var splittedDefinition = Defintion.Split('.');
+            var classParts = splittedDefinition.Take(splittedDefinition.Length - 1);
+            var classDefinition = string.Join(".", classParts);
+            CalledClassOriginal = classDefinition;
         }
 
         public TParent GetFirstParent<TParent>()

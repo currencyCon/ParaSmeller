@@ -54,13 +54,24 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             var counter = 0;
             var total = invocations.Count;
             Logger.DebugLog($"Total Invocations {total}");
-            Parallel.ForEach(invocations, (invocationExpressionRepresentation) => 
+            Parallel.ForEach(invocations, invocationExpressionRepresentation => 
             {
                 if (solution.Members.ContainsKey(invocationExpressionRepresentation.Defintion))
                 {
                     invocationExpressionRepresentation.InvokedImplementations.AddRange(
                         solution.Members[invocationExpressionRepresentation.Defintion]);
-                    Logger.DebugLog($"Bukachu");
+                    Logger.DebugLog("Bukachu");
+
+                } else if (solution.ClassMap.ContainsKey(invocationExpressionRepresentation.CalledClassOriginal))
+                {
+                    foreach (var member in solution.ClassMap[invocationExpressionRepresentation.CalledClassOriginal].SelectMany(e => e.Members))
+                    {
+                        if (IsInvocatedTarget(invocationExpressionRepresentation, member, solution))
+                        {
+                            invocationExpressionRepresentation.InvokedImplementations.Add(member);
+                        }
+                    }
+                    Logger.DebugLog("Blachu");
 
                 }
                 else
@@ -72,32 +83,13 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                             invocationExpressionRepresentation.InvokedImplementations.Add(memberWithBody);
                         }
                     }
+                    Logger.DebugLog("Biaaaaatch");
+
                 }
 
                 Logger.DebugLog($"Current Invocation {counter} / {total}");
                 counter++;
             });
-/*            foreach (var invocationExpressionRepresentation in invocations)
-            {
-                if (solution.Members.ContainsKey(invocationExpressionRepresentation.Defintion))
-                {
-                    invocationExpressionRepresentation.InvokedImplementations.Add(
-                        solution.Members[invocationExpressionRepresentation.Defintion]);
-                }
-                else
-                {
-                    foreach (var memberWithBody in memberWithBodies)
-                    {
-                        if (IsInvocatedTarget(invocationExpressionRepresentation, memberWithBody, solution))
-                        {
-                            invocationExpressionRepresentation.InvokedImplementations.Add(memberWithBody);
-                        }
-                    }
-                }
-
-                Logger.DebugLog($"Current Invocation {counter} / {total}");
-                counter++;
-            }*/
         }
 
         private static bool IsInvocatedTarget(InvocationExpressionRepresentation invocationExpressionRepresentation, Member memberWithBody, SolutionRepresentation solution)
@@ -145,16 +137,20 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             foreach (var upperClass in hierarchieChecker.InheritanceFromClass)
             {
                 var className = upperClass.ToString();
-                var clazz = solution.GetClass(className);
-                if (clazz != null)
+                var classes = solution.GetClass(className);
+                if (classes != null)
                 {
-                    foreach (var member in clazz.Members)
+                    foreach (var clazz in classes)
                     {
-                        if (member.OriginalDefinition == invocationExpressionRepresentation.Defintion)
+                        foreach (var member in clazz.Members)
                         {
-                            return true;
+                            if (member.OriginalDefinition == invocationExpressionRepresentation.Defintion)
+                            {
+                                return true;
+                            }
                         }
                     }
+                    
                 }
             }
             return false;
@@ -191,7 +187,12 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 solution.Classes.Add(classRepresentation);
                 try
                 {
-                    solution.ClassMap.Add(classRepresentation.NamedTypeSymbol.ToString(), classRepresentation);
+                    var className = classRepresentation.NamedTypeSymbol.ToString();
+                    if (!solution.ClassMap.ContainsKey(className))
+                    {
+                        solution.ClassMap.Add(className, new List<ClassRepresentation>());
+                    }
+                    solution.ClassMap[className].Add(classRepresentation);
                     foreach (var member in classRepresentation.Members.Distinct())
                     {
                         if (!solution.Members.ContainsKey(member.OriginalDefinition))
