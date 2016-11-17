@@ -50,7 +50,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             Logger.DebugLog("ConnectInvocations");
             var memberWithBodies = solution.Classes.SelectMany(e => e.Members).ToList();
             var memberBlocks = memberWithBodies.SelectMany(a => a.Blocks).ToList();
-            var invocations = memberBlocks.SelectMany(e => e.GetAllInvocations()).ToList();
+            var invocations = memberBlocks.SelectMany(e => e.GetAllInvocations()).Where(e => !e.InvokedImplementations.Any()).ToList();
             var counter = 0;
             var total = invocations.Count;
             Logger.DebugLog($"Total Invocations {total}");

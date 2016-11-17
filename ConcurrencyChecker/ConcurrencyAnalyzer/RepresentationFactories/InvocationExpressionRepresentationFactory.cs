@@ -76,7 +76,11 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         {
             var invocationExpression = (IdentifierNameSyntax)invocationExpressionSyntax.Expression;
             var invocationTarget = invocationExpression;
-            return CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget);
+            var invocation = CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget);
+            var membersInOwnClass = invocation.ContainingBody.ContainingMember.ContainingClass.Members;
+            invocation.InvokedImplementations.AddRange(membersInOwnClass.Where(e => e.OriginalDefinition == invocation.Defintion));
+            return invocation;
+            
         }
 
 
