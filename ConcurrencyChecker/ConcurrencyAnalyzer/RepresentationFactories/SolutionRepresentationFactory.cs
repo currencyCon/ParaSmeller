@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SymbolExtensions;
@@ -76,7 +77,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 }
 
                 Logger.DebugLog($"Current Invocation {counter} / {total}");
-                counter++;
+                Interlocked.Increment(ref counter);
             });
 /*            foreach (var invocationExpressionRepresentation in invocations)
             {
@@ -112,15 +113,29 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                     var baseClassRepresentation = solution.GetClass(baseClass.OriginalDefinition.ToString());
                     if (baseClassRepresentation != null)
                     {
-                        clazz.ClassMap.Add(baseClass.OriginalDefinition.ToString(), baseClassRepresentation);
-                    }
+                        try
+                        {
+                            clazz.ClassMap.Add(baseClass.OriginalDefinition.ToString(), baseClassRepresentation);
+                        }
+                            catch (Exception)
+                        {
+
+                        }
+                }
                 }
                 foreach (var interfacee in hierarchieChecker.InheritanceFromInterfaces)
                 {
                     var interfaceRepresentation = solution.GetInterface(interfacee.OriginalDefinition.ToString());
                     if (interfaceRepresentation != null)
                     {
-                        clazz.InterfaceMap.Add(interfacee.OriginalDefinition.ToString(), interfaceRepresentation);
+                        try
+                        {
+                            clazz.InterfaceMap.Add(interfacee.OriginalDefinition.ToString(), interfaceRepresentation);
+                        }
+                        catch (Exception)
+                        {
+                            
+                        }
                     }
                 }
             }
