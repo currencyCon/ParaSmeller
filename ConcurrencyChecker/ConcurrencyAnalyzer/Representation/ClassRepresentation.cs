@@ -24,6 +24,8 @@ namespace ConcurrencyAnalyzer.Representation
         public ICollection<PropertyRepresentation> UnSynchronizedProperties { get; set; }
         public ICollection<MethodRepresentation> Methods => Members.OfType<MethodRepresentation>().ToList();
         public ICollection<PropertyRepresentation> Properties => Members.OfType<PropertyRepresentation>().ToList();
+        public Dictionary<string, ClassRepresentation> ClassMap { get; set; }
+        public Dictionary<string, InterfaceRepresentation> InterfaceMap { get; set; }
 
         public ClassRepresentation(ClassDeclarationSyntax classDeclarationSyntax, SemanticModel semanticModel)
         {
@@ -34,6 +36,8 @@ namespace ConcurrencyAnalyzer.Representation
             Destructor = Implementation.GetFirstChild<DestructorDeclarationSyntax>();
             Fields = Implementation.GetChildren<FieldDeclarationSyntax>().ToList();
             NamedTypeSymbol = semanticModel.GetDeclaredSymbol(Implementation) ;
+            ClassMap = new Dictionary<string, ClassRepresentation>();
+            InterfaceMap = new Dictionary<string, InterfaceRepresentation>();
         }
         
         public IEnumerable<IdentifierNameSyntax> GetIdentifiersInLocks()

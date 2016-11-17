@@ -53,6 +53,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             var invocations = memberBlocks.SelectMany(e => e.GetAllInvocations()).Where(e => !e.InvokedImplementations.Any()).ToList();
             var counter = 0;
             var total = invocations.Count;
+            LoadHierarchies(solution);
             Logger.DebugLog($"Total Invocations {total}");
             Parallel.ForEach(invocations, (invocationExpressionRepresentation) => 
             {
@@ -100,20 +101,46 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             }*/
         }
 
+        private static void LoadHierarchies(SolutionRepresentation solution)
+        {
+            Logger.DebugLog("LoadHierarchies");
+            foreach (var clazz in solution.Classes)
+            {
+                var hierarchieChecker = new HierarchieChecker(clazz.NamedTypeSymbol);
+                foreach (var baseClass in hierarchieChecker.InheritanceFromClass)
+                {
+                    var baseClassRepresentation = solution.GetClass(baseClass.OriginalDefinition.ToString());
+                    if (baseClassRepresentation != null)
+                    {
+                        clazz.ClassMap.Add(baseClass.OriginalDefinition.ToString(), baseClassRepresentation);
+                    }
+                }
+                foreach (var interfacee in hierarchieChecker.InheritanceFromInterfaces)
+                {
+                    var interfaceRepresentation = solution.GetInterface(interfacee.OriginalDefinition.ToString());
+                    if (interfaceRepresentation != null)
+                    {
+                        clazz.InterfaceMap.Add(interfacee.OriginalDefinition.ToString(), interfaceRepresentation);
+                    }
+                }
+            }
+            Logger.DebugLog("LoadHierarchies finished");
+        }
+
         private static bool IsInvocatedTarget(InvocationExpressionRepresentation invocationExpressionRepresentation, Member memberWithBody, SolutionRepresentation solution)
         {
             if (invocationExpressionRepresentation.Defintion == memberWithBody.OriginalDefinition)
             {
                 return true;
             }
-            var hierarchieChecker = new HierarchieChecker(memberWithBody.ContainingClass.NamedTypeSymbol);
+            //var hierarchieChecker = new HierarchieChecker(memberWithBody.ContainingClass.NamedTypeSymbol);
             
-            if (CheckInheritatedClasses(invocationExpressionRepresentation, solution, hierarchieChecker))
+            if (CheckInheritatedClasses(invocationExpressionRepresentation, memberWithBody.ContainingClass))
             {
                 return true;
             }
 
-            if (CheckInheritatedInterfaces(invocationExpressionRepresentation, solution, hierarchieChecker))
+            if (CheckInheritatedInterfaces(invocationExpressionRepresentation, memberWithBody.ContainingClass))
             {
                 return true;
             }
@@ -121,12 +148,11 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             return false;
         }
 
-        private static bool CheckInheritatedInterfaces(InvocationExpressionRepresentation invocationExpressionRepresentation, SolutionRepresentation solution, HierarchieChecker hierarchieChecker)
+        private static bool CheckInheritatedInterfaces(InvocationExpressionRepresentation invocationExpressionRepresentation, ClassRepresentation clazz)
         {
-            foreach (var parentInterface in hierarchieChecker.InheritanceFromInterfaces)
+            foreach (var interfacee in clazz.InterfaceMap.Values)
             {
-                var clazz = solution.GetInterface(parentInterface.ToString());
-                if (clazz == null) continue;
+                if (interfacee == null) continue;
                 foreach (var member in clazz.Members)
                 {
                     if (member.OriginalDefinition == invocationExpressionRepresentation.Defintion)
@@ -140,20 +166,16 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         }
 
         
-        private static bool CheckInheritatedClasses(InvocationExpressionRepresentation invocationExpressionRepresentation, SolutionRepresentation solution, HierarchieChecker hierarchieChecker)
+        private static bool CheckInheritatedClasses(InvocationExpressionRepresentation invocationExpressionRepresentation, ClassRepresentation clazz)
         {
-            foreach (var upperClass in hierarchieChecker.InheritanceFromClass)
+            foreach(var baseClass in clazz.ClassMap.Values)
             {
-                var className = upperClass.ToString();
-                var clazz = solution.GetClass(className);
-                if (clazz != null)
+                if (baseClass == null) continue;
+                foreach (var member in baseClass.Members)
                 {
-                    foreach (var member in clazz.Members)
+                    if (member.OriginalDefinition == invocationExpressionRepresentation.Defintion)
                     {
-                        if (member.OriginalDefinition == invocationExpressionRepresentation.Defintion)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
