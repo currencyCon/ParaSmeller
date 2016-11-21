@@ -123,9 +123,8 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                         {
 
                             clazz.ClassMap.Add(baseClass.OriginalDefinition.ToString(), baseClassRepresentation);
-                        }
-                        
-                }
+                        }    
+                    }
                 }
                 foreach (var interfacee in hierarchieChecker.InheritanceFromInterfaces)
                 {
