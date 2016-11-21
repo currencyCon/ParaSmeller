@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.SymbolExtensions;
 
-namespace ConcurrencyAnalyzer.RepresentationFactories
+namespace ConcurrencyAnalyzer.Hierarchy
 {
     public static class HierarchyLoader
     {

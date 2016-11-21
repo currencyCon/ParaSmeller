@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
+using ConcurrencyAnalyzer.SymbolExtensions;
 using Microsoft.CodeAnalysis;
 
-namespace ConcurrencyAnalyzer.SymbolExtensions
+namespace ConcurrencyAnalyzer.Hierarchy
 {
-    public class HierarchieChecker
+    public class HierarchyChecker
     {
         readonly List<string> _inheritanceClasses = new List<string>();
         public List<INamedTypeSymbol> InheritanceFromInterfaces { get; }
         public List<ITypeSymbol> InheritanceFromClass { get; }
 
-        public HierarchieChecker(ITypeSymbol type)
+        public HierarchyChecker(ITypeSymbol type)
         {
             var baseTypes = type.GetBaseTypesAndThis();
             var interfaces = type.AllInterfaces;

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ConcurrencyAnalyzer.Hierarchy;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SymbolExtensions;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
