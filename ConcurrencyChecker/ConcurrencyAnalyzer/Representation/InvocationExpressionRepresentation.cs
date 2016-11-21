@@ -9,8 +9,8 @@ namespace ConcurrencyAnalyzer.Representation
 {
     public class InvocationExpressionRepresentation
     {
-        public readonly string CalledClass;
         public readonly string CalledClassOriginal;
+        public readonly string TopLevelNameSpace;
         public readonly SimpleNameSyntax InvocationTargetName;
         public readonly bool IsSynchronized;
         public readonly InvocationExpressionSyntax Implementation;
@@ -26,7 +26,6 @@ namespace ConcurrencyAnalyzer.Representation
         {
             IsSynchronized = isSynchronized;
             Arguments = new List<IdentifierNameSyntax>();
-            CalledClass = symbolInfo.ClassName;
             OriginalDefinition = symbolInfo.OriginalDefinition;
             Type = symbolInfo.Type;
             Implementation = implementation;
@@ -35,7 +34,8 @@ namespace ConcurrencyAnalyzer.Representation
             IsInvokedInTask = isInvokedInTask;
             InvokedImplementations = new List<Member>();
             Defintion = symbolInfo.Definition;
-            var splittedDefinition = Defintion.Split('.');
+            var splittedDefinition = OriginalDefinition.Split('.');
+            TopLevelNameSpace = splittedDefinition[0];
             var classParts = splittedDefinition.Take(splittedDefinition.Length - 1);
             var classDefinition = string.Join(".", classParts);
             CalledClassOriginal = classDefinition;

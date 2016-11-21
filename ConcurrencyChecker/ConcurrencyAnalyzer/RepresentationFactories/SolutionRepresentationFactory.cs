@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -51,47 +50,49 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             Logger.DebugLog("ConnectInvocations");
             var memberWithBodies = solution.Classes.SelectMany(e => e.Members).ToList();
             var memberBlocks = memberWithBodies.SelectMany(a => a.Blocks).ToList();
-            var invocations = memberBlocks.SelectMany(e => e.GetAllInvocations()).Where(e => !e.InvokedImplementations.Any()).ToList();
+            var namesSpacesToExclude = new List<string> {"System", "object", "string", "decimal", "int", "double"};
+            var invocations = memberBlocks.SelectMany(e => e.GetAllInvocations()).Where(e => !e.InvokedImplementations.Any() && !namesSpacesToExclude.Contains(e.TopLevelNameSpace)).ToList();
             var counter = 0;
             var total = invocations.Count;
             LoadHierarchies(solution);
             Logger.DebugLog($"Total Invocations {total}");
-            Parallel.ForEach(invocations, invocationExpressionRepresentation => 
+            Parallel.ForEach(invocations, invocationExpressionRepresentation =>
             {
                 if (solution.Members.ContainsKey(invocationExpressionRepresentation.Defintion))
                 {
                     invocationExpressionRepresentation.InvokedImplementations.AddRange(
                         solution.Members[invocationExpressionRepresentation.Defintion]);
-                    Logger.DebugLog("Bukachu");
-
-                } else if (solution.ClassMap.ContainsKey(invocationExpressionRepresentation.CalledClassOriginal))
+                }
+                else if (solution.ClassMap.ContainsKey(invocationExpressionRepresentation.CalledClassOriginal))
                 {
-                    foreach (var member in solution.ClassMap[invocationExpressionRepresentation.CalledClassOriginal].SelectMany(e => e.Members))
+                    foreach (
+                        var member in
+                        solution.ClassMap[invocationExpressionRepresentation.CalledClassOriginal].SelectMany(
+                            e => e.Members))
                     {
-                        if (IsInvocatedTarget(invocationExpressionRepresentation, member, solution))
+                        if (IsInvocatedTarget(invocationExpressionRepresentation, member))
                         {
                             invocationExpressionRepresentation.InvokedImplementations.Add(member);
                         }
                     }
-                    Logger.DebugLog("Blachu");
-
                 }
                 else
                 {
                     foreach (var memberWithBody in memberWithBodies)
                     {
-                        if (IsInvocatedTarget(invocationExpressionRepresentation, memberWithBody, solution))
+                        if (IsInvocatedTarget(invocationExpressionRepresentation, memberWithBody))
                         {
                             invocationExpressionRepresentation.InvokedImplementations.Add(memberWithBody);
                         }
                     }
-                    Logger.DebugLog("Biaaaaatch");
-
                 }
-
-                Logger.DebugLog($"Current Invocation {counter} / {total}");
-                counter++;
+                if (counter % 100 == 0)
+                {
+                    Logger.DebugLog($"Current Invocation {counter} / {total}");
+                }
+                Interlocked.Increment(ref counter);
             });
+
         }
 
         private static void LoadHierarchies(SolutionRepresentation solution)
@@ -102,17 +103,15 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 var hierarchieChecker = new HierarchieChecker(clazz.NamedTypeSymbol);
                 foreach (var baseClass in hierarchieChecker.InheritanceFromClass)
                 {
-                    var baseClassRepresentation = solution.GetClass(baseClass.OriginalDefinition.ToString());
-                    if (baseClassRepresentation != null)
+                    var baseClassRepresentations = solution.GetClass(baseClass.OriginalDefinition.ToString());
+                    if (baseClassRepresentations != null)
                     {
-                        try
-                        {
-                            clazz.ClassMap.Add(baseClass.OriginalDefinition.ToString(), baseClassRepresentation);
-                        }
-                            catch (Exception)
+                        foreach (var baseClassRepresentation in baseClassRepresentations)
                         {
 
+                            clazz.ClassMap.Add(baseClass.OriginalDefinition.ToString(), baseClassRepresentation);
                         }
+                        
                 }
                 }
                 foreach (var interfacee in hierarchieChecker.InheritanceFromInterfaces)
@@ -120,27 +119,19 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                     var interfaceRepresentation = solution.GetInterface(interfacee.OriginalDefinition.ToString());
                     if (interfaceRepresentation != null)
                     {
-                        try
-                        {
-                            clazz.InterfaceMap.Add(interfacee.OriginalDefinition.ToString(), interfaceRepresentation);
-                        }
-                        catch (Exception)
-                        {
-                            
-                        }
+                        clazz.InterfaceMap.Add(interfacee.OriginalDefinition.ToString(), interfaceRepresentation);
                     }
                 }
             }
             Logger.DebugLog("LoadHierarchies finished");
         }
 
-        private static bool IsInvocatedTarget(InvocationExpressionRepresentation invocationExpressionRepresentation, Member memberWithBody, SolutionRepresentation solution)
+        private static bool IsInvocatedTarget(InvocationExpressionRepresentation invocationExpressionRepresentation, Member memberWithBody)
         {
             if (invocationExpressionRepresentation.Defintion == memberWithBody.OriginalDefinition)
             {
                 return true;
             }
-            //var hierarchieChecker = new HierarchieChecker(memberWithBody.ContainingClass.NamedTypeSymbol);
             
             if (CheckInheritatedClasses(invocationExpressionRepresentation, memberWithBody.ContainingClass))
             {
@@ -218,28 +209,22 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 counter++;
                 var classRepresentation = ClassRepresentationFactory.Create(classDeclarationSyntax, semanticModel);
                 solution.Classes.Add(classRepresentation);
-                try
+
+                var className = classRepresentation.NamedTypeSymbol.ToString();
+                if (!solution.ClassMap.ContainsKey(className))
                 {
-                    var className = classRepresentation.NamedTypeSymbol.ToString();
-                    if (!solution.ClassMap.ContainsKey(className))
-                    {
-                        solution.ClassMap.Add(className, new List<ClassRepresentation>());
-                    }
-                    solution.ClassMap[className].Add(classRepresentation);
-                    foreach (var member in classRepresentation.Members.Distinct())
-                    {
-                        if (!solution.Members.ContainsKey(member.OriginalDefinition))
-                        {
-                            solution.Members.Add(member.OriginalDefinition, new List<Member>());
-                        }
-                        solution.Members[member.OriginalDefinition].Add(member);
-                    }
+                    solution.ClassMap.Add(className, new List<ClassRepresentation>());
                 }
-                catch (Exception)
+                solution.ClassMap[className].Add(classRepresentation);
+                foreach (var member in classRepresentation.Members.Distinct())
                 {
-                    var name = classRepresentation.NamedTypeSymbol.ToString();
-                    var test = 01;
+                    if (!solution.Members.ContainsKey(member.OriginalDefinition))
+                    {
+                        solution.Members.Add(member.OriginalDefinition, new List<Member>());
+                    }
+                    solution.Members[member.OriginalDefinition].Add(member);
                 }
+
                 if (counter%10 == 0)
                 {
                     Logger.DebugLog(""+counter);
