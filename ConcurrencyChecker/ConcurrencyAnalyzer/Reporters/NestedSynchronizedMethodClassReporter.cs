@@ -98,7 +98,7 @@ namespace ConcurrencyAnalyzer.Reporters
             var clazz = method.ContainingClass.Implementation;
             var classTypeSymbol = semanticModel.GetDeclaredSymbol(clazz) as INamedTypeSymbol;
             var parametersOfOwnType = new List<SyntaxToken>();
-            var hierarchieChecker = new HierarchieChecker(classTypeSymbol);
+            var hierarchieChecker = new HierarchyChecker(classTypeSymbol);
 
             foreach (var parameterSyntax in method.Parameters)
             {

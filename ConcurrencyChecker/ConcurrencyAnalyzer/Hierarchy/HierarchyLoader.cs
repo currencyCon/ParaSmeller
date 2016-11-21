@@ -10,16 +10,16 @@ namespace ConcurrencyAnalyzer.Hierarchy
             Logger.Debug("HierarchyLoader");
             foreach (var clazz in solution.Classes)
             {
-                var hierarchieChecker = new HierarchieChecker(clazz.NamedTypeSymbol);
+                var hierarchieChecker = new HierarchyChecker(clazz.NamedTypeSymbol);
                 AddBaseClasses(solution, hierarchieChecker, clazz);
                 AddInterfaces(solution, hierarchieChecker, clazz);
             }
             Logger.Debug("HierarchyLoader finished");
         }
 
-        private static void AddInterfaces(SolutionRepresentation solution, HierarchieChecker hierarchieChecker, ClassRepresentation clazz)
+        private static void AddInterfaces(SolutionRepresentation solution, HierarchyChecker hierarchyChecker, ClassRepresentation clazz)
         {
-            foreach (var interfacee in hierarchieChecker.InheritanceFromInterfaces)
+            foreach (var interfacee in hierarchyChecker.InheritanceFromInterfaces)
             {
                 var interfaceRepresentation = solution.GetInterface(interfacee.OriginalDefinition.ToString());
                 if (interfaceRepresentation != null)
@@ -34,9 +34,9 @@ namespace ConcurrencyAnalyzer.Hierarchy
             }
         }
 
-        private static void AddBaseClasses(SolutionRepresentation solution, HierarchieChecker hierarchieChecker, ClassRepresentation clazz)
+        private static void AddBaseClasses(SolutionRepresentation solution, HierarchyChecker hierarchyChecker, ClassRepresentation clazz)
         {
-            foreach (var baseClass in hierarchieChecker.InheritanceFromClass)
+            foreach (var baseClass in hierarchyChecker.InheritanceFromClass)
             {
                 var baseClassRepresentations = solution.GetClass(baseClass.OriginalDefinition.ToString());
                 if (baseClassRepresentations != null)
