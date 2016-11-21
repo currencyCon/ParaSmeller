@@ -50,7 +50,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             Logger.DebugLog("ConnectInvocations");
             var memberWithBodies = solution.Classes.SelectMany(e => e.Members).ToList();
             var memberBlocks = memberWithBodies.SelectMany(a => a.Blocks).ToList();
-            var namesSpacesToExclude = new List<string> {"System", "object", "string", "decimal", "int", "double"};
+            var namesSpacesToExclude = new List<string> {"System", "object", "string", "decimal", "int", "double", "float", "Antlr", "long", "char", "bool", "byte", "short"};
             var invocations = memberBlocks.SelectMany(e => e.GetAllInvocations()).Where(e => !e.InvokedImplementations.Any() && !namesSpacesToExclude.Contains(e.TopLevelNameSpace)).ToList();
             var counter = 0;
             var total = invocations.Count;
@@ -78,13 +78,32 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 }
                 else
                 {
-                    foreach (var memberWithBody in memberWithBodies)
+                    if (solution.InterfaceMap.ContainsKey(invocationExpressionRepresentation.CalledClassOriginal))
                     {
-                        if (IsInvocatedTarget(invocationExpressionRepresentation, memberWithBody))
+                        foreach (
+    var member in
+    solution.InterfaceMap[invocationExpressionRepresentation.CalledClassOriginal].ImplementingClasses.SelectMany(
+        e => e.Members))
                         {
-                            invocationExpressionRepresentation.InvokedImplementations.Add(memberWithBody);
+                            if (IsInvocatedTarget(invocationExpressionRepresentation, member))
+                            {
+                                invocationExpressionRepresentation.InvokedImplementations.Add(member);
+                            }
                         }
                     }
+                    else
+                    {
+                        foreach (var memberWithBody in memberWithBodies)
+                        {
+                            if (IsInvocatedTarget(invocationExpressionRepresentation, memberWithBody))
+                            {
+                                invocationExpressionRepresentation.InvokedImplementations.Add(memberWithBody);
+                            }
+                        }
+                        Logger.DebugLog("Bliatch");
+                    }
+                
+
                 }
                 if (counter % 100 == 0)
                 {
@@ -118,7 +137,12 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                     var interfaceRepresentation = solution.GetInterface(interfacee.OriginalDefinition.ToString());
                     if (interfaceRepresentation != null)
                     {
-                        clazz.InterfaceMap.Add(interfacee.OriginalDefinition.ToString(), interfaceRepresentation);
+                        if (!clazz.InterfaceMap.ContainsKey(interfacee.OriginalDefinition.ToString()))
+                        {
+                            clazz.InterfaceMap.Add(interfacee.OriginalDefinition.ToString(), interfaceRepresentation);
+                        }
+                        
+                        interfaceRepresentation.ImplementingClasses.Add(clazz);
                     }
                 }
             }

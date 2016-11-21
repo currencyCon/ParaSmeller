@@ -13,6 +13,7 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly ICollection<Member> Members;
 		public readonly SemanticModel SemanticModel;
         public readonly INamedTypeSymbol NamedTypeSymbol;
+        public readonly ICollection<ClassRepresentation> ImplementingClasses;
 
         public ICollection<MethodRepresentation> Methods => Members.OfType<MethodRepresentation>().ToList();
         public ICollection<PropertyRepresentation> Properties => Members.OfType<PropertyRepresentation>().ToList();
@@ -22,6 +23,7 @@ namespace ConcurrencyAnalyzer.Representation
             Name = interfaceDeclarationSyntax.Identifier;
             SemanticModel = semanticModel;
             Members = new List<Member>();
+            ImplementingClasses = new List<ClassRepresentation>();
             Implementation = interfaceDeclarationSyntax;
             NamedTypeSymbol = semanticModel.GetDeclaredSymbol(Implementation);
         }
