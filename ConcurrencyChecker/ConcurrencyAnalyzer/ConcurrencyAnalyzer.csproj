@@ -45,6 +45,7 @@
     <Compile Include="Reporters\HalfSynchronizedReporter.cs" />
     <Compile Include="Reporters\WaitingConditionsTasksReporter.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="Hierarchy\HierarchyLoader.cs" />
     <Compile Include="RepresentationFactories\InterfaceRepresentationFactory.cs" />
     <Compile Include="Representation\InterfaceRepresentation.cs" />
     <Compile Include="SemanticAnalysis\SymbolInspector.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="SemanticAnalysis\DefaultSymbolValues.cs" />
     <Compile Include="SemanticAnalysis\SymbolInformationBuilder.cs" />
     <Compile Include="SemanticAnalysis\SymbolInformation.cs" />
-    <Compile Include="SymbolExtensions\HierarchieChecker.cs" />
+    <Compile Include="Hierarchy\HierarchyChecker.cs" />
     <Compile Include="SymbolExtensions\TypeExtension.cs" />
     <Compile Include="SyntaxNodeUtils\SyntaxNodeExtensions.cs" />
     <Compile Include="SyntaxNodeUtils\SyntaxNodeFilter.cs" />

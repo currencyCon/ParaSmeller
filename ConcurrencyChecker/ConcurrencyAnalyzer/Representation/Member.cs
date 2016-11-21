@@ -9,7 +9,6 @@ namespace ConcurrencyAnalyzer.Representation
     public abstract class Member
     {
         public readonly ICollection<InvocationExpressionRepresentation> InvocationExpressions;
-        public readonly ICollection<InvocationExpressionRepresentation> Callers;
         public readonly ICollection<Body> Blocks;
         public readonly SyntaxToken Name;
         public ClassRepresentation ContainingClass { get; set; }
@@ -21,7 +20,6 @@ namespace ConcurrencyAnalyzer.Representation
         {
             InvocationExpressions = new List<InvocationExpressionRepresentation>();
             Blocks = new List<Body>();
-            Callers = new List<InvocationExpressionRepresentation>();
             OriginalDefinition = originalDefinition;
             Name = name;
         }

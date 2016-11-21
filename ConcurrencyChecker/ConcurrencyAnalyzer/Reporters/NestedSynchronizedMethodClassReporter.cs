@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ConcurrencyAnalyzer.Hierarchy;
 using ConcurrencyAnalyzer.Locks;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
@@ -97,7 +98,7 @@ namespace ConcurrencyAnalyzer.Reporters
             var clazz = method.ContainingClass.Implementation;
             var classTypeSymbol = semanticModel.GetDeclaredSymbol(clazz) as INamedTypeSymbol;
             var parametersOfOwnType = new List<SyntaxToken>();
-            var hierarchieChecker = new HierarchieChecker(classTypeSymbol);
+            var hierarchieChecker = new HierarchyChecker(classTypeSymbol);
 
             foreach (var parameterSyntax in method.Parameters)
             {

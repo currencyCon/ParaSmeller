@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ConcurrencyAnalyzer.Representation
 {
@@ -35,6 +36,28 @@ namespace ConcurrencyAnalyzer.Representation
             TType type;
             typeMap.TryGetValue(name, out type);
             return type;
+        }
+
+        public IEnumerable<Member> ImplementedInterfaceMembers(string className)
+        {
+            return InterfaceMap[className].ImplementingClasses.SelectMany(e => e.Members);
+        }
+
+        public IEnumerable<Member> ClassMembers(string className)
+        {
+            return ClassMap[className].SelectMany(e => e.Members);
+        }
+
+        public void AddMembers(ClassRepresentation classRepresentation)
+        {
+            foreach (var member in classRepresentation.Members.Distinct())
+            {
+                if (!Members.ContainsKey(member.OriginalDefinition))
+                {
+                    Members.Add(member.OriginalDefinition, new List<Member>());
+                }
+                Members[member.OriginalDefinition].Add(member);
+            }
         }
     }
 }
