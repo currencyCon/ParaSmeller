@@ -16,7 +16,7 @@ namespace ConcurrencyChecker.Analyzer
         private static readonly SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1);
         protected static void ReportDiagnostics(CompilationAnalysisContext context, ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics)
         {
-            Logger.DebugLog($"Found {diagnostics.Count} diagnostics");
+            Logger.Debug($"Found {diagnostics.Count} diagnostics");
             foreach (var diagnostic in diagnostics)
             {
                 var diag = new DiagnosticDescriptor(diagnostic.Id, diagnostic.Title, diagnostic.MessageFormat,
@@ -43,7 +43,7 @@ namespace ConcurrencyChecker.Analyzer
             bool hasLock = await SemaphoreSlim.WaitAsync(new TimeSpan(0,0,0,1));
             if (hasLock)
             {
-                Logger.DebugLog("Starting Analyzer");
+                Logger.Debug("Starting Analyzer");
                 if (SelectSmell().Any())
                 {
                     RegisterDiagnostics(context, SelectSmell());

@@ -4,10 +4,10 @@ namespace ConcurrencyAnalyzer
 {
     public static class Logger
     {
-        public static void DebugLog(string log)
+        public static void Debug(string log)
         {
 #if DEBUG
-            Debug.WriteLine(log);
+            System.Diagnostics.Debug.WriteLine(log);
 #endif
         }
     }

@@ -45,6 +45,7 @@
     <Compile Include="Reporters\HalfSynchronizedReporter.cs" />
     <Compile Include="Reporters\WaitingConditionsTasksReporter.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="RepresentationFactories\HierarchyLoader.cs" />
     <Compile Include="RepresentationFactories\InterfaceRepresentationFactory.cs" />
     <Compile Include="Representation\InterfaceRepresentation.cs" />
     <Compile Include="SemanticAnalysis\SymbolInspector.cs" />

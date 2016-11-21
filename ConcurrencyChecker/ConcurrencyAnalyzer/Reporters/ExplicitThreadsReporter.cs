@@ -12,14 +12,12 @@ namespace ConcurrencyAnalyzer.Reporters
     {
         public const string DiagnosticId = "ETC001";
         private const string ThreadDefintion = "System.Threading.Thread";
-        private readonly ICollection<string> IgnoreDefinitions = new List<string>(new string[]
+        private readonly ICollection<string> _ignoreDefinitions = new List<string>(new string[]
         {
             "System.Threading.Thread.CurrentThread",
             "System.Threading.Thread.CurrentPrincipal",
             "System.Threading.Thread.CurrentContext",
         });
-        private const string CurrentThread = "";
-
         public const string Category = "ParallelCorrectness";
 
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.ETCAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
@@ -47,7 +45,7 @@ namespace ConcurrencyAnalyzer.Reporters
             do
             {
                 var info = classRepresentation.SemanticModel.GetSymbolInfo(parent);
-                if (IgnoreDefinitions.Contains(info.Symbol?.OriginalDefinition.ToString()))
+                if (_ignoreDefinitions.Contains(info.Symbol?.OriginalDefinition.ToString()))
                 { 
                     return false;
                 }

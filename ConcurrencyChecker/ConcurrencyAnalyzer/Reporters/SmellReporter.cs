@@ -45,7 +45,7 @@ namespace ConcurrencyAnalyzer.Reporters
             var diagnostics = new List<Diagnostic>();
             foreach (var smell in smells)
             {
-                Logger.DebugLog("Executing Reporter:" + _reporters[smell].GetType().Name);
+                Logger.Debug("Executing Reporter:" + _reporters[smell].GetType().Name);
                 diagnostics.AddRange(_reporters[smell].Report(solutionModel));
             }
             ReportAnalysisEnd();
@@ -54,9 +54,9 @@ namespace ConcurrencyAnalyzer.Reporters
 
         private static void ReportAnalysisEnd()
         {
-            Logger.DebugLog("=================");
-            Logger.DebugLog("Analysis finished");
-            Logger.DebugLog("=================");
+            Logger.Debug("=================");
+            Logger.Debug("Analysis finished");
+            Logger.Debug("=================");
         }
 
     }
