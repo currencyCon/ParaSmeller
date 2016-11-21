@@ -86,6 +86,29 @@ namespace ConcurrencyChecker.Test.TestCodeTester
         }
 
         [TestMethod]
+        public void ReportsUnsynchronizedFieldAccessNoFalsePositivesNoNStatic()
+        {
+            const string test = @"
+namespace ConcurrencyChecker.Test.TestCodeTester
+{
+    public class SynchronizedFinalizer
+    {
+        public int Counter;
+        public SynchronizedFinalizer()
+        {
+            Counter++;
+        }
+
+        ~SynchronizedFinalizer()
+        {
+            Counter--;
+        }
+
+    }
+}";
+            VerifyCSharpDiagnostic(test);
+        }
+        [TestMethod]
         public void DoesNotReportFalsePositivesOnProperties()
         {
             const string test = @"

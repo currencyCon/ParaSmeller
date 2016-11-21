@@ -84,7 +84,12 @@ namespace ConcurrencyAnalyzer.Reporters
             var fieldsUsedInDestructorUnsynchronized = classRepresentation.Destructor.GetChildren<IdentifierNameSyntax>().Where(e => !e.GetParents<LockStatementSyntax>().Any()).ToList();
             foreach (var fieldUsedInDestructor in fieldsUsedInDestructorUnsynchronized)
             {
-                foreach (var field in classRepresentation.Fields.ToList())
+                var fields =
+                    classRepresentation.Fields.Where(
+                        e =>
+                            e.Modifiers.Select(a => a.Text)
+                                .Contains("static"));
+                foreach (var field in fields.ToList())
                 {
                     if (field.DeclaresVariable(fieldUsedInDestructor.Identifier.Text))
                     {
