@@ -53,6 +53,26 @@ namespace ExplicitThreadsSmell
             VerifyCSharpDiagnostic(test, expected1, expected2);
         }
 
+        [TestMethod]
+        public void TestCurrentThread()
+        {
+            const string test = @"
+using System.Threading;
+
+namespace ExplicitThreadsSmell
+{
+    class SimpleThread
+    {
+        public void Test1()
+        {
+            CultureInfo ci = new CultureInfo("");
+            Thread.CurrentThread.CurrentCulture = ci;
+        }
+    }
+}";         
+            VerifyCSharpDiagnostic(test);
+        }
+
 
         [TestMethod]
         public void TestMultiDiagnostics()
