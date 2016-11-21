@@ -127,8 +127,11 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                     {
                         foreach (var baseClassRepresentation in baseClassRepresentations)
                         {
-
-                            clazz.ClassMap.Add(baseClass.OriginalDefinition.ToString(), baseClassRepresentation);
+                            if (!clazz.ClassMap.ContainsKey(baseClass.OriginalDefinition.ToString()))
+                            {
+                                clazz.ClassMap.Add(baseClass.OriginalDefinition.ToString(), new List<ClassRepresentation>());
+                            }
+                            clazz.ClassMap[baseClass.OriginalDefinition.ToString()].Add(baseClassRepresentation);
                         }    
                     }
                 }
@@ -189,14 +192,17 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         
         private static bool CheckInheritatedClasses(InvocationExpressionRepresentation invocationExpressionRepresentation, ClassRepresentation clazz)
         {
-            foreach(var baseClass in clazz.ClassMap.Values)
+            foreach(var classes in clazz.ClassMap.Values)
             {
-                if (baseClass == null) continue;
-                foreach (var member in baseClass.Members)
+                foreach (var baseClass in classes)
                 {
-                    if (member.OriginalDefinition == invocationExpressionRepresentation.Defintion)
+                    if (baseClass == null) continue;
+                    foreach (var member in baseClass.Members)
                     {
-                        return true;
+                        if (member.OriginalDefinition == invocationExpressionRepresentation.Defintion)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
