@@ -50,10 +50,11 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             Logger.DebugLog("ConnectInvocations");
             var memberWithBodies = solution.Classes.SelectMany(e => e.Members).ToList();
             var memberBlocks = memberWithBodies.SelectMany(a => a.Blocks).ToList();
-            var namesSpacesToExclude = new List<string> {"System", "object", "string", "decimal", "int", "double", "float", "Antlr", "long", "char", "bool", "byte", "short"};
+            var namesSpacesToExclude = new List<string> {"System", "object", "string", "decimal", "int", "double", "float", "Antlr", "long", "char", "bool", "byte", "short", "uint", "ulong", "ushort", "sbyte"};
             var invocations = memberBlocks.SelectMany(e => e.GetAllInvocations()).Where(e => !e.InvokedImplementations.Any() && !namesSpacesToExclude.Contains(e.TopLevelNameSpace)).ToList();
             var counter = 0;
             var total = invocations.Count;
+            var loads = new List<string>();
             LoadHierarchies(solution);
             Logger.DebugLog($"Total Invocations {total}");
             Parallel.ForEach(invocations, invocationExpressionRepresentation =>
@@ -93,14 +94,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                     }
                     else
                     {
-                        foreach (var memberWithBody in memberWithBodies)
-                        {
-                            if (IsInvocatedTarget(invocationExpressionRepresentation, memberWithBody))
-                            {
-                                invocationExpressionRepresentation.InvokedImplementations.Add(memberWithBody);
-                            }
-                        }
-                        Logger.DebugLog("Bliatch");
+                        loads.Add(invocationExpressionRepresentation.CalledClassOriginal);
                     }
                 
 
@@ -111,7 +105,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 }
                 Interlocked.Increment(ref counter);
             });
-
+            var x = 2;
         }
 
         private static void LoadHierarchies(SolutionRepresentation solution)
