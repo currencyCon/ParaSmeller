@@ -11,7 +11,7 @@ namespace ConcurrencyAnalyzer.RepresentationExtensions
             return GetLockStatements(member.Blocks);
         }
 
-        public static List<LockStatementSyntax> GetLockStatements(IEnumerable<Body> bodies)
+        private static List<LockStatementSyntax> GetLockStatements(IEnumerable<Body> bodies)
         {
             var lockStatementSyntaxs = new List<LockStatementSyntax>();
             foreach (var body in bodies)

@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ConcurrencyAnalyzer.Hierarchy;
 using ConcurrencyAnalyzer.Locks;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
-using ConcurrencyAnalyzer.SymbolExtensions;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;

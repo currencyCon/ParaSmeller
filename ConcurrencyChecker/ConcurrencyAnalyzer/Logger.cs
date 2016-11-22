@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace ConcurrencyAnalyzer
 {
     public static class Logger

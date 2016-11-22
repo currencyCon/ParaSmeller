@@ -31,14 +31,14 @@ namespace ConcurrencyChecker.Vsix
                 return page;
             }
         }
-        
-        public static string Convert(List<string> list)
+
+        private static string Convert(List<string> list)
         {
             if (list == null) return string.Empty;
             return string.Join(";", list);
         }
-        
-        public static List<string> Convert(string str)
+
+        private static List<string> Convert(string str)
         {
             if (str == null) return new List<string>();
             return str.Split(';').ToList();

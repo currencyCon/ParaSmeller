@@ -10,7 +10,7 @@ namespace ConcurrencyAnalyzer.Reporters
         public const string Category = "Synchronization";
         public const string DiagnosticId = "OA001";
         public const string DiagnosticIdNestedAsync = "OA002";
-        public const int DepthAsyncTillWarning = 2;
+        private const int DepthAsyncTillWarning = 2;
 
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.OAAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.OAAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));

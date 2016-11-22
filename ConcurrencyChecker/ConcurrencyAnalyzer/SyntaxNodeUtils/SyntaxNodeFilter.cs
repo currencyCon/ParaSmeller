@@ -42,19 +42,5 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
             }
             return identifiers;
         }
-
-        public static IEnumerable<InvocationExpressionRepresentation> GetInvocationsInLocks(IEnumerable<Body> bodies)
-        {
-            IEnumerable<InvocationExpressionRepresentation> invocations = new List<InvocationExpressionRepresentation>();
-            foreach (var body in bodies)
-            {
-                if (body.IsSynchronized)
-                {
-                    invocations = invocations.Concat(body.InvocationExpressions);
-                }
-                invocations = invocations.Concat(GetInvocationsInLocks(body.Blocks));
-            }
-            return invocations;
-        }
     }
 }

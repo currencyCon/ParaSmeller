@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Hierarchy;
 using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.SymbolExtensions;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -25,8 +24,8 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             ConnectInvocations(solution);
             return solution;
         }
-        
-        public static void ConnectInvocations(SolutionRepresentation solution)
+
+        private static void ConnectInvocations(SolutionRepresentation solution)
         {
             Logger.Debug("ConnectInvocations");
             var memberWithBodies = solution.Classes.SelectMany(e => e.Members).ToList();
@@ -68,7 +67,6 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
                 }
                 Interlocked.Increment(ref counter);
             });
-            var x = 2;
         }
 
         private static void AddAsImplementationIfTarget(InvocationExpressionRepresentation invocationExpressionRepresentation, Member member)
