@@ -12,7 +12,7 @@ namespace ConcurrencyAnalyzer.Reporters
     {
         public const string DiagnosticId = "ETC001";
         private const string ThreadDefintion = "System.Threading.Thread";
-        private readonly ICollection<string> _ignoreDefinitions = new List<string>(new string[]
+        private readonly ICollection<string> _ignoreDefinitions = new List<string>(new[]
         {
             "System.Threading.Thread.CurrentThread",
             "System.Threading.Thread.CurrentPrincipal",

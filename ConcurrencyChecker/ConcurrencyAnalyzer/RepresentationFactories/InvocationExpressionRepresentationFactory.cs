@@ -16,7 +16,6 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             if (invocationExpressionSyntax.Expression is IdentifierNameSyntax)
             {
                 return CreateSelfInvocation(invocationExpressionSyntax, semanticModel, containingBody);
-
             }
             if (invocationExpressionSyntax.Expression is MemberAccessExpressionSyntax)
             {
@@ -49,7 +48,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             }
             throw new NotImplementedException($"An unexpected Type of invocationExpression was encountered: {invocationExpressionSyntax.ToFullString()}");
         }
-
+        
         private static InvocationExpressionRepresentation CreateParenthesizedInvocation(InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody)
         {
             var invocationExpression = (ParenthesizedExpressionSyntax)invocationExpressionSyntax.Expression;
@@ -82,9 +81,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             return invocation;
             
         }
-
-
-
+        
         private static InvocationExpressionRepresentation CreateRemoteInvocation(
             InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody)
         {

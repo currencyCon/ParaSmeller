@@ -110,8 +110,7 @@ namespace ConcurrencyAnalyzer.Reporters
                 Reports.Add(ReportFireAndForget(invocationExpressionRepresentation.Implementation));
             }
         }
-
-
+        
         private static Diagnostic ReportFireAndForget(SyntaxNode threadInvocation)
         {
             return new Diagnostic(FireAndForgetCallId, Title, MessageFormatFireAndForghet, Description, Category, threadInvocation.GetLocation());

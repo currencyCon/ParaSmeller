@@ -4,13 +4,13 @@ using Microsoft.CodeAnalysis;
 
 namespace ConcurrencyAnalyzer.Hierarchy
 {
-    public class HierarchyChecker
+    public class Hierarchy
     {
         readonly List<string> _inheritanceClasses = new List<string>();
         public List<INamedTypeSymbol> InheritanceFromInterfaces { get; }
         public List<ITypeSymbol> InheritanceFromClass { get; }
 
-        public HierarchyChecker(ITypeSymbol type)
+        public Hierarchy(ITypeSymbol type)
         {
             var baseTypes = type.GetBaseTypesAndThis();
             var interfaces = type.AllInterfaces;

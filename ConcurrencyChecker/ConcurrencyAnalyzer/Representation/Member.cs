@@ -8,7 +8,6 @@ namespace ConcurrencyAnalyzer.Representation
 {
     public abstract class Member
     {
-        public readonly ICollection<InvocationExpressionRepresentation> InvocationExpressions;
         public readonly ICollection<Body> Blocks;
         public readonly SyntaxToken Name;
         public ClassRepresentation ContainingClass { get; set; }
@@ -18,14 +17,13 @@ namespace ConcurrencyAnalyzer.Representation
         
         protected Member(string originalDefinition, SyntaxToken name)
         {
-            InvocationExpressions = new List<InvocationExpressionRepresentation>();
             Blocks = new List<Body>();
             OriginalDefinition = originalDefinition;
             Name = name;
         }
         public ICollection<InvocationExpressionRepresentation> GetAllInvocations()
         {
-            var invocations = InvocationExpressions.ToList();
+            var invocations = new List<InvocationExpressionRepresentation>();
             foreach (var block in Blocks)
             {
                 invocations.AddRange(block.GetAllInvocations());
