@@ -21,9 +21,9 @@ namespace ConcurrencyChecker.Analyzer
             {
                 var diag = new DiagnosticDescriptor(diagnostic.Id, diagnostic.Title, diagnostic.MessageFormat,
                     diagnostic.Category, DiagnosticSeverity.Warning, true, diagnostic.Description);
-                if (diagnostic.Params != null)
+                if (diagnostic.Parameter != null)
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(diag, diagnostic.Location, diagnostic.Params));
+                    context.ReportDiagnostic(Diagnostic.Create(diag, diagnostic.Location, diagnostic.Parameter));
                 }
                 else
                 {

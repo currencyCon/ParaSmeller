@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
@@ -53,15 +54,9 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
         private static bool IsNotInsertedInBody(Body body, CSharpSyntaxNode invocationExpressionSyntax)
         {
-            foreach (var invocationExpressionRepresentation in body.GetAllInvocations())
-            {
-                if (invocationExpressionRepresentation.Implementation.GetLocation() == invocationExpressionSyntax.GetLocation())
-                {
-                    return false;
-                }    
-            }
-            
-            return true;
+            return
+                body.GetAllInvocations()
+                    .All(e => e.Implementation.GetLocation() != invocationExpressionSyntax.GetLocation());
         }
     }
 }

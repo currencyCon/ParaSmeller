@@ -7,7 +7,6 @@ namespace ConcurrencyAnalyzer.Representation
     {
         public readonly string Name;
         public readonly ICollection<ClassRepresentation> Classes;
-        public readonly ICollection<InterfaceRepresentation> Interfaces;
         public readonly Dictionary<string, ICollection<ClassRepresentation>> ClassMap;
         public readonly Dictionary<string, InterfaceRepresentation> InterfaceMap;
         public readonly Dictionary<string, ICollection<Member>> Members;
@@ -15,7 +14,6 @@ namespace ConcurrencyAnalyzer.Representation
         {
             Name = name;
             Classes = new List<ClassRepresentation>();
-            Interfaces = new List<InterfaceRepresentation>();
             ClassMap = new Dictionary<string, ICollection<ClassRepresentation>>();
             InterfaceMap = new Dictionary<string, InterfaceRepresentation>();
             Members = new Dictionary<string, ICollection<Member>>();

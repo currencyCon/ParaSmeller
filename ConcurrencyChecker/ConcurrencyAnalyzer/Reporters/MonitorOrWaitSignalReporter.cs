@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using ConcurrencyAnalyzer.Diagnostics;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
@@ -10,7 +11,6 @@ namespace ConcurrencyAnalyzer.Reporters
 {
     public class MonitorOrWaitSignalReporter: BaseReporter
     {
-        public const string Category = "Synchronization";
         public const string MonitorIfConditionDiagnosticId = "MWS001";
         public const string MonitorPulseDiagnosticId = "MWS002";
         private const string MonitorClass = "Monitor";
@@ -53,7 +53,7 @@ namespace ConcurrencyAnalyzer.Reporters
         {
             foreach (var monitorPulseExpression in classRepresentation.Implementation.GetInvocationExpression(MonitorClass, MonitorPulseMethod))
             {
-                Reports.Add(new Diagnostic(MonitorPulseDiagnosticId, Title, MessageFormatPulse, Description, Category,
+                Reports.Add(new Diagnostic(MonitorPulseDiagnosticId, Title, MessageFormatPulse, Description, DiagnosticCategory.Synchronization,
                     monitorPulseExpression.Parent.GetLocation()));
 
             }
@@ -64,7 +64,7 @@ namespace ConcurrencyAnalyzer.Reporters
             var block = monitorWaitExpression.GetFirstParent<BlockSyntax>();
             if (!(block.Parent is WhileStatementSyntax) && !(block.Parent is DoStatementSyntax))
             {
-                Reports.Add(new Diagnostic(MonitorIfConditionDiagnosticId, Title, MessageFormatIf, Description, Category,
+                Reports.Add(new Diagnostic(MonitorIfConditionDiagnosticId, Title, MessageFormatIf, Description, DiagnosticCategory.Synchronization,
                     block.Parent.GetLocation()));
             }
         }

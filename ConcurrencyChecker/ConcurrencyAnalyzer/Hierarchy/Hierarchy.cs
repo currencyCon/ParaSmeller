@@ -6,17 +6,15 @@ namespace ConcurrencyAnalyzer.Hierarchy
 {
     public class Hierarchy
     {
-        readonly List<string> _inheritanceClasses = new List<string>();
-        public List<INamedTypeSymbol> InheritanceFromInterfaces { get; }
-        public List<ITypeSymbol> InheritanceFromClass { get; }
+        private readonly List<string> _inheritanceClasses = new List<string>();
+        public  readonly List<INamedTypeSymbol> InheritanceFromInterfaces = new List<INamedTypeSymbol>();
+        public readonly List<ITypeSymbol> InheritanceFromClass = new List<ITypeSymbol>();
 
         public Hierarchy(ITypeSymbol type)
         {
             var baseTypes = type.GetBaseTypesAndThis();
             var interfaces = type.AllInterfaces;
 
-            InheritanceFromInterfaces = new List<INamedTypeSymbol>();
-            InheritanceFromClass = new List<ITypeSymbol>();
             foreach (var interfacee in interfaces)
             {
                 _inheritanceClasses.Add(interfacee.Name);
@@ -27,7 +25,11 @@ namespace ConcurrencyAnalyzer.Hierarchy
                 _inheritanceClasses.Add(baseType.Name);
                 InheritanceFromClass.Add(baseType);
             }
+            RemoveSelfFromInheritanceTree();
+        }
 
+        private void RemoveSelfFromInheritanceTree()
+        {
             InheritanceFromClass.RemoveAt(0);
         }
 

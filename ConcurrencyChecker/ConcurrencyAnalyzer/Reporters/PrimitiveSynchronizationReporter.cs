@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using ConcurrencyAnalyzer.Diagnostics;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
@@ -9,7 +10,6 @@ namespace ConcurrencyAnalyzer.Reporters
 {
     public class PrimitiveSynchronizationReporter: BaseReporter
     {
-        public const string Category = "Synchronization";
         public const string PrimitiveSynchronizationDiagnosticId = "PS001";
         private const string InterlockedKeyword = "Interlocked";
         private const string VolatileKeyWord = "volatile";
@@ -61,7 +61,7 @@ namespace ConcurrencyAnalyzer.Reporters
 
         private static Diagnostic ReportPrimitiveSynchronizationDiagnostic(SyntaxNode syntaxnode)
         {
-            return new Diagnostic(PrimitiveSynchronizationDiagnosticId, Title, MessageFormatPrimitiveSynchronization, Description, Category, syntaxnode.GetLocation());
+            return new Diagnostic(PrimitiveSynchronizationDiagnosticId, Title, MessageFormatPrimitiveSynchronization, Description, DiagnosticCategory.Synchronization, syntaxnode.GetLocation());
         }
 
         protected override void Register()

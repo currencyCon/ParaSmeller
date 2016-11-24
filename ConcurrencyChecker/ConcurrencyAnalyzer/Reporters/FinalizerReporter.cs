@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using ConcurrencyAnalyzer.Diagnostics;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
@@ -9,7 +10,6 @@ namespace ConcurrencyAnalyzer.Reporters
 {
     public class FinalizerReporter: BaseReporter
     {
-        public const string Category = "Synchronization";
         public const string FinalizerSynchronizationDiagnosticId = "FS001";
 
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.FSAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
@@ -102,7 +102,7 @@ namespace ConcurrencyAnalyzer.Reporters
 
         private static Diagnostic ReportUnsynchronizedField(SyntaxNode syntaxnode)
         {
-            return new Diagnostic(FinalizerSynchronizationDiagnosticId, Title, MessageFormatFinalizerSynchronization, Description, Category, syntaxnode.GetLocation());
+            return new Diagnostic(FinalizerSynchronizationDiagnosticId, Title, MessageFormatFinalizerSynchronization, Description, DiagnosticCategory.Synchronization, syntaxnode.GetLocation());
         }
 
         protected override void Register()

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using ConcurrencyAnalyzer.Diagnostics;
 using ConcurrencyAnalyzer.Representation;
 using Microsoft.CodeAnalysis;
 using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
@@ -7,7 +8,6 @@ namespace ConcurrencyAnalyzer.Reporters
 {
     public class OverAsynchronyReporter: BaseReporter
     {
-        public const string Category = "Synchronization";
         public const string DiagnosticId = "OA001";
         public const string DiagnosticIdNestedAsync = "OA002";
         private const int DepthAsyncTillWarning = 2;
@@ -50,7 +50,7 @@ namespace ConcurrencyAnalyzer.Reporters
 
             if (symbol != null && symbol.IsAsync && symbol.DeclaredAccessibility != Accessibility.Public)
             {
-                Reports.Add(new Diagnostic(DiagnosticId, Title, MessageFormat, Description, Category, method.Implementation.GetLocation()));
+                Reports.Add(new Diagnostic(DiagnosticId, Title, MessageFormat, Description, DiagnosticCategory.Synchronization, method.Implementation.GetLocation()));
             }
         }
 
@@ -64,7 +64,7 @@ namespace ConcurrencyAnalyzer.Reporters
             CheckForPrivateAsync(method);
             if (CheckForNestedAsync(method, 0))
             {
-                Reports.Add(new Diagnostic(DiagnosticIdNestedAsync, Title, MessageFormatNestedAsync, Description, Category,
+                Reports.Add(new Diagnostic(DiagnosticIdNestedAsync, Title, MessageFormatNestedAsync, Description, DiagnosticCategory.Synchronization,
                     method.Implementation.GetLocation(), new object[] {DepthAsyncTillWarning + 1}));
             }
         }

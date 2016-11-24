@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ConcurrencyAnalyzer.Representation;
 
 namespace ConcurrencyAnalyzer.Hierarchy
@@ -7,13 +8,13 @@ namespace ConcurrencyAnalyzer.Hierarchy
     {
         public static void Load(SolutionRepresentation solution)
         {
-            Logger.Debug("HierarchyLoader");
-            foreach (var clazz in solution.Classes)
+            Logger.Debug("HierarchyLoader startet");
+            Parallel.ForEach(solution.Classes, clazz =>
             {
                 var hierarchy = new Hierarchy(clazz.NamedTypeSymbol);
                 AddBaseClasses(solution, hierarchy, clazz);
                 AddInterfaces(solution, hierarchy, clazz);
-            }
+            });
             Logger.Debug("HierarchyLoader finished");
         }
 

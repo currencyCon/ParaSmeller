@@ -30,11 +30,11 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             bool synchronized) where TMember : Member
         {
             var members = classRepresentation.Members.Where(e => e is TMember);
-            members = GetMembers(synchronized, members);
+            members = FilterSynchronization(synchronized, members);
             return members.Select(e => e as TMember).ToList();
         }
 
-        private static IEnumerable<Member> GetMembers(bool synchronized, IEnumerable<Member> members)
+        private static IEnumerable<Member> FilterSynchronization(bool synchronized, IEnumerable<Member> members)
         {
             if (synchronized)
             {

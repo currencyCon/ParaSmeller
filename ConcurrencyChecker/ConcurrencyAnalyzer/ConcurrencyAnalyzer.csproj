@@ -38,6 +38,7 @@
     <Compile Include="Builders\MethodBuilder.cs" />
     <Compile Include="Builders\PropertyBuilder.cs" />
     <Compile Include="Builders\SyntaxFormatter.cs" />
+    <Compile Include="Diagnostics\DiagnosticCategory.cs" />
     <Compile Include="Reporters\BaseReporter.cs" />
     <Compile Include="Reporters\ExplicitThreadsReporter.cs" />
     <Compile Include="Reporters\FinalizerReporter.cs" />
@@ -46,7 +47,9 @@
     <Compile Include="Reporters\WaitingConditionsTasksReporter.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Hierarchy\HierarchyLoader.cs" />
+    <Compile Include="RepresentationFactories\AnalysisConfiguration\AnalysisConfiguration.cs" />
     <Compile Include="RepresentationFactories\InterfaceRepresentationFactory.cs" />
+    <Compile Include="RepresentationFactories\ProgressInformation\ScopeCalculator.cs" />
     <Compile Include="Representation\InterfaceRepresentation.cs" />
     <Compile Include="SemanticAnalysis\SymbolInspector.cs" />
     <Compile Include="Reporters\MonitorOrWaitSignalReporter.cs" />
