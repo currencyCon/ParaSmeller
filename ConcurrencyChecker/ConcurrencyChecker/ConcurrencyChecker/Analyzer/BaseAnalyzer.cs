@@ -13,7 +13,6 @@ namespace ConcurrencyChecker.Analyzer
 {
     public abstract class BaseAnalyzer: DiagnosticAnalyzer
     {
-        private static readonly SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1);
         protected static void ReportDiagnostics(CompilationAnalysisContext context, ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics)
         {
             Logger.Debug($"Found {diagnostics.Count} diagnostics");
@@ -29,7 +28,7 @@ namespace ConcurrencyChecker.Analyzer
                 {
                     context.ReportDiagnostic(Diagnostic.Create(diag, diagnostic.Location));
                 }
-                
+                Logger.Debug($"{diagnostic.Id}: {diagnostic.Description}, {diagnostic.MessageFormat}, Location:{diagnostic.Location}");
             }
         }
 
@@ -38,21 +37,16 @@ namespace ConcurrencyChecker.Analyzer
             context.RegisterCompilationAction(RegisterDiagnostics);
         }
 
-        private async void RegisterDiagnostics(CompilationAnalysisContext context)
+        private void RegisterDiagnostics(CompilationAnalysisContext context)
         {
-            bool hasLock = await SemaphoreSlim.WaitAsync(new TimeSpan(0,0,0,1));
-            if (hasLock)
+            Logger.Debug("Starting Analyzer");
+            if (SelectSmell().Any())
             {
-                Logger.Debug("Starting Analyzer");
-                if (SelectSmell().Any())
-                {
-                    RegisterDiagnostics(context, SelectSmell());
-                }
-                else
-                {
-                    RegisterDiagnostics(context, SmellReporter.DefaultSmellCollection);
-                }
-                SemaphoreSlim.Release(1);
+                RegisterDiagnostics(context, SelectSmell());
+            }
+            else
+            {
+                RegisterDiagnostics(context, SmellReporter.DefaultSmellCollection);
             }
         }
 
