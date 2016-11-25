@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ConcurrencyAnalyzer.SymbolExtensions;
 using Microsoft.CodeAnalysis;
 
 namespace ConcurrencyAnalyzer.Hierarchy
@@ -12,7 +11,7 @@ namespace ConcurrencyAnalyzer.Hierarchy
 
         public Hierarchy(ITypeSymbol type)
         {
-            var baseTypes = type.GetBaseTypesAndThis();
+            var baseTypes = GetBaseTypesAndThis(type);
             var interfaces = type.AllInterfaces;
 
             foreach (var interfacee in interfaces)
@@ -36,6 +35,16 @@ namespace ConcurrencyAnalyzer.Hierarchy
         public bool IsSubClass(ITypeSymbol baseType)
         {
             return _inheritanceClasses.Contains(baseType.Name);
+        }
+
+        public IEnumerable<ITypeSymbol> GetBaseTypesAndThis(ITypeSymbol type)
+        {
+            var current = type;
+            while (current != null)
+            {
+                yield return current;
+                current = current.BaseType;
+            }
         }
     }
 }

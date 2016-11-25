@@ -23,7 +23,7 @@ namespace ConcurrencyAnalyzer.SemanticAnalysis
             }
             catch (Exception)
             {
-                return new SymbolInformation()
+                return new SymbolInformation
                 {
                     ClassName = DefaultSymbolValues.ClassName,
                     OriginalDefinition = DefaultSymbolValues.OriginalDefinition,

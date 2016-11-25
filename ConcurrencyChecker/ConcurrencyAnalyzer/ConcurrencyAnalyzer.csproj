@@ -88,7 +88,6 @@
     <Compile Include="SemanticAnalysis\SymbolInformationBuilder.cs" />
     <Compile Include="SemanticAnalysis\SymbolInformation.cs" />
     <Compile Include="Hierarchy\Hierarchy.cs" />
-    <Compile Include="SymbolExtensions\TypeExtension.cs" />
     <Compile Include="SyntaxNodeUtils\SyntaxNodeExtensions.cs" />
     <Compile Include="SyntaxNodeUtils\SyntaxNodeFilter.cs" />
   </ItemGroup>
