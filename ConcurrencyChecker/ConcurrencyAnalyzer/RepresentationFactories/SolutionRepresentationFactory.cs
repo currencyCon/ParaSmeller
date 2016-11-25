@@ -94,11 +94,12 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
 
         private static async Task AddSyntaxTrees(SolutionRepresentation solution, Compilation compilation)
         {
-            var total = compilation.SyntaxTrees.ToList().Count;
-            Logger.Debug("Total Compilations: " + total);
+            ScopeCalculator scopeCalculator = new ScopeCalculator(compilation);
 
-            var countClasses = await ScopeCalculator.CountTypes(compilation);
-            Logger.Debug("Total Classes & Interfaces: " + countClasses);
+            var countClasses = await scopeCalculator.CountTypes();
+
+            Logger.Debug($"Total SyntaxTrees: {scopeCalculator.CountSyntaxTrees()}");           
+            Logger.Debug($"Total Classes & Interfaces: {countClasses}");
 
             var counter = 0;
             foreach (var syntaxTree in compilation.SyntaxTrees)
@@ -116,7 +117,6 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         
         private static void AddClassRepresentations(SolutionRepresentation solution, IEnumerable<ClassDeclarationSyntax> classes, SemanticModel semanticModel, ref int counter)
         {   
-
             foreach (var classDeclarationSyntax in classes)
             {
                 counter++;
