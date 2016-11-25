@@ -7,18 +7,18 @@ namespace ConcurrencyAnalyzer.Representation
 {
     public abstract class Body
     {
-        public SyntaxNode Implementation { get; set; }
-        public Member ContainingMember { get; set; }
-        public ICollection<InvocationExpressionRepresentation> InvocationExpressions { get; set; }
-        public ICollection<Body> Blocks { get; set; }
+        public readonly SyntaxNode Implementation;
+        public readonly Member ContainingMember;
+        public readonly ICollection<InvocationExpressionRepresentation> InvocationExpressions = new List<InvocationExpressionRepresentation>();
+        public readonly ICollection<Body> Blocks = new List<Body>();
         public abstract bool IsSynchronized { get; }
+
         protected Body(Member member, SyntaxNode implementation)
         {
             Implementation = implementation;
             ContainingMember = member;
-            InvocationExpressions = new List<InvocationExpressionRepresentation>();
-            Blocks = new List<Body>();
         }
+
         public ICollection<InvocationExpressionRepresentation> GetAllInvocations()
         {
             var invocations = InvocationExpressions.ToList();
@@ -38,6 +38,19 @@ namespace ConcurrencyAnalyzer.Representation
             foreach (var subLockBlock in Blocks)
             {
                 subLockBlock.AppendLockArguments(lockObjects);
+            }
+        }
+
+        public void AddInvokedMembersWithLock(ICollection<Member> members, Member member)
+        {
+            if (!members.Contains(member) && IsSynchronized)
+            {
+                members.Add(member);
+            }
+
+            foreach (var subBlock in Blocks)
+            {
+                subBlock.AddInvokedMembersWithLock(members, member);
             }
         }
     }

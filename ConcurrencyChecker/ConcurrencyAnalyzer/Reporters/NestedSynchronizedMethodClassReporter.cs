@@ -29,7 +29,7 @@ namespace ConcurrencyAnalyzer.Reporters
                 lockObjects.Add(memberWithBody.GetAllLockArguments());
             }
 
-            bool correct = LockChecker.IsCorrectlyAquired(lockObjects);
+            var correct = LockChecker.IsCorrectlyAquired(lockObjects);
             if (!correct)
             {
                 foreach (var memberWithBody in clazz.GetMembersWithMultipleLocks())

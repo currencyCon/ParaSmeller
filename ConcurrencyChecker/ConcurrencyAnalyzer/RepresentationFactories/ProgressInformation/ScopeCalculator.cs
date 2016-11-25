@@ -8,11 +8,11 @@ namespace ConcurrencyAnalyzer.RepresentationFactories.ProgressInformation
 {
     public class ScopeCalculator
     {
-        private Compilation compilation;
+        private readonly Compilation _compilation;
 
         public ScopeCalculator(Compilation compilation)
         {
-            this.compilation = compilation;
+            _compilation = compilation;
         }
 
         private async Task<int> CountTypes(SyntaxTree syntaxTree)
@@ -25,7 +25,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories.ProgressInformation
         public async Task<int> CountTypes()
         {
             var countClasses = 0;
-            foreach (var syntaxTree in compilation.SyntaxTrees)
+            foreach (var syntaxTree in _compilation.SyntaxTrees)
             {
                 countClasses += await CountTypes(syntaxTree);
             }
@@ -34,7 +34,7 @@ namespace ConcurrencyAnalyzer.RepresentationFactories.ProgressInformation
 
         public int CountSyntaxTrees()
         {
-            return compilation.SyntaxTrees.ToList().Count;
+            return _compilation.SyntaxTrees.ToList().Count;
         }
     }
 }
