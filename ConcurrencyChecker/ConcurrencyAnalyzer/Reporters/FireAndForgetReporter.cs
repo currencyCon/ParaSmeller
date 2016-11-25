@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using ConcurrencyAnalyzer.Diagnostics;
 using ConcurrencyAnalyzer.Representation;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -14,7 +15,6 @@ namespace ConcurrencyAnalyzer.Reporters
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormatFireAndForghet = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
-        public const string Category = "Synchronization";
 
         private void InspectMemberForUnawaitedTasks(Member member)
         {
@@ -113,7 +113,7 @@ namespace ConcurrencyAnalyzer.Reporters
         
         private static Diagnostic ReportFireAndForget(SyntaxNode threadInvocation)
         {
-            return new Diagnostic(FireAndForgetCallId, Title, MessageFormatFireAndForghet, Description, Category, threadInvocation.GetLocation());
+            return new Diagnostic(FireAndForgetCallId, Title, MessageFormatFireAndForghet, Description, DiagnosticCategory.Synchronization, threadInvocation.GetLocation());
 
         }
 

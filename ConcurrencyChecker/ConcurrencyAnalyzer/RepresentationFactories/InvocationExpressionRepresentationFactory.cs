@@ -97,8 +97,8 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
             return CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget);
         }
         private static InvocationExpressionRepresentation CreateInvocationWithSymbolInfo(
-    InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody,
-    SimpleNameSyntax invocationTarget)
+            InvocationExpressionSyntax invocationExpressionSyntax, SemanticModel semanticModel, Body containingBody,
+            SimpleNameSyntax invocationTarget)
         {
             var symbolInfo = SymbolInformationBuilder.Create(invocationTarget, semanticModel);
             return CreateInvocation(invocationExpressionSyntax, containingBody, invocationTarget, symbolInfo);

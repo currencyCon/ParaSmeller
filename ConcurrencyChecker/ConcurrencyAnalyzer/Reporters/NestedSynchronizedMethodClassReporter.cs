@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ConcurrencyAnalyzer.Diagnostics;
 using ConcurrencyAnalyzer.Locks;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.RepresentationExtensions;
@@ -18,7 +19,6 @@ namespace ConcurrencyAnalyzer.Reporters
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.NSMCAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.NSMCAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.NSMCAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
-        public const string Category = "Synchronization";
 
         private void CheckAquireMultipleLocks(ClassRepresentation clazz)
         {
@@ -29,12 +29,12 @@ namespace ConcurrencyAnalyzer.Reporters
                 lockObjects.Add(memberWithBody.GetAllLockArguments());
             }
 
-            bool correct = LockChecker.IsCorrectAquired(lockObjects);
+            bool correct = LockChecker.IsCorrectlyAquired(lockObjects);
             if (!correct)
             {
                 foreach (var memberWithBody in clazz.GetMembersWithMultipleLocks())
                 {
-                    Reports.Add(new Diagnostic(NestedLockingDiagnosticId2, Title, MessageFormat, Description, Category, memberWithBody.Name.GetLocation()));
+                    Reports.Add(new Diagnostic(NestedLockingDiagnosticId2, Title, MessageFormat, Description, DiagnosticCategory.Synchronization, memberWithBody.Name.GetLocation()));
                 }
             }
         }
@@ -62,7 +62,7 @@ namespace ConcurrencyAnalyzer.Reporters
                         if (UsesLockRecursive(memberAccessExpressionSyntax, parameter, lockObject,
                             method.Implementation))
                         {
-                            Reports.Add(new Diagnostic(NestedLockingDiagnosticId, Title, MessageFormat, Description, Category, memberAccessExpressionSyntax.GetLocation()));
+                            Reports.Add(new Diagnostic(NestedLockingDiagnosticId, Title, MessageFormat, Description, DiagnosticCategory.Synchronization, memberAccessExpressionSyntax.GetLocation()));
                         }
                     }
                 }

@@ -1,14 +1,13 @@
 ﻿using System.Linq;
+using ConcurrencyAnalyzer.Diagnostics;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SemanticAnalysis;
 using Microsoft.CodeAnalysis;
 using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
-
 namespace ConcurrencyAnalyzer.Reporters
 {
     public class TentativelyResourceReferenceReporter: BaseReporter
     {
-        public const string Category = "Synchronization";
         public const string DiagnosticId = "TRR001";
 
         private const string MonitorWait = "System.Threading.Monitor.Wait";
@@ -55,7 +54,7 @@ namespace ConcurrencyAnalyzer.Reporters
 
         private static Diagnostic ReportTimeoutUsage(SyntaxNode syntaxnode)
         {
-            return new Diagnostic(DiagnosticId, Title, MessageFormatTentativelyResourceReference, Description, Category, syntaxnode.GetLocation());
+            return new Diagnostic(DiagnosticId, Title, MessageFormatTentativelyResourceReference, Description, DiagnosticCategory.Synchronization, syntaxnode.GetLocation());
         }
 
         protected override void Register()

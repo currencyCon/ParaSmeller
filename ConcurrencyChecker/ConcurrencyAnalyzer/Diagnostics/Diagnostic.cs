@@ -12,7 +12,7 @@ namespace ConcurrencyAnalyzer.Diagnostics
         public readonly LocalizableString Description;
         public readonly string Category;
         public readonly Location Location;
-        public readonly object[] Params;
+        public readonly object[] Parameter;
 
 
         public Diagnostic(string id, LocalizableString title, LocalizableString messageFormat, LocalizableString description,
@@ -24,17 +24,16 @@ namespace ConcurrencyAnalyzer.Diagnostics
             Description = description;
             Category = category;
         }
-
         public Diagnostic(string id, LocalizableString title, LocalizableString messageFormat, LocalizableString description,
-            string category, Location location, object[] par): this(id, title, messageFormat, description, category, location)
+            string category, Location location) : this(id, title, messageFormat, description, category)
         {
-            Params = par;
+            Location = location;
         }
 
         public Diagnostic(string id, LocalizableString title, LocalizableString messageFormat, LocalizableString description,
-            string category, Location location): this(id, title, messageFormat, description, category)
+            string category, Location location, object[] parameter): this(id, title, messageFormat, description, category, location)
         {
-            Location = location;
+            Parameter = parameter;
         }
     }
 }

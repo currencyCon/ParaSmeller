@@ -108,5 +108,40 @@ namespace ConcurrencyAnalyzer.Representation
             }
             return methodsWithHalfSynchronizedProperties;
         }
+
+        public bool ImplementsInvocationDefinedInBaseClasses(InvocationExpressionRepresentation invocationExpressionRepresentation)
+        {
+            foreach(var classes in ClassMap.Values)
+            {
+                foreach (var baseClass in classes)
+                {
+                    if (baseClass == null) continue;
+                    foreach (var member in baseClass.Members)
+                    {
+                        if (member.OriginalDefinition == invocationExpressionRepresentation.Defintion)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool ImplementsInvocationDefinedInInterfaces(InvocationExpressionRepresentation invocationExpressionRepresentation)
+        {
+            foreach (var interfacee in InterfaceMap.Values)
+            {
+                if (interfacee == null) continue;
+                foreach (var member in interfacee.Members)
+                {
+                    if (member.OriginalDefinition == invocationExpressionRepresentation.Defintion)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

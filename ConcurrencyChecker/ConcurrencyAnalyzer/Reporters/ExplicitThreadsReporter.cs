@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using ConcurrencyAnalyzer.Diagnostics;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
@@ -11,13 +13,12 @@ namespace ConcurrencyAnalyzer.Reporters
     {
         public const string DiagnosticId = "ETC001";
         private const string ThreadDefintion = "System.Threading.Thread";
-        private readonly ICollection<string> _ignoreDefinitions = new List<string>(new[]
+        private readonly IReadOnlyList<string> _ignoredDefinitions = new List<string>(new[]
         {
             "System.Threading.Thread.CurrentThread",
             "System.Threading.Thread.CurrentPrincipal",
             "System.Threading.Thread.CurrentContext",
         });
-        public const string Category = "ParallelCorrectness";
 
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.ETCAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.ETCAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
@@ -34,7 +35,7 @@ namespace ConcurrencyAnalyzer.Reporters
             }
             if (symbol?.OriginalDefinition?.ToString() == ThreadDefintion && IsNotCurrentThreadAccess(node, classRepresentation))
             {
-                Reports.Add(new Diagnostic(DiagnosticId, Title, MessageFormat, Description, Category, node.Parent.GetLocation()));
+                Reports.Add(new Diagnostic(DiagnosticId, Title, MessageFormat, Description, DiagnosticCategory.ParallelCorrectness, node.Parent.GetLocation()));
             }
         }
 
@@ -44,7 +45,7 @@ namespace ConcurrencyAnalyzer.Reporters
             do
             {
                 var info = classRepresentation.SemanticModel.GetSymbolInfo(parent);
-                if (_ignoreDefinitions.Contains(info.Symbol?.OriginalDefinition.ToString()))
+                if (_ignoredDefinitions.Contains(info.Symbol?.OriginalDefinition.ToString()))
                 { 
                     return false;
                 }
