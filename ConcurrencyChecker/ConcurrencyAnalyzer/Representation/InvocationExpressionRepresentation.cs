@@ -16,23 +16,21 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly InvocationExpressionSyntax Implementation;
         public readonly Body ContainingBody;
         public readonly SymbolKind Type;
-        public readonly List<IdentifierNameSyntax> Arguments;
+        public readonly List<IdentifierNameSyntax> Arguments = new List<IdentifierNameSyntax>();
         public readonly string OriginalDefinition;
         public readonly string Defintion;
         public readonly bool IsInvokedInTask;
-        public readonly List<Member> InvokedImplementations;
+        public readonly List<Member> InvokedImplementations = new List<Member>();
         
         public InvocationExpressionRepresentation(bool isSynchronized, SymbolInformation symbolInfo, InvocationExpressionSyntax implementation, Body containingBody, SimpleNameSyntax invocationTarget, bool isInvokedInTask)
         {
             IsSynchronized = isSynchronized;
-            Arguments = new List<IdentifierNameSyntax>();
             OriginalDefinition = symbolInfo.OriginalDefinition;
             Type = symbolInfo.Type;
             Implementation = implementation;
             ContainingBody = containingBody;
             InvocationTargetName = invocationTarget;
             IsInvokedInTask = isInvokedInTask;
-            InvokedImplementations = new List<Member>();
             Defintion = symbolInfo.Definition;
             var splittedDefinition = OriginalDefinition.Split('.');
             TopLevelNameSpace = splittedDefinition[0];

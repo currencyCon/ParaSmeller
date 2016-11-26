@@ -6,17 +6,13 @@ namespace ConcurrencyAnalyzer.Representation
     public class SolutionRepresentation
     {
         public readonly string Name;
-        public readonly ICollection<ClassRepresentation> Classes;
-        public readonly Dictionary<string, ICollection<ClassRepresentation>> ClassMap;
-        public readonly Dictionary<string, InterfaceRepresentation> InterfaceMap;
-        public readonly Dictionary<string, ICollection<Member>> Members;
+        public readonly ICollection<ClassRepresentation> Classes = new List<ClassRepresentation>();
+        public readonly Dictionary<string, ICollection<ClassRepresentation>> ClassMap = new Dictionary<string, ICollection<ClassRepresentation>>();
+        public readonly Dictionary<string, InterfaceRepresentation> InterfaceMap = new Dictionary<string, InterfaceRepresentation>();
+        public readonly Dictionary<string, ICollection<Member>> Members = new Dictionary<string, ICollection<Member>>();
         public SolutionRepresentation(string name)
         {
             Name = name;
-            Classes = new List<ClassRepresentation>();
-            ClassMap = new Dictionary<string, ICollection<ClassRepresentation>>();
-            InterfaceMap = new Dictionary<string, InterfaceRepresentation>();
-            Members = new Dictionary<string, ICollection<Member>>();
         }
 
         public ICollection<ClassRepresentation> GetClass(string className)

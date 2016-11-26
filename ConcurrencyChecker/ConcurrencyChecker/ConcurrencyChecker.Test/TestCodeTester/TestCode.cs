@@ -1,21 +1,22 @@
-﻿using System.Threading.Tasks;
-
-namespace ConcurrencyChecker.Test.TestCodeTester
+﻿namespace Test
 {
-    public class SynchronizedThread
+    class TestProgram
     {
-        public static object LockObject = new object();
-        public static void DoTask()
+        public int z
         {
-            lock (LockObject)
+            get
             {
-                var c = 2;
+                var x = 2;
+                return x;
             }
         }
 
-        public static void Main()
+        public void m()
         {
-            Task.Run(()=> DoTask());
+            lock (this)
+            {
+                var x = z + 1;
+            }
         }
     }
 }

@@ -42,5 +42,38 @@ namespace ConcurrencyAnalyzer.SyntaxNodeUtils
             }
             return identifiers;
         }
+
+        public static IEnumerable<SyntaxToken> GetConstantDeclarations(SyntaxNode node)
+        {
+            return node.GetChildren<LocalDeclarationStatementSyntax>()
+                .Select(e => e.Declaration)
+                .Where(
+                    a =>
+                        a.GetChildren<EqualsValueClauseSyntax>()
+                            .Any(z => z.Value is LiteralExpressionSyntax))
+                .SelectMany(h => h.Variables.Select(u => u.Identifier));
+        }
+
+        public static bool ReturnsConstantValue(SyntaxNode node)
+        {
+            var returnStatement = node?.GetFirstChild<ReturnStatementSyntax>();
+            var returnValue = returnStatement?.Expression;
+            if (returnValue != null)
+            {
+                if (returnValue is LiteralExpressionSyntax)
+                {
+                    return true;
+                }
+                if (returnValue is IdentifierNameSyntax)
+                {
+                    var localConstantDeclarations = GetConstantDeclarations(node).Select(e => e.Text);
+                    if (localConstantDeclarations.Contains(((IdentifierNameSyntax) returnValue).Identifier.Text))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

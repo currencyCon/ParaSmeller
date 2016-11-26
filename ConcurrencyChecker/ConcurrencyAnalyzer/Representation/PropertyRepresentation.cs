@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ConcurrencyAnalyzer.SyntaxNodeUtils;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Representation
@@ -11,18 +14,18 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly BlockSyntax Setter;
         public readonly PropertyDeclarationSyntax Implementation;
 
-        protected PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, string originalDefinition): base(originalDefinition, propertyDeclarationSyntax.Identifier)
+        protected PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, string originalDefinition, SemanticModel semanticModel): base(originalDefinition, propertyDeclarationSyntax.Identifier, semanticModel)
         {
             Implementation = propertyDeclarationSyntax;
             Getter = propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(e => e.Keyword.ToString() == GetKeyWord)?.Body;
             Setter = propertyDeclarationSyntax.AccessorList?.Accessors.FirstOrDefault(e => e.Keyword.ToString() == SetKeyWord)?.Body;
         }
-        public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation, string originalDefintion): this(propertyDeclarationSyntax, originalDefintion)
+        public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation, string originalDefintion, SemanticModel semanticModel): this(propertyDeclarationSyntax, originalDefintion, semanticModel)
         {
             ContainingClass = classRepresentation;
         }
 
-        public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, string originalDefintion): this(propertyDeclarationSyntax, originalDefintion)
+        public PropertyRepresentation(PropertyDeclarationSyntax propertyDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, string originalDefintion, SemanticModel semanticModel): this(propertyDeclarationSyntax, originalDefintion, semanticModel)
         {
             ContainingInterface = interfaceRepresentation;
         }
@@ -60,9 +63,12 @@ namespace ConcurrencyAnalyzer.Representation
             {
                 return false;
             }
+            if (SyntaxNodeFilter.ReturnsConstantValue(Getter))
+            {
+                return false;
+            }
             var identifiersInLockStatements = ContainingClass.GetIdentifiersInLocks().Select(e => e.Identifier.ToString());
             return identifiersInLockStatements.Contains(Implementation.Identifier.Text);
-            
         }
     }
 }

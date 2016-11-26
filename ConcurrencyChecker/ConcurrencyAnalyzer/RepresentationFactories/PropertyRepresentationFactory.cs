@@ -10,14 +10,14 @@ namespace ConcurrencyAnalyzer.RepresentationFactories
         public static PropertyRepresentation Create(PropertyDeclarationSyntax propertyDeclarationSyntax, ClassRepresentation classRepresentation, SemanticModel semanticModel)
         {
             var symbolInfo = SymbolInspector.GetDeclaredSymbol<IPropertySymbol>(propertyDeclarationSyntax, semanticModel);
-            var propertyRepresentation = new PropertyRepresentation(propertyDeclarationSyntax, classRepresentation, symbolInfo.OriginalDefinition.ToString());
+            var propertyRepresentation = new PropertyRepresentation(propertyDeclarationSyntax, classRepresentation, symbolInfo.OriginalDefinition.ToString(), semanticModel);
             return WithAccessors(propertyRepresentation, semanticModel);
         }
 
         public static PropertyRepresentation Create(PropertyDeclarationSyntax propertyDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, SemanticModel semanticModel)
         {
             var symbolInfo = SymbolInspector.GetDeclaredSymbol<IPropertySymbol>(propertyDeclarationSyntax, semanticModel);
-            var propertyRepresentation = new PropertyRepresentation(propertyDeclarationSyntax, interfaceRepresentation, symbolInfo.OriginalDefinition.ToString());
+            var propertyRepresentation = new PropertyRepresentation(propertyDeclarationSyntax, interfaceRepresentation, symbolInfo.OriginalDefinition.ToString(), semanticModel);
             return WithAccessors(propertyRepresentation, semanticModel);
         }
 

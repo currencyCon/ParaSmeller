@@ -133,6 +133,63 @@ namespace ConcurrencyChecker.Test.HalfSynchronizedClass
             VerifyCSharpDiagnostic(test, expected);
         }
 
+        [TestMethod]
+        public void TestReportsNoFalsePositivesOnConstantGetters()
+        {
+            const string test = @"
+namespace Test
+{
+    class TestProgram
+    {
+        public int z
+        {
+            get { return 1; }
+        }
+
+        public void m()
+        {
+            lock (this)
+            {
+                var x = z + 1;
+            }
+        }
+    }
+}
+            ";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void TestReportsNoFalsePositivesOnConstantGettersComplexCase()
+        {
+            const string test = @"
+namespace Test
+{
+    class TestProgram
+    {
+        public int z
+        {
+            get
+            {
+                var x = 2;
+                return x;
+            }
+        }
+
+        public void m()
+        {
+            lock (this)
+            {
+                var x = z + 1;
+            }
+        }
+    }
+}
+            ";
+
+            VerifyCSharpDiagnostic(test);
+        }
 
         [TestMethod]
         public void TestDetectsUnsynchronizedPropertyWithLockObject()

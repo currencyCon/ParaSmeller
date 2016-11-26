@@ -14,12 +14,14 @@ namespace ConcurrencyAnalyzer.Representation
         public InterfaceRepresentation ContainingInterface { get; set; }
         public abstract bool IsFullySynchronized();
         public readonly string OriginalDefinition;
-        
-        protected Member(string originalDefinition, SyntaxToken name)
+        protected readonly SemanticModel SemanticModel;
+
+        protected Member(string originalDefinition, SyntaxToken name, SemanticModel semanticModel)
         {
             Blocks = new List<Body>();
             OriginalDefinition = originalDefinition;
             Name = name;
+            SemanticModel = semanticModel;
         }
         public ICollection<InvocationExpressionRepresentation> GetAllInvocations()
         {

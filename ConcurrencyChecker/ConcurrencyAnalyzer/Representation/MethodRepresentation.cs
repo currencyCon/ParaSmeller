@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConcurrencyAnalyzer.Representation
@@ -9,17 +10,17 @@ namespace ConcurrencyAnalyzer.Representation
         public readonly MethodDeclarationSyntax Implementation;
         public readonly ICollection<ParameterSyntax> Parameters;
 
-        private MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, string originalDefinition): base(originalDefinition, methodDeclarationSyntax.Identifier)
+        private MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, string originalDefinition, SemanticModel semanticModel): base(originalDefinition, methodDeclarationSyntax.Identifier, semanticModel)
         {
             Implementation = methodDeclarationSyntax;
             Parameters = Implementation.ParameterList.Parameters.ToList();
         }
-        public MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, ClassRepresentation classRepresentation, string originalDefintion): this(methodDeclarationSyntax, originalDefintion)
+        public MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, ClassRepresentation classRepresentation, string originalDefintion, SemanticModel semanticModel): this(methodDeclarationSyntax, originalDefintion, semanticModel)
         {
             ContainingClass = classRepresentation;
         }
 
-        public MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, string originalDefintion): this(methodDeclarationSyntax, originalDefintion)
+        public MethodRepresentation(MethodDeclarationSyntax methodDeclarationSyntax, InterfaceRepresentation interfaceRepresentation, string originalDefintion, SemanticModel semanticModel): this(methodDeclarationSyntax, originalDefintion, semanticModel)
         {
             ContainingInterface = interfaceRepresentation;
         }
