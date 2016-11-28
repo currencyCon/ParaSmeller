@@ -26,7 +26,7 @@ namespace ConcurrencyChecker.Analyzer
                 {
                     context.ReportDiagnostic(Diagnostic.Create(diag, diagnostic.Location));
                 }
-                Logger.Debug($"{diagnostic.Id}: {diagnostic.Description}, {diagnostic.MessageFormat}, Location:{diagnostic.Location}");
+                Logger.Debug($"DIAG::: {diagnostic.Id}: {diagnostic.Description}, {diagnostic.MessageFormat}, Location:{diagnostic.Location}");
             }
         }
 
