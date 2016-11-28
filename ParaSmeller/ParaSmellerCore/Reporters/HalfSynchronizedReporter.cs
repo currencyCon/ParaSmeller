@@ -18,7 +18,7 @@ namespace ParaSmellerCore.Reporters
 
         private void DiagnoseMethod(MethodRepresentation method)
         {
-            if (method.MethodHasHalfSynchronizedProperties())
+            if (method.NeedsSynchronization())
             {
                 Reports.Add(ReportHalfSynchronizationDiagnostic(method.Implementation, "Property", ""));
             }

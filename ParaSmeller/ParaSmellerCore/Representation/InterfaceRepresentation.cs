@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -10,10 +11,10 @@ namespace ParaSmellerCore.Representation
     {
         public readonly InterfaceDeclarationSyntax Implementation;
         public readonly SyntaxToken Name;
-        public readonly ICollection<Member> Members = new List<Member>();
+        public readonly ConcurrentBag<Member> Members = new ConcurrentBag<Member>();
 		public readonly SemanticModel SemanticModel;
         public readonly INamedTypeSymbol NamedTypeSymbol;
-        public readonly ICollection<ClassRepresentation> ImplementingClasses = new List<ClassRepresentation>();
+        public readonly ConcurrentBag<ClassRepresentation> ImplementingClasses = new ConcurrentBag<ClassRepresentation>();
 
         public ICollection<MethodRepresentation> Methods => Members.OfType<MethodRepresentation>().ToList();
         public ICollection<PropertyRepresentation> Properties => Members.OfType<PropertyRepresentation>().ToList();

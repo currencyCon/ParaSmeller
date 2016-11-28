@@ -36,7 +36,7 @@ namespace ParaSmellerCore.Representation
 
         private bool AllAccessorsAreSynchronized()
         {
-            if (Blocks.Count != 2)
+            if (!Blocks.Any())
             {
                 return false;
             }

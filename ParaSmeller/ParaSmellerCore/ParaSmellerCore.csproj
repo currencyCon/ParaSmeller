@@ -90,6 +90,7 @@
     <Compile Include="Hierarchy\Hierarchy.cs" />
     <Compile Include="SyntaxNodeUtils\SyntaxNodeExtensions.cs" />
     <Compile Include="SyntaxNodeUtils\SyntaxNodeFilter.cs" />
+    <Compile Include="TypeExtensions\ConcurrentBagExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeAnalysis">

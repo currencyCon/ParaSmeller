@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ParaSmellerCore.Representation
@@ -6,16 +7,16 @@ namespace ParaSmellerCore.Representation
     public class SolutionRepresentation
     {
         public readonly string Name;
-        public readonly ICollection<ClassRepresentation> Classes = new List<ClassRepresentation>();
-        public readonly Dictionary<string, ICollection<ClassRepresentation>> ClassMap = new Dictionary<string, ICollection<ClassRepresentation>>();
-        public readonly Dictionary<string, InterfaceRepresentation> InterfaceMap = new Dictionary<string, InterfaceRepresentation>();
-        public readonly Dictionary<string, ICollection<Member>> Members = new Dictionary<string, ICollection<Member>>();
+        public readonly ConcurrentBag<ClassRepresentation> Classes = new ConcurrentBag<ClassRepresentation>();
+        public readonly ConcurrentDictionary<string, ConcurrentBag<ClassRepresentation>> ClassMap = new ConcurrentDictionary<string, ConcurrentBag<ClassRepresentation>>();
+        public readonly ConcurrentDictionary<string, InterfaceRepresentation> InterfaceMap = new ConcurrentDictionary<string, InterfaceRepresentation>();
+        public readonly ConcurrentDictionary<string, ConcurrentBag<Member>> Members = new ConcurrentDictionary<string, ConcurrentBag<Member>>();
         public SolutionRepresentation(string name)
         {
             Name = name;
         }
 
-        public ICollection<ClassRepresentation> GetClass(string className)
+        public ConcurrentBag<ClassRepresentation> GetClass(string className)
         {
             return GetType(ClassMap, className);
         }
@@ -25,7 +26,7 @@ namespace ParaSmellerCore.Representation
             return GetType(InterfaceMap, interfaceName);
         }
 
-        private static TType GetType<TType>(IReadOnlyDictionary<string, TType> typeMap, string name)
+        private static TType GetType<TType>(IDictionary<string, TType> typeMap, string name)
         {
             TType type;
             typeMap.TryGetValue(name, out type);
@@ -46,12 +47,41 @@ namespace ParaSmellerCore.Representation
         {
             foreach (var member in classRepresentation.Members.Distinct())
             {
-                if (!Members.ContainsKey(member.OriginalDefinition))
-                {
-                    Members.Add(member.OriginalDefinition, new List<Member>());
-                }
-                Members[member.OriginalDefinition].Add(member);
+                var memberList = Members.GetOrAdd(member.OriginalDefinition, new ConcurrentBag<Member>());
+                memberList.Add(member);
             }
+        }
+
+        public void AddClass(ClassRepresentation classRepresentation)
+        {
+            Classes.Add(classRepresentation);
+            var className = classRepresentation.NamedTypeSymbol.ToString();
+            var classList = ClassMap.GetOrAdd(className, new ConcurrentBag<ClassRepresentation>());
+            classList.Add(classRepresentation);
+            AddMembers(classRepresentation);
+        }
+
+        public void AddInterface(InterfaceRepresentation interfaceRepresentation)
+        {
+            if (!InterfaceMap.TryAdd(interfaceRepresentation.NamedTypeSymbol.ToString(),
+                interfaceRepresentation))
+            {
+                Logger.Debug($"Try to add Interface twice{interfaceRepresentation.NamedTypeSymbol}");
+            }
+        }
+
+        public List<InvocationExpressionRepresentation> InvocationsToConnext()
+        {
+            var memberWithBodies = Classes.SelectMany(e => e.Members).ToList();
+            var memberBlocks = memberWithBodies.SelectMany(a => a.Blocks).ToList();
+            var invocations =
+                memberBlocks.SelectMany(e => e.GetAllInvocations())
+                    .Where(
+                        e =>
+                            !e.InvokedImplementations.Any() &&
+                            !RepresentationFactories.AnalysisConfiguration.AnalysisConfiguration.NamesSpacesToExclude.Contains(e.TopLevelNameSpace))
+                    .ToList();
+            return invocations;
         }
     }
 }

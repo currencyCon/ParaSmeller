@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -8,7 +9,7 @@ namespace ParaSmellerCore.Representation
 {
     public abstract class Member
     {
-        public readonly ICollection<Body> Blocks;
+        public readonly ConcurrentBag<Body> Blocks = new ConcurrentBag<Body>();
         public readonly SyntaxToken Name;
         public ClassRepresentation ContainingClass { get; set; }
         public InterfaceRepresentation ContainingInterface { get; set; }
@@ -18,7 +19,6 @@ namespace ParaSmellerCore.Representation
 
         protected Member(string originalDefinition, SyntaxToken name, SemanticModel semanticModel)
         {
-            Blocks = new List<Body>();
             OriginalDefinition = originalDefinition;
             Name = name;
             SemanticModel = semanticModel;

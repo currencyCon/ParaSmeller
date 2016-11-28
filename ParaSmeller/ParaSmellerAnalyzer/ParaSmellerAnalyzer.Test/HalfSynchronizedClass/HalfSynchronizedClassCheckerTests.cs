@@ -54,6 +54,104 @@ namespace ParaSmeller.Test.HalfSynchronizedClass
         }
 
         [TestMethod]
+        public void TestDetectsNoFalsePositiveOnSynchronizedPropertyWithNonSynchronizedLocals()
+        {
+            const string test = @"
+                namespace bla
+{
+    class Program
+    {
+        private int _z;
+
+        public int z
+        {
+            get
+            {
+                var x = 3;
+                lock (this)
+                {
+                    if (_z > 4)
+                    {
+                        x = _z;
+                    }
+                }
+                return x;
+            }
+
+            set
+            {
+                lock (this)
+                {
+                    _z = value;
+                }
+            }
+        }
+
+        public void m()
+        {
+            lock (this)
+            {
+                z = 2;
+            }
+        }
+    }
+}";
+            VerifyCSharpDiagnostic(test);
+
+        }
+
+        [TestMethod]
+        public void TestDetectsNoFalsePositiveOnSynchronizedPropertyIgnoresEmptyMethods()
+        {
+            const string test = @"
+namespace bla
+{
+    class Program
+    {
+        private int _z;
+
+        public int z
+        {
+            get
+            {
+                var x = 3;
+                lock (this)
+                {
+                    if (_z > 4)
+                    {
+                        x = _z;
+                    }
+                }
+                return x;
+            }
+
+            set
+            {
+                lock (this)
+                {
+                    _z = value;
+                }
+            }
+        }
+
+        public void DoNothing()
+        {
+            
+        }
+        public void m()
+        {
+            lock (this)
+            {
+                z = 2;
+                DoNothing();
+            }
+        }
+    }
+}";
+            VerifyCSharpDiagnostic(test);
+
+        }
+        [TestMethod]
         public void TestDetectsUnsynchronizedProperty()
         {
             const string test = @"
@@ -257,7 +355,7 @@ namespace Test
                     }
                 }
             ";
-            var expected = new [] {
+            var expected = new[] {
                 new DiagnosticResult
             {
                 Id = HalfSynchronizedReporter.UnsynchronizedPropertyId,
@@ -278,7 +376,7 @@ namespace Test
                             new DiagnosticResultLocation("Test0.cs", 8, 25)
                         }
             }
-            } ;
+            };
 
             VerifyCSharpDiagnostic(test, expected);
         }
@@ -286,7 +384,7 @@ namespace Test
         [TestMethod]
         public void TestProvidesSimpleHalfSynchronizedFix()
         {
-            const string test = 
+            const string test =
 @"
 namespace Test
 {
@@ -308,7 +406,7 @@ namespace Test
     }
 }
 ";
-            const string fixTest = 
+            const string fixTest =
 @"
 namespace Test
 {

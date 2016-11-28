@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ParaSmellerCore.Representation;
@@ -25,9 +26,9 @@ namespace ParaSmellerCore.Hierarchy
                 var interfaceRepresentation = solution.GetInterface(interfacee.OriginalDefinition.ToString());
                 if (interfaceRepresentation != null)
                 {
-                    if (!clazz.InterfaceMap.ContainsKey(interfacee.OriginalDefinition.ToString()))
+                    if (!clazz.InterfaceMap.TryAdd(interfacee.OriginalDefinition.ToString(), interfaceRepresentation))
                     {
-                        clazz.InterfaceMap.Add(interfacee.OriginalDefinition.ToString(), interfaceRepresentation);
+                        Logger.Debug($"Tried to add Interface twice: {interfacee.OriginalDefinition}");
                     }
 
                     interfaceRepresentation.ImplementingClasses.Add(clazz);
@@ -44,11 +45,8 @@ namespace ParaSmellerCore.Hierarchy
                 {
                     foreach (var baseClassRepresentation in baseClassRepresentations)
                     {
-                        if (!clazz.ClassMap.ContainsKey(baseClass.OriginalDefinition.ToString()))
-                        {
-                            clazz.ClassMap.Add(baseClass.OriginalDefinition.ToString(), new List<ClassRepresentation>());
-                        }
-                        clazz.ClassMap[baseClass.OriginalDefinition.ToString()].Add(baseClassRepresentation);
+                        var classList = clazz.ClassMap.GetOrAdd(baseClass.OriginalDefinition.ToString(), new ConcurrentBag<ClassRepresentation>());
+                        classList.Add(baseClassRepresentation);
                     }
                 }
             }

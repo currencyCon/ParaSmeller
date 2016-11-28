@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,8 +10,8 @@ namespace ParaSmellerCore.Representation
     {
         public readonly SyntaxNode Implementation;
         public readonly Member ContainingMember;
-        public readonly ICollection<InvocationExpressionRepresentation> InvocationExpressions = new List<InvocationExpressionRepresentation>();
-        public readonly ICollection<Body> Blocks = new List<Body>();
+        public readonly ConcurrentBag<InvocationExpressionRepresentation> InvocationExpressions = new ConcurrentBag<InvocationExpressionRepresentation>();
+        public readonly ConcurrentBag<Body> Blocks = new ConcurrentBag<Body>();
         public abstract bool IsSynchronized { get; }
 
         protected Body(Member member, SyntaxNode implementation)

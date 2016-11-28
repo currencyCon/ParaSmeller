@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -16,11 +17,11 @@ namespace ParaSmellerCore.Representation
         public readonly InvocationExpressionSyntax Implementation;
         public readonly Body ContainingBody;
         public readonly SymbolKind Type;
-        public readonly List<IdentifierNameSyntax> Arguments = new List<IdentifierNameSyntax>();
+        public readonly ConcurrentBag<IdentifierNameSyntax> Arguments = new ConcurrentBag<IdentifierNameSyntax>();
         public readonly string OriginalDefinition;
         public readonly string Defintion;
         public readonly bool IsInvokedInTask;
-        public readonly List<Member> InvokedImplementations = new List<Member>();
+        public readonly ConcurrentBag<Member> InvokedImplementations = new ConcurrentBag<Member>();
         
         public InvocationExpressionRepresentation(bool isSynchronized, SymbolInformation symbolInfo, InvocationExpressionSyntax implementation, Body containingBody, SimpleNameSyntax invocationTarget, bool isInvokedInTask)
         {

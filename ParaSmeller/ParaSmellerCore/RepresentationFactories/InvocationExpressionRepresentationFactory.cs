@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ParaSmellerCore.Representation;
 using ParaSmellerCore.SemanticAnalysis;
 using ParaSmellerCore.SyntaxNodeUtils;
+using ParaSmellerCore.TypeExtensions;
 
 namespace ParaSmellerCore.RepresentationFactories
 {

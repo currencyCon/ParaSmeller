@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using ParaSmellerCore.Hierarchy;
 using ParaSmellerCore.Representation;
 using ParaSmellerCore.RepresentationFactories.ProgressInformation;
 using ParaSmellerCore.SyntaxNodeUtils;
+using ParaSmellerCore.TypeExtensions;
 
 namespace ParaSmellerCore.RepresentationFactories
 {
@@ -28,40 +30,45 @@ namespace ParaSmellerCore.RepresentationFactories
         private static void ConnectInvocations(SolutionRepresentation solution)
         {
             Logger.Debug("ConnectInvocations");
-            var memberWithBodies = solution.Classes.SelectMany(e => e.Members).ToList();
-            var memberBlocks = memberWithBodies.SelectMany(a => a.Blocks).ToList();
-            var invocations = memberBlocks.SelectMany(e => e.GetAllInvocations()).Where(e => !e.InvokedImplementations.Any() && !AnalysisConfiguration.AnalysisConfiguration.NamesSpacesToExclude.Contains(e.TopLevelNameSpace)).ToList();
+            var invocations = solution.InvocationsToConnext();
             var counter = 0;
             var total = invocations.Count;
             
             Logger.Debug($"Total Invocations {total}");
             Parallel.ForEach(invocations, invocationExpressionRepresentation =>
             {
-                var calledClassOriginal = invocationExpressionRepresentation.CalledClassOriginal;
-                if (solution.Members.ContainsKey(invocationExpressionRepresentation.Defintion))
-                {
-                    invocationExpressionRepresentation.InvokedImplementations.AddRange(solution.Members[invocationExpressionRepresentation.Defintion]);
-                }
-                else if (solution.ClassMap.ContainsKey(calledClassOriginal))
-                {
-                    foreach (var member in solution.ClassMembers(calledClassOriginal))
-                    {
-                        AddAsImplementationIfTarget(invocationExpressionRepresentation, member);
-                    }
-                }
-                else if (solution.InterfaceMap.ContainsKey(calledClassOriginal))
-                {
-                    foreach (var member in solution.ImplementedInterfaceMembers(calledClassOriginal))
-                    {
-                        AddAsImplementationIfTarget(invocationExpressionRepresentation, member);
-                    }
-                }
-                if (counter % 100 == 0)
-                {
-                    Logger.Debug($"Current Invocation {counter} / {total}");
-                }
-                Interlocked.Increment(ref counter);
+                ConnectInvocations(solution, invocationExpressionRepresentation, ref counter, total);
             });
+        }
+
+        private static void ConnectInvocations(SolutionRepresentation solution,
+            InvocationExpressionRepresentation invocationExpressionRepresentation, ref int counter, int total)
+        {
+            var calledClassOriginal = invocationExpressionRepresentation.CalledClassOriginal;
+            if (solution.Members.ContainsKey(invocationExpressionRepresentation.Defintion))
+            {
+                invocationExpressionRepresentation.InvokedImplementations.AddRange(
+                    solution.Members[invocationExpressionRepresentation.Defintion]);
+            }
+            else if (solution.ClassMap.ContainsKey(calledClassOriginal))
+            {
+                foreach (var member in solution.ClassMembers(calledClassOriginal))
+                {
+                    AddAsImplementationIfTarget(invocationExpressionRepresentation, member);
+                }
+            }
+            else if (solution.InterfaceMap.ContainsKey(calledClassOriginal))
+            {
+                foreach (var member in solution.ImplementedInterfaceMembers(calledClassOriginal))
+                {
+                    AddAsImplementationIfTarget(invocationExpressionRepresentation, member);
+                }
+            }
+            if (counter%100 == 0)
+            {
+                Logger.Debug($"Current Invocation {counter} / {total}");
+            }
+            Interlocked.Increment(ref counter);
         }
 
         private static void AddAsImplementationIfTarget(InvocationExpressionRepresentation invocationExpressionRepresentation, Member member)
@@ -95,10 +102,8 @@ namespace ParaSmellerCore.RepresentationFactories
 
         private static async Task AddSyntaxTrees(SolutionRepresentation solution, Compilation compilation)
         {
-            ScopeCalculator scopeCalculator = new ScopeCalculator(compilation);
-
+            var scopeCalculator = new ScopeCalculator(compilation);
             var countClasses = await scopeCalculator.CountTypes();
-
             Logger.Debug($"Total SyntaxTrees: {scopeCalculator.CountSyntaxTrees()}");           
             Logger.Debug($"Total Classes & Interfaces: {countClasses}");
 
@@ -122,35 +127,30 @@ namespace ParaSmellerCore.RepresentationFactories
             {
                 counter++;
                 var classRepresentation = ClassRepresentationFactory.Create(classDeclarationSyntax, semanticModel);
-                solution.Classes.Add(classRepresentation);
-
-                var className = classRepresentation.NamedTypeSymbol.ToString();
-                if (!solution.ClassMap.ContainsKey(className))
-                {
-                    solution.ClassMap.Add(className, new List<ClassRepresentation>());
-                }
-                solution.ClassMap[className].Add(classRepresentation);
-                solution.AddMembers(classRepresentation);
-                
-                if (counter%10 == 0)
-                {
-                    Logger.Debug(""+counter);
-                }
+                solution.AddClass(classRepresentation);
+                AnnounceTypeProgress(counter);
             }   
         }
-        
 
-        private static void AddInterfaceRepresentations(SolutionRepresentation solution, IEnumerable<InterfaceDeclarationSyntax> interfaces, SemanticModel semanticModel, ref int counter)
+        private static void AnnounceTypeProgress( int counter)
+        {
+            if (counter%10 == 0)
+            {
+                Logger.Debug("" + counter);
+            }
+        }
+
+
+        private static void AddInterfaceRepresentations(SolutionRepresentation solution,
+            IEnumerable<InterfaceDeclarationSyntax> interfaces, SemanticModel semanticModel, ref int counter)
         {
             foreach (var interfaceDeclarationSyntax in interfaces)
             {
                 counter++;
-                var interfaceRepresentation = InterfaceRepresentationFactory.Create(interfaceDeclarationSyntax, semanticModel);
-                solution.InterfaceMap.Add(interfaceRepresentation.NamedTypeSymbol.ToString(), interfaceRepresentation);
-                if (counter % 10 == 0)
-                {
-                    Logger.Debug("" + counter);
-                }
+                var interfaceRepresentation = InterfaceRepresentationFactory.Create(interfaceDeclarationSyntax,
+                    semanticModel);
+                solution.AddInterface(interfaceRepresentation);
+                AnnounceTypeProgress(counter);
             }
         }
     }

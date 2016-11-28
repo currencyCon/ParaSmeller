@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,13 +13,13 @@ namespace ParaSmellerCore.Representation
     {
         public readonly ClassDeclarationSyntax Implementation;
         public readonly SyntaxToken Name;
-        public readonly ICollection<Member> Members;
+        public readonly ConcurrentBag<Member> Members = new ConcurrentBag<Member>();
 		public readonly DestructorDeclarationSyntax Destructor;
         public readonly SemanticModel SemanticModel;
         public readonly ICollection<FieldDeclarationSyntax> Fields;
         public readonly INamedTypeSymbol NamedTypeSymbol;
-        public readonly Dictionary<string, List<ClassRepresentation>> ClassMap = new Dictionary<string, List<ClassRepresentation>>();
-        public readonly Dictionary<string, InterfaceRepresentation> InterfaceMap = new Dictionary<string, InterfaceRepresentation>();
+        public readonly ConcurrentDictionary<string, ConcurrentBag<ClassRepresentation>> ClassMap = new ConcurrentDictionary<string, ConcurrentBag<ClassRepresentation>>();
+        public readonly ConcurrentDictionary<string, InterfaceRepresentation> InterfaceMap = new ConcurrentDictionary<string, InterfaceRepresentation>();
 
         public ICollection<MethodRepresentation> SynchronizedMethods { get; set; }
         public ICollection<MethodRepresentation> UnSynchronizedMethods { get; set; }
@@ -32,7 +33,6 @@ namespace ParaSmellerCore.Representation
         {
             Name = classDeclarationSyntax.Identifier;
             SemanticModel = semanticModel;
-            Members = new List<Member>();
             Implementation = classDeclarationSyntax;
             Destructor = Implementation.GetFirstChild<DestructorDeclarationSyntax>();
             Fields = Implementation.GetChildren<FieldDeclarationSyntax>().ToList();
