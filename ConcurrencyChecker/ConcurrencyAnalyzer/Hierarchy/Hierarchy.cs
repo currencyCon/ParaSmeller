@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 
-namespace ConcurrencyAnalyzer.Hierarchy
+namespace ParaSmellerCore.Hierarchy
 {
     public class Hierarchy
     {

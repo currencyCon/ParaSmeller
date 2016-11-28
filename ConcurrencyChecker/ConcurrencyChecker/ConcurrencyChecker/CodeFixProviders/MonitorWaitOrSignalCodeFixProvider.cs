@@ -3,15 +3,15 @@ using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ConcurrencyAnalyzer.Reporters;
-using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ParaSmellerCore.Reporters;
+using ParaSmellerCore.SyntaxNodeUtils;
 
-namespace ConcurrencyChecker.CodeFixProviders
+namespace ParaSmellerAnalyzer.CodeFixProviders
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MonitorWaitOrSignalCodeFixProvider)), Shared]
     public class MonitorWaitOrSignalCodeFixProvider : CodeFixProvider

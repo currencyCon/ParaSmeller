@@ -1,10 +1,10 @@
 ﻿using System.Linq;
-using ConcurrencyAnalyzer.Diagnostics;
-using ConcurrencyAnalyzer.Representation;
 using Microsoft.CodeAnalysis;
-using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
+using ParaSmellerCore.Diagnostics;
+using ParaSmellerCore.Representation;
+using Diagnostic = ParaSmellerCore.Diagnostics.Diagnostic;
 
-namespace ConcurrencyAnalyzer.Reporters
+namespace ParaSmellerCore.Reporters
 {
     public class OverAsynchronyReporter: BaseReporter
     {

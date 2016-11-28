@@ -1,4 +1,4 @@
-﻿namespace ConcurrencyChecker.Vsix
+﻿namespace ParaSmeller.Vsix
 {
     public enum Smell
     {

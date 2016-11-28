@@ -1,9 +1,9 @@
-﻿using ConcurrencyChecker.Analyzer;
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParaSmellerAnalyzer.Analyzer;
 using TestHelper;
 
-namespace ConcurrencyChecker.Test
+namespace ParaSmeller.Test
 {
 
     [DeploymentItem("bin\\debug\\Microsoft.Build.dll")]

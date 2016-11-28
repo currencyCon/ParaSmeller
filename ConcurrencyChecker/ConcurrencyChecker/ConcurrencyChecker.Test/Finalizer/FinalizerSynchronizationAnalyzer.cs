@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using ConcurrencyAnalyzer.Diagnostics;
-using ConcurrencyChecker.Analyzer;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+using ParaSmellerAnalyzer.Analyzer;
+using ParaSmellerCore.Diagnostics;
 
-namespace ConcurrencyChecker.Test.Finalizer
+namespace ParaSmeller.Test.Finalizer
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class FinalizerSynchronizationAnalyzer: BaseAnalyzer

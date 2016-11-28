@@ -1,6 +1,6 @@
-﻿namespace ConcurrencyChecker.Vsix
+﻿namespace ParaSmeller.Vsix
 {
-    partial class ConcurrencyCheckerSettingsUi
+    partial class ParaSmellerSettingsUi
     {
         /// <summary> 
         /// Required designer variable.
@@ -95,13 +95,13 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Async depth till Warning";
             // 
-            // ConcurrencyCheckerSettingsUi
+            // ParaSmellerSettingsUi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Name = "ConcurrencyCheckerSettingsUi";
+            this.Name = "ParaSmellerSettingsUi";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(464, 402);
             this.groupBox1.ResumeLayout(false);

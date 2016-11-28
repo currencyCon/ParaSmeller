@@ -3,17 +3,17 @@ using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ConcurrencyAnalyzer.Builders;
-using ConcurrencyAnalyzer.Reporters;
-using ConcurrencyAnalyzer.RepresentationFactories;
-using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
+using ParaSmellerCore.Builders;
+using ParaSmellerCore.Reporters;
+using ParaSmellerCore.RepresentationFactories;
+using ParaSmellerCore.SyntaxNodeUtils;
 
-namespace ConcurrencyChecker.CodeFixProviders
+namespace ParaSmellerAnalyzer.CodeFixProviders
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(HalfSynchronizedCheckerCodeFixProvider)), Shared]
     public class HalfSynchronizedCheckerCodeFixProvider : CodeFixProvider

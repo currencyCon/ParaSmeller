@@ -1,5 +1,5 @@
 ﻿
-namespace ConcurrencyAnalyzer.Diagnostics
+namespace ParaSmellerCore.Diagnostics
 {
     public static class DiagnosticCategory
     {

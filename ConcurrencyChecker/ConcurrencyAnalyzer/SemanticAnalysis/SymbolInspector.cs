@@ -1,9 +1,7 @@
-﻿
-
-using System;
+﻿using System;
 using Microsoft.CodeAnalysis;
 
-namespace ConcurrencyAnalyzer.SemanticAnalysis
+namespace ParaSmellerCore.SemanticAnalysis
 {
     public static class SymbolInspector
     {

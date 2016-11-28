@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using ConcurrencyAnalyzer.Diagnostics;
-using ConcurrencyChecker.Analyzer;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+using ParaSmellerAnalyzer.Analyzer;
+using ParaSmellerCore.Diagnostics;
 
-namespace ConcurrencyChecker.Test.FireAndForget
+namespace ParaSmeller.Test.FireAndForget
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class FireAndForgetCheckerAnalyzer: BaseAnalyzer

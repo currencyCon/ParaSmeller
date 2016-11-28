@@ -8,8 +8,8 @@
     <ProjectGuid>{EC34A75A-2B1F-4454-AB7C-94D0659FFCBD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConcurrencyChecker.Test</RootNamespace>
-    <AssemblyName>ConcurrencyChecker.Test</AssemblyName>
+    <RootNamespace>ParaSmeller.Test</RootNamespace>
+    <AssemblyName>ParaSmeller.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -132,13 +132,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ConcurrencyAnalyzer\ConcurrencyAnalyzer.csproj">
+    <ProjectReference Include="..\..\ConcurrencyAnalyzer\ParaSmellerCore.csproj">
       <Project>{09cf3dcc-1daf-4180-a2e2-ba41bc7e1ad3}</Project>
-      <Name>ConcurrencyAnalyzer</Name>
+      <Name>ParaSmellerCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ConcurrencyChecker\ConcurrencyChecker.csproj">
+    <ProjectReference Include="..\ConcurrencyChecker\ParaSmellerAnalyzer.csproj">
       <Project>{40285A25-7897-4D97-9A8E-94E1B1E718DE}</Project>
-      <Name>ConcurrencyChecker</Name>
+      <Name>ParaSmellerAnalyzer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

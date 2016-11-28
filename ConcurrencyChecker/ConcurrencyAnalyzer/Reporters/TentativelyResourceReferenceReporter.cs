@@ -1,10 +1,11 @@
 ﻿using System.Linq;
-using ConcurrencyAnalyzer.Diagnostics;
-using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.SemanticAnalysis;
 using Microsoft.CodeAnalysis;
-using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
-namespace ConcurrencyAnalyzer.Reporters
+using ParaSmellerCore.Diagnostics;
+using ParaSmellerCore.Representation;
+using ParaSmellerCore.SemanticAnalysis;
+using Diagnostic = ParaSmellerCore.Diagnostics.Diagnostic;
+
+namespace ParaSmellerCore.Reporters
 {
     public class TentativelyResourceReferenceReporter: BaseReporter
     {

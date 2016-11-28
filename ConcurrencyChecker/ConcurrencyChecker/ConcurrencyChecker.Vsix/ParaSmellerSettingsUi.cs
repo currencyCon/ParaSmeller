@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace ConcurrencyChecker.Vsix
+namespace ParaSmeller.Vsix
 {
-    public partial class ConcurrencyCheckerSettingsUi : UserControl
+    public partial class ParaSmellerSettingsUi : UserControl
     {
-        public ConcurrencyCheckerSettingsUi()
+        public ParaSmellerSettingsUi()
         {
             InitializeComponent();
         }
 
-        internal ConcurrencyCheckerSettings OptionsPage;
+        internal ParaSmellerSettings OptionsPage;
 
         public void Initialize()
         {

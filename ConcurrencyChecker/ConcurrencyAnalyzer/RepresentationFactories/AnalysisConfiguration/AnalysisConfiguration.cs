@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ConcurrencyAnalyzer.RepresentationFactories.AnalysisConfiguration
+namespace ParaSmellerCore.RepresentationFactories.AnalysisConfiguration
 {
     public static class AnalysisConfiguration
     {

@@ -2,13 +2,14 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ConcurrencyAnalyzer.Hierarchy;
-using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.RepresentationFactories.ProgressInformation;
-using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-namespace ConcurrencyAnalyzer.RepresentationFactories
+using ParaSmellerCore.Hierarchy;
+using ParaSmellerCore.Representation;
+using ParaSmellerCore.RepresentationFactories.ProgressInformation;
+using ParaSmellerCore.SyntaxNodeUtils;
+
+namespace ParaSmellerCore.RepresentationFactories
 {
     public static class SolutionRepresentationFactory
     {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ConcurrencyAnalyzer.Representation;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ParaSmellerCore.Representation;
 
-namespace ConcurrencyAnalyzer.RepresentationExtensions
+namespace ParaSmellerCore.RepresentationExtensions
 {
     public static class MemberExtensions
     {

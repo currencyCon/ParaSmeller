@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
 
-namespace ConcurrencyChecker.Test.OverAsynchrony
+namespace ParaSmeller.Test.OverAsynchrony
 {
     [TestClass]
     public class OverAsynchronyUnitTests : CodeFixVerifier

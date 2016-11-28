@@ -1,9 +1,8 @@
-﻿
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace ConcurrencyChecker.Analyzer
+namespace ParaSmellerAnalyzer.Analyzer
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AllAnalyzer : BaseAnalyzer

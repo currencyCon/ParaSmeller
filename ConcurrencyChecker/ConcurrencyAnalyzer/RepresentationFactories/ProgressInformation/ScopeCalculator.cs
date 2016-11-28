@@ -1,10 +1,9 @@
-﻿
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
+using ParaSmellerCore.SyntaxNodeUtils;
 
-namespace ConcurrencyAnalyzer.RepresentationFactories.ProgressInformation
+namespace ParaSmellerCore.RepresentationFactories.ProgressInformation
 {
     public class ScopeCalculator
     {

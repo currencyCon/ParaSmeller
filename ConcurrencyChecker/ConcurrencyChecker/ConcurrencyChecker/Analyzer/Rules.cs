@@ -1,8 +1,8 @@
-﻿using ConcurrencyAnalyzer.Diagnostics;
-using ConcurrencyAnalyzer.Reporters;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
+using ParaSmellerCore.Diagnostics;
+using ParaSmellerCore.Reporters;
 
-namespace ConcurrencyChecker.Analyzer
+namespace ParaSmellerAnalyzer.Analyzer
 {
     public static class Rules
     {

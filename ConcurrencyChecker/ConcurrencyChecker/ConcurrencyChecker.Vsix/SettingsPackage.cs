@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 
-namespace ConcurrencyChecker.Vsix
+namespace ParaSmeller.Vsix
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -31,8 +31,8 @@ namespace ConcurrencyChecker.Vsix
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [Guid(PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    [ProvideOptionPage(typeof(ConcurrencyCheckerSettings), "Concurrency Checker", "General", 0, 0, true)]
-    [ProvideProfileAttribute(typeof(ConcurrencyCheckerSettings), "Concurrency Checker", "General", 106, 107, isToolsOptionPage: true, DescriptionResourceID = 108)]
+    [ProvideOptionPage(typeof(ParaSmellerSettings), "Concurrency Checker", "General", 0, 0, true)]
+    [ProvideProfile(typeof(ParaSmellerSettings), "Concurrency Checker", "General", 106, 107, isToolsOptionPage: true, DescriptionResourceID = 108)]
     public sealed class SettingsPackage : Package
     {
         /// <summary>

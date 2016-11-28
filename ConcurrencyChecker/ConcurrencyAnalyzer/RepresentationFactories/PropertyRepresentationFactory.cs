@@ -1,9 +1,9 @@
-﻿using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.SemanticAnalysis;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ParaSmellerCore.Representation;
+using ParaSmellerCore.SemanticAnalysis;
 
-namespace ConcurrencyAnalyzer.RepresentationFactories
+namespace ParaSmellerCore.RepresentationFactories
 {
     public static class PropertyRepresentationFactory
     {

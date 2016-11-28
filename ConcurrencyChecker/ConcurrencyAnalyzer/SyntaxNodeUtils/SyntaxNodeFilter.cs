@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ConcurrencyAnalyzer.Representation;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ParaSmellerCore.Representation;
 
-namespace ConcurrencyAnalyzer.SyntaxNodeUtils
+namespace ParaSmellerCore.SyntaxNodeUtils
 {
     public static class SyntaxNodeFilter
     {

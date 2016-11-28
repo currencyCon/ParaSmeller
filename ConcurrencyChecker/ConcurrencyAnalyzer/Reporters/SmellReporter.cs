@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ConcurrencyAnalyzer.Diagnostics;
-using ConcurrencyAnalyzer.RepresentationFactories;
 using Microsoft.CodeAnalysis;
-using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
+using ParaSmellerCore.Diagnostics;
+using ParaSmellerCore.RepresentationFactories;
+using Diagnostic = ParaSmellerCore.Diagnostics.Diagnostic;
 
-namespace ConcurrencyAnalyzer.Reporters
+namespace ParaSmellerCore.Reporters
 {
     public class SmellReporter
     {

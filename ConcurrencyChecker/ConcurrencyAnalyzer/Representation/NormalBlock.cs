@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 
-namespace ConcurrencyAnalyzer.Representation
+namespace ParaSmellerCore.Representation
 {
     public class NormalBlock : Body
     {

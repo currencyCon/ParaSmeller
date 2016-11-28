@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace ConcurrencyAnalyzer.Representation
+namespace ParaSmellerCore.Representation
 {
     public class SolutionRepresentation
     {

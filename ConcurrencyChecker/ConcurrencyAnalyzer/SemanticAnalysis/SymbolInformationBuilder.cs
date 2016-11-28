@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ConcurrencyAnalyzer.SemanticAnalysis
+namespace ParaSmellerCore.SemanticAnalysis
 {
     public static class SymbolInformationBuilder
     {

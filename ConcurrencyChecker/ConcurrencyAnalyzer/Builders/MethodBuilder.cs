@@ -1,8 +1,7 @@
-﻿
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ConcurrencyAnalyzer.Builders
+namespace ParaSmellerCore.Builders
 {
     public static class MethodBuilder
     {

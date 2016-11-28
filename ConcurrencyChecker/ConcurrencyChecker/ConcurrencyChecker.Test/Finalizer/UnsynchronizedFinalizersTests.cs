@@ -1,10 +1,10 @@
-﻿using ConcurrencyAnalyzer.Reporters;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParaSmellerCore.Reporters;
 using TestHelper;
 
-namespace ConcurrencyChecker.Test.Finalizer
+namespace ParaSmeller.Test.Finalizer
 {
     [TestClass]
     public class UnsynchronizedFinalizersTests: CodeFixVerifier

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ConcurrencyAnalyzer.SemanticAnalysis;
-using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ParaSmellerCore.SemanticAnalysis;
+using ParaSmellerCore.SyntaxNodeUtils;
 
-namespace ConcurrencyAnalyzer.Representation
+namespace ParaSmellerCore.Representation
 {
     public class InvocationExpressionRepresentation
     {

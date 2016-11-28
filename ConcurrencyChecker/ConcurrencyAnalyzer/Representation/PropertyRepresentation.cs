@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ConcurrencyAnalyzer.SyntaxNodeUtils;
+﻿using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ParaSmellerCore.SyntaxNodeUtils;
 
-namespace ConcurrencyAnalyzer.Representation
+namespace ParaSmellerCore.Representation
 {
     public class PropertyRepresentation : Member
     {

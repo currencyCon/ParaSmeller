@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using ConcurrencyAnalyzer.Diagnostics;
-using ConcurrencyChecker.Analyzer;
 using Microsoft.CodeAnalysis;
+using ParaSmellerAnalyzer.Analyzer;
+using ParaSmellerCore.Diagnostics;
 
-namespace ConcurrencyChecker.Test.WaitingConditionsThreads
+namespace ParaSmeller.Test.WaitingConditionsThreads
 {
     public class WaitingConditionsTasksAnalyzer: BaseAnalyzer
     {

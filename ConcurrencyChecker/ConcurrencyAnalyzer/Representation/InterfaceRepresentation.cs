@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ConcurrencyAnalyzer.Representation
+namespace ParaSmellerCore.Representation
 {
     public class InterfaceRepresentation
     {

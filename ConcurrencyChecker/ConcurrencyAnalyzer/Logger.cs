@@ -1,4 +1,4 @@
-namespace ConcurrencyAnalyzer
+namespace ParaSmellerCore
 {
     public static class Logger
     {

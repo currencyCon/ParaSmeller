@@ -3,14 +3,14 @@ using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ConcurrencyAnalyzer.Reporters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ParaSmellerCore.Reporters;
 
-namespace ConcurrencyChecker.CodeFixProviders
+namespace ParaSmellerAnalyzer.CodeFixProviders
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(TapirCodeFixProvider)), Shared]
     public class TapirCodeFixProvider : CodeFixProvider

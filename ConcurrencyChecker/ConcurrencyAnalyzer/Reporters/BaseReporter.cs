@@ -1,11 +1,10 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ConcurrencyAnalyzer.Diagnostics;
-using ConcurrencyAnalyzer.Representation;
+using ParaSmellerCore.Diagnostics;
+using ParaSmellerCore.Representation;
 
-namespace ConcurrencyAnalyzer.Reporters
+namespace ParaSmellerCore.Reporters
 {
     public abstract class BaseReporter
     {

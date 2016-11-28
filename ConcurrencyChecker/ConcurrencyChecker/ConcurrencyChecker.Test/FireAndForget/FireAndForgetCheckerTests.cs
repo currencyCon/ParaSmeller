@@ -1,10 +1,10 @@
-﻿using ConcurrencyAnalyzer.Reporters;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParaSmellerCore.Reporters;
 using TestHelper;
 
-namespace ConcurrencyChecker.Test.FireAndForget
+namespace ParaSmeller.Test.FireAndForget
 {
     [TestClass]
     public class FireAndForgetCheckerTests: CodeFixVerifier

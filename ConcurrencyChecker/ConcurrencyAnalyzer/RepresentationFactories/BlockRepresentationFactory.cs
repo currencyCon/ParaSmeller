@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
-using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ParaSmellerCore.Representation;
+using ParaSmellerCore.SyntaxNodeUtils;
 
-namespace ConcurrencyAnalyzer.RepresentationFactories
+namespace ParaSmellerCore.RepresentationFactories
 {
     public static class BlockRepresentationFactory
     {

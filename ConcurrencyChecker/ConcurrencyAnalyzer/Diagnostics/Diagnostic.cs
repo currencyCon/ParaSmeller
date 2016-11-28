@@ -2,7 +2,7 @@
 
 using Microsoft.CodeAnalysis;
 
-namespace ConcurrencyAnalyzer.Diagnostics
+namespace ParaSmellerCore.Diagnostics
 {
     public class Diagnostic
     {

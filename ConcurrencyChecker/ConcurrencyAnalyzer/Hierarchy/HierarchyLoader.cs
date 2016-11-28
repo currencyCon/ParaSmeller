@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ConcurrencyAnalyzer.Representation;
+using ParaSmellerCore.Representation;
 
-namespace ConcurrencyAnalyzer.Hierarchy
+namespace ParaSmellerCore.Hierarchy
 {
     public static class HierarchyLoader
     {
@@ -18,7 +18,7 @@ namespace ConcurrencyAnalyzer.Hierarchy
             Logger.Debug("HierarchyLoader finished");
         }
 
-        private static void AddInterfaces(SolutionRepresentation solution, Hierarchy hierarchy, ClassRepresentation clazz)
+        private static void AddInterfaces(SolutionRepresentation solution, ParaSmellerCore.Hierarchy.Hierarchy hierarchy, ClassRepresentation clazz)
         {
             foreach (var interfacee in hierarchy.InheritanceFromInterfaces)
             {
@@ -35,7 +35,7 @@ namespace ConcurrencyAnalyzer.Hierarchy
             }
         }
 
-        private static void AddBaseClasses(SolutionRepresentation solution, Hierarchy hierarchy, ClassRepresentation clazz)
+        private static void AddBaseClasses(SolutionRepresentation solution, ParaSmellerCore.Hierarchy.Hierarchy hierarchy, ClassRepresentation clazz)
         {
             foreach (var baseClass in hierarchy.InheritanceFromClass)
             {

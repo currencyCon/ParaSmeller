@@ -23,8 +23,8 @@
     <ProjectGuid>{3B4C6D69-567F-45B7-A9D6-1CCF9FD1B39A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConcurrencyChecker.Vsix</RootNamespace>
-    <AssemblyName>ConcurrencyChecker.Vsix</AssemblyName>
+    <RootNamespace>ParaSmeller.Vsix</RootNamespace>
+    <AssemblyName>ParaSmeller.Vsix</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
@@ -64,14 +64,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConcurrencyCheckerSettings.cs">
+    <Compile Include="ParaSmellerSettings.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ConcurrencyCheckerSettingsUI.cs">
+    <Compile Include="ParaSmellerSettingsUi.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ConcurrencyCheckerSettingsUI.designer.cs">
-      <DependentUpon>ConcurrencyCheckerSettingsUI.cs</DependentUpon>
+    <Compile Include="ParaSmellerSettingsUi.designer.cs">
+      <DependentUpon>ParaSmellerSettingsUi.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsPackage.cs" />
     <Compile Include="Smell.cs" />
@@ -184,8 +184,8 @@
     <Content Include="Resources\Settings.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ConcurrencyCheckerSettingsUI.resx">
-      <DependentUpon>ConcurrencyCheckerSettingsUI.cs</DependentUpon>
+    <EmbeddedResource Include="ParaSmellerSettingsUi.resx">
+      <DependentUpon>ParaSmellerSettingsUi.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
@@ -193,13 +193,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ConcurrencyAnalyzer\ConcurrencyAnalyzer.csproj">
+    <ProjectReference Include="..\..\ConcurrencyAnalyzer\ParaSmellerCore.csproj">
       <Project>{09cf3dcc-1daf-4180-a2e2-ba41bc7e1ad3}</Project>
-      <Name>ConcurrencyAnalyzer</Name>
+      <Name>ParaSmellerCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ConcurrencyChecker\ConcurrencyChecker.csproj">
+    <ProjectReference Include="..\ConcurrencyChecker\ParaSmellerAnalyzer.csproj">
       <Project>{40285a25-7897-4d97-9a8e-94e1b1e718de}</Project>
-      <Name>ConcurrencyChecker</Name>
+      <Name>ParaSmellerAnalyzer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

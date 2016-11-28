@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ConcurrencyAnalyzer;
-using ConcurrencyAnalyzer.Diagnostics;
-using ConcurrencyAnalyzer.Reporters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+using ParaSmellerCore;
+using ParaSmellerCore.Diagnostics;
+using ParaSmellerCore.Reporters;
 using Diagnostic = Microsoft.CodeAnalysis.Diagnostic;
 
-namespace ConcurrencyChecker.Analyzer
+namespace ParaSmellerAnalyzer.Analyzer
 {
     public abstract class BaseAnalyzer: DiagnosticAnalyzer
     {
-        protected static void ReportDiagnostics(CompilationAnalysisContext context, ICollection<ConcurrencyAnalyzer.Diagnostics.Diagnostic> diagnostics)
+        protected static void ReportDiagnostics(CompilationAnalysisContext context, ICollection<ParaSmellerCore.Diagnostics.Diagnostic> diagnostics)
         {
             Logger.Debug($"Found {diagnostics.Count} diagnostics");
             foreach (var diagnostic in diagnostics)

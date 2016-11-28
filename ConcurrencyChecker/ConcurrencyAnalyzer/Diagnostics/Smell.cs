@@ -1,4 +1,4 @@
-﻿namespace ConcurrencyAnalyzer.Diagnostics
+﻿namespace ParaSmellerCore.Diagnostics
 {
     public enum Smell
     {

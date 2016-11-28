@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.CodeAnalysis;
 
-namespace ConcurrencyAnalyzer.SemanticAnalysis
+namespace ParaSmellerCore.SemanticAnalysis
 {
     public class SymbolInformation
     {

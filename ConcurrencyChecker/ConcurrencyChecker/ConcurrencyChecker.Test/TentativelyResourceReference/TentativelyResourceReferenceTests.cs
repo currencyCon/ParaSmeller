@@ -1,10 +1,10 @@
-﻿using ConcurrencyAnalyzer.Reporters;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParaSmellerCore.Reporters;
 using TestHelper;
 
-namespace ConcurrencyChecker.Test.TentativelyResourceReference
+namespace ParaSmeller.Test.TentativelyResourceReference
 {
     [TestClass]
     public class TentativelyResourceReferenceTests : CodeFixVerifier

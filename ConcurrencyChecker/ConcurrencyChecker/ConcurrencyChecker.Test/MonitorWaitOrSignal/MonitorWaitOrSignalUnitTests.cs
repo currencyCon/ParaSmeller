@@ -1,11 +1,11 @@
-﻿using ConcurrencyChecker.CodeFixProviders;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParaSmellerAnalyzer.CodeFixProviders;
 using TestHelper;
 
-namespace ConcurrencyChecker.Test.MonitorWaitOrSignal
+namespace ParaSmeller.Test.MonitorWaitOrSignal
 {
     [TestClass]
     public class MonitorWaitOrSignalAnalyzerUnitTests : CodeFixVerifier

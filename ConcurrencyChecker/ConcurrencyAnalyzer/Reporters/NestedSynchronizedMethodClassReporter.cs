@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ConcurrencyAnalyzer.Diagnostics;
-using ConcurrencyAnalyzer.Locks;
-using ConcurrencyAnalyzer.Representation;
-using ConcurrencyAnalyzer.RepresentationExtensions;
-using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Diagnostic = ConcurrencyAnalyzer.Diagnostics.Diagnostic;
+using ParaSmellerCore.Diagnostics;
+using ParaSmellerCore.Locks;
+using ParaSmellerCore.Representation;
+using ParaSmellerCore.RepresentationExtensions;
+using ParaSmellerCore.SyntaxNodeUtils;
+using Diagnostic = ParaSmellerCore.Diagnostics.Diagnostic;
 
-namespace ConcurrencyAnalyzer.Reporters
+namespace ParaSmellerCore.Reporters
 {
     public class NestedSynchronizedMethodClassReporter: BaseReporter
     {
@@ -96,7 +96,7 @@ namespace ConcurrencyAnalyzer.Reporters
             var clazz = method.ContainingClass.Implementation;
             var classTypeSymbol = semanticModel.GetDeclaredSymbol(clazz) as INamedTypeSymbol;
             var parametersOfOwnType = new List<SyntaxToken>();
-            var hierarchieChecker = new Hierarchy.Hierarchy(classTypeSymbol);
+            var hierarchieChecker = new ParaSmellerCore.Hierarchy.Hierarchy(classTypeSymbol);
 
             foreach (var parameterSyntax in method.Parameters)
             {
