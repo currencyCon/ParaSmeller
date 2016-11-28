@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParaSmellerAnalyzer", "ConcurrencyChecker\ConcurrencyChecker\ParaSmellerAnalyzer.csproj", "{40285A25-7897-4D97-9A8E-94E1B1E718DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParaSmellerAnalyzer", "ParaSmellerAnalyzer\ParaSmellerAnalyzer\ParaSmellerAnalyzer.csproj", "{40285A25-7897-4D97-9A8E-94E1B1E718DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParaSmeller.Test", "ConcurrencyChecker\ConcurrencyChecker.Test\ParaSmeller.Test.csproj", "{EC34A75A-2B1F-4454-AB7C-94D0659FFCBD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParaSmeller.Test", "ParaSmellerAnalyzer\ParaSmellerAnalyzer.Test\ParaSmeller.Test.csproj", "{EC34A75A-2B1F-4454-AB7C-94D0659FFCBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParaSmeller.Vsix", "ConcurrencyChecker\ConcurrencyChecker.Vsix\ParaSmeller.Vsix.csproj", "{3B4C6D69-567F-45B7-A9D6-1CCF9FD1B39A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParaSmeller.Vsix", "ParaSmellerAnalyzer\ParaSmellerAnalyzer.Vsix\ParaSmeller.Vsix.csproj", "{3B4C6D69-567F-45B7-A9D6-1CCF9FD1B39A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParaSmellerCore", "ConcurrencyAnalyzer\ParaSmellerCore.csproj", "{09CF3DCC-1DAF-4180-A2E2-BA41BC7E1AD3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParaSmellerCore", "ParaSmellerCore\ParaSmellerCore.csproj", "{09CF3DCC-1DAF-4180-A2E2-BA41BC7E1AD3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

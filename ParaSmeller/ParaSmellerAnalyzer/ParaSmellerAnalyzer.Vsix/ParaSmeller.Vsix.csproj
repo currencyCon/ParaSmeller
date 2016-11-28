@@ -181,6 +181,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\logo.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\Settings.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -193,11 +197,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ConcurrencyAnalyzer\ParaSmellerCore.csproj">
+    <ProjectReference Include="..\..\ParaSmellerCore\ParaSmellerCore.csproj">
       <Project>{09cf3dcc-1daf-4180-a2e2-ba41bc7e1ad3}</Project>
       <Name>ParaSmellerCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ConcurrencyChecker\ParaSmellerAnalyzer.csproj">
+    <ProjectReference Include="..\ParaSmellerAnalyzer\ParaSmellerAnalyzer.csproj">
       <Project>{40285a25-7897-4d97-9a8e-94e1b1e718de}</Project>
       <Name>ParaSmellerAnalyzer</Name>
     </ProjectReference>

@@ -81,7 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ConcurrencyAnalyzer\ParaSmellerCore.csproj">
+    <ProjectReference Include="..\..\ParaSmellerCore\ParaSmellerCore.csproj">
       <Project>{09cf3dcc-1daf-4180-a2e2-ba41bc7e1ad3}</Project>
       <Name>ParaSmellerCore</Name>
     </ProjectReference>
