@@ -1,21 +1,43 @@
-﻿namespace Test
+﻿namespace bla
 {
-    class TestProgram
+    class Program
     {
+        private int _z;
+
         public int z
         {
             get
             {
-                var x = 2;
+                var x = 3;
+                lock (this)
+                {
+                    if (_z > 4)
+                    {
+                        x = _z;
+                    }
+                }
                 return x;
+            }
+
+            set
+            {
+                lock (this)
+                {
+                    _z = value;
+                }
             }
         }
 
+        public void DoNothing()
+        {
+            
+        }
         public void m()
         {
             lock (this)
             {
-                var x = z + 1;
+                z = 2;
+                DoNothing();
             }
         }
     }

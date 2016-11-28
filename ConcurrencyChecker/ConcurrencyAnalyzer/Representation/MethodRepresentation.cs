@@ -40,10 +40,32 @@ namespace ConcurrencyAnalyzer.Representation
             return Blocks.Count == 1 && !Blocks.First().IsSynchronized;
         }
 
-        public bool MethodHasHalfSynchronizedProperties()
+        public bool NeedsSynchronization()
         {
+            if (IsAbstract() || IsEmpty() || IsFullySynchronized())
+            {
+                return false;
+            }
             var methodsWithHalfSynchronizedProperties = ContainingClass.GetMethodsWithHalfSynchronizedProperties();
             return methodsWithHalfSynchronizedProperties.Select(e => e.Name.Text).Contains(Name.Text);
+        }
+
+        private bool IsAbstract()
+        {
+            return Implementation.Modifiers.Select(e => e.Text).Contains("abstract");
+        }
+
+        private bool IsEmpty()
+        {
+            if (Blocks.Count == 1 && !Blocks.First().Blocks.Any())
+            {
+                var body = Blocks.First().Implementation as BlockSyntax;
+                if (body != null)
+                {
+                    return !body.Statements.Any();
+                }
+            }
+            return false;
         }
     }
 }
