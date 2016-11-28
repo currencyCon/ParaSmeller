@@ -129,5 +129,19 @@ namespace ParaSmellerCore.Representation
             }
             return false;
         }
+
+        public void AddClassInHierarchy(string baseClassOriginalDefinition, ClassRepresentation baseClassRepresentation)
+        {
+            var classList = ClassMap.GetOrAdd(baseClassOriginalDefinition, new ConcurrentBag<ClassRepresentation>());
+            classList.Add(baseClassRepresentation);
+        }
+
+        public  void AddInterface(string interfaceOriginalDefinition, InterfaceRepresentation interfaceRepresentation)
+        {
+            if (!InterfaceMap.TryAdd(interfaceOriginalDefinition, interfaceRepresentation))
+            {
+                Logger.Debug($"Tried to add Interface twice: {interfaceOriginalDefinition}");
+            }
+        }
     }
 }
