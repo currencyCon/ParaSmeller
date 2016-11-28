@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{09CF3DCC-1DAF-4180-A2E2-BA41BC7E1AD3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ParaSmellerCore</RootNamespace>
+    <AssemblyName>ParaSmellerCore</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Builders\LockBuilder.cs" />
+    <Compile Include="Builders\MethodBuilder.cs" />
+    <Compile Include="Builders\PropertyBuilder.cs" />
+    <Compile Include="Builders\SyntaxFormatter.cs" />
+    <Compile Include="Diagnostics\DiagnosticCategory.cs" />
+    <Compile Include="Reporters\BaseReporter.cs" />
+    <Compile Include="Reporters\ExplicitThreadsReporter.cs" />
+    <Compile Include="Reporters\FinalizerReporter.cs" />
+    <Compile Include="Reporters\FireAndForgetReporter.cs" />
+    <Compile Include="Reporters\HalfSynchronizedReporter.cs" />
+    <Compile Include="Reporters\WaitingConditionsTasksReporter.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Hierarchy\HierarchyLoader.cs" />
+    <Compile Include="RepresentationFactories\AnalysisConfiguration\AnalysisConfiguration.cs" />
+    <Compile Include="RepresentationFactories\InterfaceRepresentationFactory.cs" />
+    <Compile Include="RepresentationFactories\ProgressInformation\ScopeCalculator.cs" />
+    <Compile Include="Representation\InterfaceRepresentation.cs" />
+    <Compile Include="SemanticAnalysis\SymbolInspector.cs" />
+    <Compile Include="Reporters\MonitorOrWaitSignalReporter.cs" />
+    <Compile Include="Reporters\NestedSynchronizedMethodClassReporter.cs" />
+    <Compile Include="Reporters\OverAsynchronyReporter.cs" />
+    <Compile Include="Diagnostics\Diagnostic.cs" />
+    <Compile Include="Diagnostics\Smell.cs" />
+    <Compile Include="Locks\LockChecker.cs" />
+    <Compile Include="Reporters\PrimitiveSynchronizationReporter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reporters\SmellReporter.cs" />
+    <Compile Include="Reporters\TapirReporter.cs" />
+    <Compile Include="Reporters\TentativelyResourceReferenceReporter.cs" />
+    <Compile Include="RepresentationExtensions\MemberExtensions.cs" />
+    <Compile Include="RepresentationFactories\BlockRepresentationFactory.cs" />
+    <Compile Include="RepresentationFactories\ClassRepresentationFactory.cs" />
+    <Compile Include="RepresentationFactories\InvocationExpressionRepresentationFactory.cs" />
+    <Compile Include="RepresentationFactories\MethodRepresentationFactory.cs" />
+    <Compile Include="RepresentationFactories\PropertyRepresentationFactory.cs" />
+    <Compile Include="RepresentationFactories\SolutionRepresentationFactory.cs" />
+    <Compile Include="Representation\ClassRepresentation.cs" />
+    <Compile Include="Representation\Body.cs" />
+    <Compile Include="Representation\Member.cs" />
+    <Compile Include="Representation\InvocationExpressionRepresentation.cs" />
+    <Compile Include="Representation\LockBlock.cs" />
+    <Compile Include="Representation\MethodRepresentation.cs" />
+    <Compile Include="Representation\NormalBlock.cs" />
+    <Compile Include="Representation\PropertyRepresentation.cs" />
+    <Compile Include="Representation\SolutionRepresentation.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SemanticAnalysis\DefaultSymbolValues.cs" />
+    <Compile Include="SemanticAnalysis\SymbolInformationBuilder.cs" />
+    <Compile Include="SemanticAnalysis\SymbolInformation.cs" />
+    <Compile Include="Hierarchy\Hierarchy.cs" />
+    <Compile Include="SyntaxNodeUtils\SyntaxNodeExtensions.cs" />
+    <Compile Include="SyntaxNodeUtils\SyntaxNodeFilter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.0.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.36\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
