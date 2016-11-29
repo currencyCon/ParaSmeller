@@ -44,14 +44,14 @@ namespace ParaSmellerAnalyzer.Analyzer
             }
             else
             {
-                RegisterDiagnostics(context, SmellReporter.DefaultSmellCollection);
+                RegisterDiagnostics(context, SmellReporter.DefaultSmellCollection); 
             }
         }
 
-        private static async void RegisterDiagnostics(CompilationAnalysisContext context, ICollection<Smell> smells)
+        private static void RegisterDiagnostics(CompilationAnalysisContext context, ICollection<Smell> smells)
         {
             var smellReporter = new SmellReporter();
-            var diagnostics = await smellReporter.Report(context.Compilation, smells);
+            var diagnostics = smellReporter.Report(context.Compilation, smells);
             ReportDiagnostics(context, diagnostics);
         }
 

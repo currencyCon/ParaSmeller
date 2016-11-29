@@ -14,12 +14,12 @@ namespace ParaSmellerCore.RepresentationFactories
     public static class SolutionRepresentationFactory
     {
 
-        public static async Task<SolutionRepresentation> Create(Compilation compilation)
+        public static  SolutionRepresentation Create(Compilation compilation)
         {
             
             Logger.Debug("Creating SolutionRepresentation");
             var solution = new SolutionRepresentation(compilation.AssemblyName.Trim());
-            await AddSyntaxTrees(solution, compilation);
+            AddSyntaxTrees(solution, compilation);
             HierarchyLoader.Load(solution);
             ConnectInvocations(solution);
             return solution;
@@ -98,10 +98,10 @@ namespace ParaSmellerCore.RepresentationFactories
         }
 
 
-        private static async Task AddSyntaxTrees(SolutionRepresentation solution, Compilation compilation)
+        private static void AddSyntaxTrees(SolutionRepresentation solution, Compilation compilation)
         {
             var scopeCalculator = new ScopeCalculator(compilation);
-            var countClasses = await scopeCalculator.CountTypes();
+            var countClasses =  scopeCalculator.CountTypes();
             Logger.Debug($"Total SyntaxTrees: {scopeCalculator.CountSyntaxTrees()}");           
             Logger.Debug($"Total Classes & Interfaces: {countClasses}");
 
@@ -109,8 +109,8 @@ namespace ParaSmellerCore.RepresentationFactories
             foreach (var syntaxTree in compilation.SyntaxTrees)
             {
                 var semanticModel = compilation.GetSemanticModel(syntaxTree);
-                var classes = await SyntaxNodeFilter.GetClasses(syntaxTree);
-                var interfaces = await SyntaxNodeFilter.GetInterfaces(syntaxTree);
+                var classes =  SyntaxNodeFilter.GetClasses(syntaxTree);
+                var interfaces = SyntaxNodeFilter.GetInterfaces(syntaxTree);
                 AddClassRepresentations(solution, classes, semanticModel, ref counter);
                 AddInterfaceRepresentations(solution, interfaces, semanticModel, ref counter);
             }

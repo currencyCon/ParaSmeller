@@ -9,14 +9,14 @@ namespace ParaSmellerCore.SyntaxNodeUtils
 {
     public static class SyntaxNodeFilter
     {
-        public static async Task<IEnumerable<ClassDeclarationSyntax>> GetClasses(SyntaxTree syntaxTree)
+        public static IEnumerable<ClassDeclarationSyntax> GetClasses(SyntaxTree syntaxTree)
         {
-            var root = await syntaxTree.GetRootAsync();
+            var root = syntaxTree.GetRoot();
             return root.GetChildren<ClassDeclarationSyntax>();
         }
-        public static async Task<IEnumerable<InterfaceDeclarationSyntax>> GetInterfaces(SyntaxTree syntaxTree)
+        public static IEnumerable<InterfaceDeclarationSyntax> GetInterfaces(SyntaxTree syntaxTree)
         {
-            var root = await syntaxTree.GetRootAsync();
+            var root =  syntaxTree.GetRoot();
             return root.GetChildren<InterfaceDeclarationSyntax>();
         }
 

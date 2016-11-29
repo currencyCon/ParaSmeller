@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using ParaSmellerCore.SyntaxNodeUtils;
@@ -14,20 +15,20 @@ namespace ParaSmellerCore.RepresentationFactories.ProgressInformation
             _compilation = compilation;
         }
 
-        private async Task<int> CountTypes(SyntaxTree syntaxTree)
+        private static int CountTypes(SyntaxTree syntaxTree)
         {
-            var classes = await SyntaxNodeFilter.GetClasses(syntaxTree);
-            var interfaces = await SyntaxNodeFilter.GetInterfaces(syntaxTree);
+            var classes =  SyntaxNodeFilter.GetClasses(syntaxTree);
+            var interfaces = SyntaxNodeFilter.GetInterfaces(syntaxTree);
             return classes.ToList().Count + interfaces.ToList().Count;
         }
 
-        public async Task<int> CountTypes()
+        public int CountTypes()
         {
             var countClasses = 0;
-            foreach (var syntaxTree in _compilation.SyntaxTrees)
+            Parallel.ForEach(_compilation.SyntaxTrees, syntaxTree =>
             {
-                countClasses += await CountTypes(syntaxTree);
-            }
+                Interlocked.Add(ref countClasses, CountTypes(syntaxTree));
+            });
             return countClasses;
         }
 

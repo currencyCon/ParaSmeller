@@ -39,9 +39,9 @@ namespace ParaSmellerCore.Reporters
             {Smell.Tapir, new TapirReporter() }
         };
 
-        public async Task<ICollection<Diagnostic>> Report(Compilation compilation, ICollection<Smell> smells)
+        public List<Diagnostic> Report(Compilation compilation, ICollection<Smell> smells)
         {
-            var solutionModel = await SolutionRepresentationFactory.Create(compilation);
+            var solutionModel = SolutionRepresentationFactory.Create(compilation);
             var diagnostics = new List<Diagnostic>();
             foreach (var smell in smells)
             {

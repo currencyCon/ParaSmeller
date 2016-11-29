@@ -8,8 +8,9 @@ using Diagnostic = ParaSmellerCore.Diagnostics.Diagnostic;
 
 namespace ParaSmellerCore.Reporters
 {
-    public class FinalizerReporter: BaseReporter
+    public class FinalizerReporter : BaseReporter
     {
+        public const string Category = "Synchronization";
         public const string FinalizerSynchronizationDiagnosticId = "FS001";
 
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.FSAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
@@ -84,12 +85,7 @@ namespace ParaSmellerCore.Reporters
             var fieldsUsedInDestructorUnsynchronized = classRepresentation.Destructor.GetChildren<IdentifierNameSyntax>().Where(e => !e.GetParents<LockStatementSyntax>().Any()).ToList();
             foreach (var fieldUsedInDestructor in fieldsUsedInDestructorUnsynchronized)
             {
-                var fields =
-                    classRepresentation.Fields.Where(
-                        e =>
-                            e.Modifiers.Select(a => a.Text)
-                                .Contains("static"));
-                foreach (var field in fields.ToList())
+                foreach (var field in classRepresentation.Fields.With(new[] { "static" }).Without(new[] { "readonly" }).ToList())
                 {
                     if (field.DeclaresVariable(fieldUsedInDestructor.Identifier.Text))
                     {
@@ -102,7 +98,7 @@ namespace ParaSmellerCore.Reporters
 
         private static Diagnostic ReportUnsynchronizedField(SyntaxNode syntaxnode)
         {
-            return new Diagnostic(FinalizerSynchronizationDiagnosticId, Title, MessageFormatFinalizerSynchronization, Description, DiagnosticCategory.Synchronization, syntaxnode.GetLocation());
+            return new Diagnostic(FinalizerSynchronizationDiagnosticId, Title, MessageFormatFinalizerSynchronization, Description, Category, syntaxnode.GetLocation());
         }
 
         protected override void Register()
