@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ConcurrencyAnalyzer.Representation;
 using ConcurrencyAnalyzer.SyntaxNodeUtils;
 using Microsoft.CodeAnalysis;
@@ -84,7 +85,7 @@ namespace ConcurrencyAnalyzer.Reporters
             var fieldsUsedInDestructorUnsynchronized = classRepresentation.Destructor.GetChildren<IdentifierNameSyntax>().Where(e => !e.GetParents<LockStatementSyntax>().Any()).ToList();
             foreach (var fieldUsedInDestructor in fieldsUsedInDestructorUnsynchronized)
             {
-                foreach (var field in classRepresentation.Fields.ToList())
+                foreach (var field in classRepresentation.Fields.With(new[]{"static"}).Without(new[] {"readonly"}).ToList())
                 {
                     if (field.DeclaresVariable(fieldUsedInDestructor.Identifier.Text))
                     {

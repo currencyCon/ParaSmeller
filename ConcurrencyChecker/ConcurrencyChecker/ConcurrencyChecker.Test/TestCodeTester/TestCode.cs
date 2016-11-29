@@ -1,21 +1,52 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 
-namespace ConcurrencyChecker.Test.TestCodeTester
+
+namespace log4net.Appender
 {
-    public class SynchronizedThread
+
+    public abstract class AppenderSkeleton 
     {
-        public static object LockObject = new object();
-        public static void DoTask()
+        #region Protected Instance Constructors
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <remarks>
+        /// <para>Empty default constructor</para>
+        /// </remarks>
+        protected AppenderSkeleton()
         {
-            lock (LockObject)
+        }
+
+        #endregion Protected Instance Constructors
+
+        #region Finalizer
+
+        ~AppenderSkeleton()
+        {
+            // An appender might be closed then garbage collected. 
+            // There is no point in closing twice.
+            if (!m_closed)
             {
-                var c = 2;
+                DoStuff(declaringType, "Finalizing appender named [" +"blub" + "].");
             }
         }
 
-        public static void Main()
+        #endregion Finalizer
+
+        public void DoStuff(Type type, string msg)
         {
-            Task.Run(()=> DoTask());
+            
         }
+
+        private bool m_closed = false;
+
+        public virtual bool Flush(int millisecondsTimeout)
+        {
+            return true;
+        }
+
+        private readonly static Type declaringType = typeof(AppenderSkeleton);
+
     }
 }
