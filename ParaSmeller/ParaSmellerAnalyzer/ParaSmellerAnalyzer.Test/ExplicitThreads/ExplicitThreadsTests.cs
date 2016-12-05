@@ -1,9 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParaSmeller.Test.Verifiers;
 using ParaSmellerCore.Reporters;
-using TestHelper;
+using CodeFixVerifier = ParaSmeller.Test.Verifiers.CodeFixVerifier;
 
 namespace ParaSmeller.Test.ExplicitThreads
 {
@@ -12,7 +12,7 @@ namespace ParaSmeller.Test.ExplicitThreads
     {
 
         [TestMethod]
-        public void TestThreadDiagnostics()
+        public void TestReportsThreadUsage()
         {
             const string test = @"
 using System.Threading;
@@ -54,7 +54,7 @@ namespace ExplicitThreadsSmell
         }
 
         [TestMethod]
-        public void TestCurrentThread()
+        public void TestIgnoresCurrentCultureInfo()
         {
             const string test = @"
 using System.Threading;
@@ -75,7 +75,7 @@ namespace ExplicitThreadsSmell
 
 
         [TestMethod]
-        public void TestMultiDiagnostics()
+        public void TestRecognizesMultipleThreadUsage()
         {
             const string test = @"
 using System.Threading;
@@ -129,7 +129,7 @@ namespace ExplicitThreadsSmell
 
 
         [TestMethod]
-        public void TestThreadCodeSmellMethod()
+        public void TestDetectsThreadUsageWithMethodReference()
         {
             const string test = @"
 using System.Threading;
@@ -160,7 +160,7 @@ namespace ExplicitThreadsSmell
         }
 
         [TestMethod]
-        public void TestThreadCodeSmellLambda()
+        public void TestDetectsThreadUsageWithLambda()
         {
             const string test = @"
 using System.Threading;
@@ -191,7 +191,7 @@ namespace ExplicitThreadsSmell
         }
 
         [TestMethod]
-        public void TestMultilineCodeSmell()
+        public void TestDetectsSeperateDeclarationAndDefinition()
         {
             const string test = @"
 using System.Threading;
@@ -233,21 +233,10 @@ namespace ExplicitThreadsSmell
             VerifyCSharpDiagnostic(test, expected1, expected2);
 
         }
-        
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return null;
-        }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new ExplicitThreadsAnalyzer();
         }
-
-        
     }
-
-
-
-
 }

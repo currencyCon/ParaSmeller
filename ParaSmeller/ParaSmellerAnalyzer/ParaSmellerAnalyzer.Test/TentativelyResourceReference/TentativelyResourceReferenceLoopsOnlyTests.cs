@@ -1,8 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParaSmeller.Test.Verifiers;
 using ParaSmellerCore.Reporters;
-using TestHelper;
+using CodeFixVerifier = ParaSmeller.Test.Verifiers.CodeFixVerifier;
 
 namespace ParaSmeller.Test.TentativelyResourceReference
 {
@@ -10,7 +11,7 @@ namespace ParaSmeller.Test.TentativelyResourceReference
     public class TentativelyResourceReferenceLoopsOnlyTests : CodeFixVerifier
     {
         [TestMethod]
-        public void MutexTest()
+        public void TestReportsMutex()
         {
             const string test = @"
 using System;
@@ -32,33 +33,33 @@ namespace Test
         }
     }
 }";
-            var expected1 = new DiagnosticResult
-            {
-                Id = TentativelyResourceReferenceReporter.DiagnosticId,
-                Message = TentativelyResourceReferenceReporter.MessageFormatTentativelyResourceReference.ToString(),
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[] {
-                            new DiagnosticResultLocation("Test0.cs", 15, 17)
-                        }
+            var expected = new [] {
+                new DiagnosticResult
+                {
+                    Id = TentativelyResourceReferenceReporter.DiagnosticId,
+                    Message = TentativelyResourceReferenceReporter.MessageFormatTentativelyResourceReference.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[] {
+                                new DiagnosticResultLocation("Test0.cs", 15, 17)
+                            }
+                },
+                new DiagnosticResult
+                {
+                    Id = TentativelyResourceReferenceReporter.DiagnosticId,
+                    Message = TentativelyResourceReferenceReporter.MessageFormatTentativelyResourceReference.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[] {
+                                new DiagnosticResultLocation("Test0.cs", 16, 17)
+                            }
+                }
             };
-
-            var expected2 = new DiagnosticResult
-            {
-                Id = TentativelyResourceReferenceReporter.DiagnosticId,
-                Message = TentativelyResourceReferenceReporter.MessageFormatTentativelyResourceReference.ToString(),
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[] {
-                            new DiagnosticResultLocation("Test0.cs", 16, 17)
-                        }
-            };
-
-            VerifyCSharpDiagnostic(test, expected1, expected2);
+            VerifyCSharpDiagnostic(test, expected);
         }
 
         [TestMethod]
-        public void MonitorTryEnterTest()
+        public void TestReportsMonitorTryEnter()
         {
             const string test = @"
 using System;
@@ -104,12 +105,11 @@ namespace Test
                             new DiagnosticResultLocation("Test0.cs", 15, 21)
                         }
             };
-            
             VerifyCSharpDiagnostic(test, expected);
         }
 
         [TestMethod]
-        public void MonitorWaitTest()
+        public void TestReportsMonitorWait()
         {
             const string test = @"
 using System;
@@ -146,12 +146,11 @@ namespace Test
                             new DiagnosticResultLocation("Test0.cs", 17, 24)
                         }
             };
-
             VerifyCSharpDiagnostic(test, expected);
         }
 
         [TestMethod]
-        public void SpinLockTryEnterTest()
+        public void TestReportsSpinLockTryEnter()
         {
             const string test = @"
 using System;
@@ -186,10 +185,8 @@ namespace Test
                             new DiagnosticResultLocation("Test0.cs", 17, 19)
                         }
             };
-
             VerifyCSharpDiagnostic(test, expected);
         }
-
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {

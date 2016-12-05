@@ -1,7 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
-using System;
+﻿using System;
+using Microsoft.CodeAnalysis;
 
-namespace TestHelper
+namespace ParaSmeller.Test.Verifiers
 {
     /// <summary>
     /// Location where the diagnostic appears, as determined by path, line number, and column number.
@@ -55,15 +55,10 @@ namespace TestHelper
         }
 
         public DiagnosticSeverity Severity { get; set; }
-
         public string Id { get; set; }
-
         public string Message { get; set; }
-
         public string Path => Locations.Length > 0 ? Locations[0].Path : "";
-
         public int Line => Locations.Length > 0 ? Locations[0].Line : -1;
-
         public int Column => Locations.Length > 0 ? Locations[0].Column : -1;
     }
 }

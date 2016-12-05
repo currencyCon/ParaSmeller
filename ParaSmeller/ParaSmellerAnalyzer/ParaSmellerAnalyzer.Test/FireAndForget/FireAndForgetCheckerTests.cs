@@ -1,8 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParaSmeller.Test.Verifiers;
 using ParaSmellerCore.Reporters;
-using TestHelper;
+using CodeFixVerifier = ParaSmeller.Test.Verifiers.CodeFixVerifier;
 
 namespace ParaSmeller.Test.FireAndForget
 {
@@ -10,7 +11,7 @@ namespace ParaSmeller.Test.FireAndForget
     public class FireAndForgetCheckerTests: CodeFixVerifier
     {
         [TestMethod]
-        public void TestFindsSimpleCase()
+        public void TestFindsNotAwaitedTask()
         {
             const string test = @"
 using System;
@@ -45,13 +46,11 @@ namespace Test
                     new DiagnosticResultLocation("Test0.cs", 19, 13)
                 }
             };
-
             VerifyCSharpDiagnostic(test, expected);
-
         }
 
         [TestMethod]
-        public void TestFindsLostAssignment()
+        public void TestReportsNotAwaitedAssignment()
         {
             const string test = @"
 using System;
@@ -86,13 +85,11 @@ namespace Test
                     new DiagnosticResultLocation("Test0.cs", 19, 21)
                 }
             };
-
             VerifyCSharpDiagnostic(test, expected);
-
         }
 
         [TestMethod]
-        public void TestDoesNotReportResolvedAssignment()
+        public void TestDoesNotReportAwaitedTask()
         {
             const string test = @"
 using System;
@@ -119,14 +116,11 @@ namespace Test
     }
 }
 ";
-
-
             VerifyCSharpDiagnostic(test);
-
         }
 
         [TestMethod]
-        public void TestDoesNotReportResolvedAssignmentOverMethods()
+        public void TestDoesNotReportWaitingBetweenMethods()
         {
             const string test = @"
 using System;
@@ -158,14 +152,11 @@ namespace Test
     }
 }
 ";
-
-
             VerifyCSharpDiagnostic(test);
-
         }
 
         [TestMethod]
-        public void TestDoesNotReportResolvedAssignmentOverClasses()
+        public void TestDoesNotReportWaitingBetweenClasses()
         {
             const string test = @"
 using System;
@@ -206,11 +197,9 @@ namespace Test
     }
 }
 ";
-
-
             VerifyCSharpDiagnostic(test);
-
         }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new FireAndForgetCheckerAnalyzer();

@@ -2,9 +2,10 @@
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParaSmeller.Test.Verifiers;
 using ParaSmellerAnalyzer.CodeFixProviders;
 using ParaSmellerCore.Reporters;
-using TestHelper;
+using CodeFixVerifier = ParaSmeller.Test.Verifiers.CodeFixVerifier;
 
 namespace ParaSmeller.Test.HalfSynchronizedClass
 {
@@ -13,51 +14,50 @@ namespace ParaSmeller.Test.HalfSynchronizedClass
     {
 
         [TestMethod]
-        public void TestDetectsNoFalsePositiveOnSynchronizedProperty()
+        public void TestReportsNoFalsePositiveOnSynchronizedProperty()
         {
             const string test = @"
-                namespace bla {
-                    class Program
-                    {
-                        private int _z;
+namespace bla {
+    class Program
+    {
+        private int _z;
 
-                        public int z
-                        {
-                            get
-                            {
-                                lock (this)
-                                {
-                                    return _z;
-                                }
-                            }
+        public int z
+        {
+            get
+            {
+                lock (this)
+                {
+                    return _z;
+                }
+            }
+            set
+            {
+                lock (this)
+                {
+                    _z = value;
+                }
+            }
+        }
 
-                            set
-                            {
-                                lock (this)
-                                {
-                                    _z = value;
-                                }
-                            }
-                        }
-
-                        public void m()
-                        {
-                            lock(this)
-                            {
-                                z = 2;
-                            }
-                        }
-                    }
-                }";
+        public void m()
+        {
+            lock(this)
+            {
+                z = 2;
+            }
+        }
+    }
+}";
             VerifyCSharpDiagnostic(test);
 
         }
 
         [TestMethod]
-        public void TestDetectsNoFalsePositiveOnSynchronizedPropertyWithNonSynchronizedLocals()
+        public void TestReportsNoFalsePositiveOnSynchronizedPropertyWithNonSynchronizedLocals()
         {
             const string test = @"
-                namespace bla
+namespace bla
 {
     class Program
     {
@@ -77,7 +77,6 @@ namespace ParaSmeller.Test.HalfSynchronizedClass
                 }
                 return x;
             }
-
             set
             {
                 lock (this)
@@ -97,11 +96,10 @@ namespace ParaSmeller.Test.HalfSynchronizedClass
     }
 }";
             VerifyCSharpDiagnostic(test);
-
         }
 
         [TestMethod]
-        public void TestDetectsNoFalsePositiveOnSynchronizedPropertyIgnoresEmptyMethods()
+        public void TestReportsNoFalsePositiveOnSynchronizedPropertyWithEmptyMethods()
         {
             const string test = @"
 namespace bla
@@ -149,85 +147,83 @@ namespace bla
     }
 }";
             VerifyCSharpDiagnostic(test);
-
         }
+
         [TestMethod]
-        public void TestDetectsUnsynchronizedProperty()
+        public void TestReportsUnsynchronizedProperty()
         {
             const string test = @"
-                namespace bla {
-                    class Program
-                    {
-                        private int _z;
+namespace bla {
+    class Program
+    {
+        private int _z;
 
-                        public int z
-                        {
-                            get
-                            {
-                                return _z;
-                            }
+        public int z
+        {
+            get
+            {
+                return _z;
+            }
+            set
+            {
+                lock (this)
+                {
+                    _z = value;
+                }
+            }
+        }
 
-                            set
-                            {
-                                lock (this)
-                                {
-                                    _z = value;
-                                }
-                            }
-                        }
-
-                        public void m()
-                        {
-                            lock(this)
-                            {
-                                z = 2;
-                            }
-                        }
-                    }
-                }";
+        public void m()
+        {
+            lock(this)
+            {
+                z = 2;
+            }
+        }
+    }
+}";
             var expected = new DiagnosticResult
             {
                 Id = HalfSynchronizedReporter.UnsynchronizedPropertyId,
-                Message = "The Property is used in a synchronized Member. Consider synchronizing it.",
+                Message = HalfSynchronizedReporter.MessageFormatUnsychronizedProperty.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {
-                    new DiagnosticResultLocation("Test0.cs", 7, 25)
+                    new DiagnosticResultLocation("Test0.cs", 7, 9)
                 }
             };
-
             VerifyCSharpDiagnostic(test, expected);
         }
+
         [TestMethod]
-        public void TestDetectsUnsynchronizedPropertySimpleCase()
+        public void TestDetectsPartiallySynchronizedPropertySimpleCase()
         {
             const string test = @"
-                namespace Test
-                {
-                    class TestProgram
-                    {
-                        public int z { get; set; }
+namespace Test
+{
+    class TestProgram
+    {
+        public int z { get; set; }
 
-                        public void m()
-                        {
-                            lock(this)
-                            {
-                                z = 2;
-                            }
-                        }
-                    }
-                }
-            ";
+        public void m()
+        {
+            lock(this)
+            {
+                z = 2;
+            }
+        }
+    }
+}
+";
             var expected = new DiagnosticResult
             {
                 Id = HalfSynchronizedReporter.UnsynchronizedPropertyId,
-                Message = "The Property is used in a synchronized Member. Consider synchronizing it.",
+                Message = HalfSynchronizedReporter.MessageFormatUnsychronizedProperty.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
-                            new DiagnosticResultLocation("Test0.cs", 6, 25)
+                            new DiagnosticResultLocation("Test0.cs", 6, 9)
                         }
             };
-
             VerifyCSharpDiagnostic(test, expected);
         }
 
@@ -253,8 +249,7 @@ namespace Test
         }
     }
 }
-            ";
-
+";
             VerifyCSharpDiagnostic(test);
         }
 
@@ -284,100 +279,98 @@ namespace Test
         }
     }
 }
-            ";
-
+";
             VerifyCSharpDiagnostic(test);
         }
 
         [TestMethod]
-        public void TestDetectsUnsynchronizedPropertyWithLockObject()
+        public void TestDetectsPartiallySynchronizedPropertyWithLockObject()
         {
             const string test = @"
-                namespace Test
-                {
-                    public class LockClass
-                    {
+namespace Test
+{
+    public class LockClass
+    {
         
-                    }
-                    public class TestProgram
-                    {
-                        public TestProgram(LockClass lockClass)
-                        {
-                            LockObject = lockClass;
-                        }
-                        private LockClass LockObject { get;}
+    }
+    public class TestProgram
+    {
+        public TestProgram(LockClass lockClass)
+        {
+            LockObject = lockClass;
+        }
+        private LockClass LockObject { get;}
 
-                        public int z {get; set;}
+        public int z {get; set;}
 
-                        public void M()
-                        {
-                            lock (LockObject)
-                            {
-                                z = 2;
-                            }
-                        }
-                    }
-                }
-            ";
+        public void M()
+        {
+            lock (LockObject)
+            {
+                z = 2;
+            }
+        }
+    }
+}
+";
             var expected = new DiagnosticResult
             {
                 Id = HalfSynchronizedReporter.UnsynchronizedPropertyId,
-                Message = "The Property is used in a synchronized Member. Consider synchronizing it.",
+                Message = HalfSynchronizedReporter.MessageFormatUnsychronizedProperty.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
-                            new DiagnosticResultLocation("Test0.cs", 16, 25)
+                            new DiagnosticResultLocation("Test0.cs", 16, 9)
                         }
             };
-
             VerifyCSharpDiagnostic(test, expected);
         }
+
         [TestMethod]
-        public void TestDetectsHalfSynchronizedProperty()
+        public void TestDetectsHalfSynchronizedPropertyInUnsychronizedMethod()
         {
             const string test = @"
-                namespace Test
-                {
-                    class TestProgram
-                    {
-                        public int z { get; set; }
+namespace Test
+{
+    class TestProgram
+    {
+        public int z { get; set; }
 
-                        public void m2() {
-                            z = 3;
-                        }
-                        public void m()
-                        {
-                            lock(this)
-                            {
-                                z = 2;
-                            }
-                        }
-                    }
-                }
-            ";
+        public void m2() {
+            z = 3;
+        }
+        public void m()
+        {
+            lock(this)
+            {
+                z = 2;
+            }
+        }
+    }
+}
+";
             var expected = new[] {
                 new DiagnosticResult
-            {
-                Id = HalfSynchronizedReporter.UnsynchronizedPropertyId,
-                Message = "The Property is used in a synchronized Member. Consider synchronizing it.",
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[] {
-                            new DiagnosticResultLocation("Test0.cs", 6, 25)
-                        }
-            },
-                new DiagnosticResult
-            {
-                Id = HalfSynchronizedReporter.HalfSynchronizedChildDiagnosticId,
-                Message = "The Property  is also used in another synchronized Method . Consider synchronizing also this one.",
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[] {
-                            new DiagnosticResultLocation("Test0.cs", 8, 25)
-                        }
-            }
+                {
+                    Id = HalfSynchronizedReporter.UnsynchronizedPropertyId,
+                    Message = HalfSynchronizedReporter.MessageFormatUnsychronizedProperty.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[] {
+                                new DiagnosticResultLocation("Test0.cs", 6, 9)
+                            }
+                },
+                    new DiagnosticResult
+                {
+                    Id = HalfSynchronizedReporter.HalfSynchronizedChildDiagnosticId,
+                    Message = "The Property  is also used in another synchronized Method . Consider synchronizing also this one.",
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[] {
+                                new DiagnosticResultLocation("Test0.cs", 8, 9)
+                            }
+                }
             };
-
             VerifyCSharpDiagnostic(test, expected);
         }
 

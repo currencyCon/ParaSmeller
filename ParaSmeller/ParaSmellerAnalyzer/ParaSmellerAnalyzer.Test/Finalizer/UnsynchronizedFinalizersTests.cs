@@ -1,8 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParaSmeller.Test.Verifiers;
 using ParaSmellerCore.Reporters;
-using TestHelper;
+using CodeFixVerifier = ParaSmeller.Test.Verifiers.CodeFixVerifier;
 
 namespace ParaSmeller.Test.Finalizer
 {
@@ -10,7 +11,7 @@ namespace ParaSmeller.Test.Finalizer
     public class UnsynchronizedFinalizersTests: CodeFixVerifier
     {
         [TestMethod]
-        public void DoesNotReportFalsePositives()
+        public void TestDoesNotReportFalsePositivesOnCorrectLock()
         {
             const string test = @"
 namespace ParaSmeller.Test.TestCodeTester
@@ -39,7 +40,7 @@ namespace ParaSmeller.Test.TestCodeTester
             VerifyCSharpDiagnostic(test);
         }
         [TestMethod]
-        public void DoesNotReportOnReadOnlyFields()
+        public void TestDoesNotReportOnReadOnlyFields()
         {
             const string test = @"
 using ConcurrencyAnalyzer;
@@ -53,16 +54,16 @@ namespace ParaSmeller.Test.TestCodeTester
         ~SynchronizedFinalizer()
         {
                 Logger.DebugLog(LogMessage);
-            }
-
         }
-    }";
+
+    }
+}";
 
             VerifyCSharpDiagnostic(test);
         }
 
         [TestMethod]
-        public void DoesNotReportOnReadOnlyFieldsComplexCase()
+        public void TestDoesNotReportOnReadOnlyFieldsComplexCase()
         {
             const string test = @"
 using System;
@@ -73,21 +74,9 @@ namespace log4net.Appender
 
     public abstract class AppenderSkeleton 
     {
-        #region Protected Instance Constructors
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <remarks>
-        /// <para>Empty default constructor</para>
-        /// </remarks>
         protected AppenderSkeleton()
         {
         }
-
-        #endregion Protected Instance Constructors
-
-        #region Finalizer
 
         ~AppenderSkeleton()
         {
@@ -97,32 +86,30 @@ namespace log4net.Appender
             {
                 DoStuff(declaringType, ""Finalizing appender named["" +""blub"" + ""]."");
             }
+        }
+
+
+        public void DoStuff(Type type, string msg)
+        {
+
+        }
+
+        private bool m_closed = false;
+
+        public virtual bool Flush(int millisecondsTimeout)
+        {
+            return true;
+        }
+
+        private readonly static Type declaringType = typeof(AppenderSkeleton);
     }
-
-#endregion Finalizer
-
-    public void DoStuff(Type type, string msg)
-    {
-
-    }
-
-    private bool m_closed = false;
-
-    public virtual bool Flush(int millisecondsTimeout)
-    {
-        return true;
-    }
-
-    private readonly static Type declaringType = typeof(AppenderSkeleton);
-
-}
 }
 ";
 
             VerifyCSharpDiagnostic(test);
         }
         [TestMethod]
-        public void ReportsUnsynchronizedFieldAccess()
+        public void TestReportsUnsynchronizedFieldAccess()
         {
             const string test = @"
 namespace ParaSmeller.Test.TestCodeTester
@@ -139,11 +126,9 @@ namespace ParaSmeller.Test.TestCodeTester
         {
             Counter--;
         }
-
     }
 }";
             var expected = new [] {
-            
                 new DiagnosticResult{
                 Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
                 Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
@@ -162,13 +147,13 @@ namespace ParaSmeller.Test.TestCodeTester
                             new DiagnosticResultLocation("Test0.cs", 14, 13)
                         }
                 }
-                };
+            };
 
             VerifyCSharpDiagnostic(test, expected);
         }
 
         [TestMethod]
-        public void ReportsUnsynchronizedFieldAccessNoFalsePositivesNoNStatic()
+        public void TestNoPositivesOnNonStaticFields()
         {
             const string test = @"
 namespace ParaSmeller.Test.TestCodeTester
@@ -190,8 +175,9 @@ namespace ParaSmeller.Test.TestCodeTester
 }";
             VerifyCSharpDiagnostic(test);
         }
+
         [TestMethod]
-        public void DoesNotReportFalsePositivesOnProperties()
+        public void TestDoesNotReportFalsePositivesOnSynchronizedProperties()
         {
             const string test = @"
 namespace ParaSmeller.Test.TestCodeTester
@@ -238,7 +224,7 @@ namespace ParaSmeller.Test.TestCodeTester
         }
 
         [TestMethod]
-        public void ReportsNotSynchronizedProperty()
+        public void TestReportsNotSynchronizedPropertyUsedInDestructor()
         {
             const string test = @"
 namespace ParaSmeller.Test.TestCodeTester
@@ -274,8 +260,9 @@ namespace ParaSmeller.Test.TestCodeTester
 
             VerifyCSharpDiagnostic(test, expected);
         }
+
         [TestMethod]
-        public void ReportsUnsynchronizedPropertyAccess()
+        public void TestReportsUnsynchronizedPropertyAccess()
         {
             const string test = @"
 namespace ParaSmeller.Test.TestCodeTester
@@ -295,7 +282,6 @@ namespace ParaSmeller.Test.TestCodeTester
     }
 }";
             var expected = new[] {
-
                 new DiagnosticResult{
                 Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
                 Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
@@ -314,14 +300,14 @@ namespace ParaSmeller.Test.TestCodeTester
                             new DiagnosticResultLocation("Test0.cs", 14, 13)
                         }
                 }
-                };
+            };
 
             VerifyCSharpDiagnostic(test, expected);
         }
 
 
         [TestMethod]
-        public void DoesNoticeWrongUsageOfLockObjectsOnFields()
+        public void TestReportsNonStaticLockObjects()
         {
             const string test = @"
 namespace ParaSmeller.Test.TestCodeTester
@@ -347,7 +333,6 @@ namespace ParaSmeller.Test.TestCodeTester
     }
 }";
             var expected = new[] {
-
                 new DiagnosticResult{
                 Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
                 Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
@@ -366,12 +351,12 @@ namespace ParaSmeller.Test.TestCodeTester
                             new DiagnosticResultLocation("Test0.cs", 19, 17)
                         }
                 }
-                };
+            };
             VerifyCSharpDiagnostic(test, expected);
         }
 
         [TestMethod]
-        public void DoesNoticeWrongUsageOfLockObjectsOnFieldsComplexCase()
+        public void TestReportsDifferentLockObjects()
         {
             const string test = @"
 namespace ParaSmeller.Test.TestCodeTester
@@ -400,7 +385,6 @@ namespace ParaSmeller.Test.TestCodeTester
     }
 }";
             var expected = new[] {
-
                 new DiagnosticResult{
                 Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
                 Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
@@ -419,11 +403,12 @@ namespace ParaSmeller.Test.TestCodeTester
                             new DiagnosticResultLocation("Test0.cs", 22, 17)
                         }
                 }
-                };
+            };
             VerifyCSharpDiagnostic(test, expected);
         }
+
         [TestMethod]
-        public void DoesNoticeWrongUsageOfLockObjectsOnFieldsComplexCaseTwo()
+        public void TestReportsStaticLockObject()
         {
             const string test = @"
 namespace ParaSmeller.Test.TestCodeTester
@@ -451,7 +436,6 @@ namespace ParaSmeller.Test.TestCodeTester
     }
 }";
             var expected = new[] {
-
                 new DiagnosticResult{
                 Id = FinalizerReporter.FinalizerSynchronizationDiagnosticId,
                 Message = FinalizerReporter.MessageFormatFinalizerSynchronization.ToString(),
@@ -470,9 +454,10 @@ namespace ParaSmeller.Test.TestCodeTester
                             new DiagnosticResultLocation("Test0.cs", 21, 17)
                         }
                 }
-                };
+            };
             VerifyCSharpDiagnostic(test, expected);
         }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new FinalizerSynchronizationAnalyzer();

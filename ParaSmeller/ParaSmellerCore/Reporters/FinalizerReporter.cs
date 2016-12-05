@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using ParaSmellerCore.Diagnostics;
 using ParaSmellerCore.Representation;
 using ParaSmellerCore.SyntaxNodeUtils;
 using Diagnostic = ParaSmellerCore.Diagnostics.Diagnostic;

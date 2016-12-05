@@ -1,8 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParaSmeller.Test.Verifiers;
 using ParaSmellerCore.Reporters;
-using TestHelper;
+using CodeFixVerifier = ParaSmeller.Test.Verifiers.CodeFixVerifier;
 
 namespace ParaSmeller.Test.PrimitiveSynchronization
 {
@@ -10,7 +11,7 @@ namespace ParaSmeller.Test.PrimitiveSynchronization
     public class PrimitiveSynchronizationTests: CodeFixVerifier
     {
         [TestMethod]
-        public void AnalyzerFindsInterlockedSimpleCase()
+        public void TestReportsInterlockedSimpleCase()
         {
             const string test = @"
 using System.Threading;
@@ -41,13 +42,11 @@ namespace Test
                             new DiagnosticResultLocation("Test0.cs", 15, 17)
                         }
             };
-
             VerifyCSharpDiagnostic(test, expected);
-
         }
 
         [TestMethod]
-        public void AnalyzerFindsVolatileSimpleCase()
+        public void TestReportsVolatileSimpleCase()
         {
             const string test = @"
 
@@ -73,13 +72,11 @@ namespace Test
                             new DiagnosticResultLocation("Test0.cs", 7, 9)
                         }
             };
-
             VerifyCSharpDiagnostic(test, expected);
-
         }
 
         [TestMethod]
-        public void AnalyzerFindsVolatileReferences()
+        public void TestReportsVolatileReferences()
         {
             const string test = @"
 
@@ -109,13 +106,11 @@ namespace Test
                             new DiagnosticResultLocation("Test0.cs", 11, 9)
                         }
             };
-
             VerifyCSharpDiagnostic(test, expected);
-
         }
 
         [TestMethod]
-        public void AnalyzerFindsVolatileEnums()
+        public void TestReportsVolatileEnums()
         {
             const string test = @"
 
@@ -147,13 +142,11 @@ namespace Test
                             new DiagnosticResultLocation("Test0.cs", 13, 9)
                         }
             };
-
             VerifyCSharpDiagnostic(test, expected);
-
         }
 
         [TestMethod]
-        public void AnalyzerFindsVolatileGenerics()
+        public void TestReportsVolatileGenerics()
         {
             const string test = @"
 
@@ -179,13 +172,11 @@ namespace Test
                             new DiagnosticResultLocation("Test0.cs", 7, 9)
                         }
             };
-
             VerifyCSharpDiagnostic(test, expected);
-
         }
 
         [TestMethod]
-        public void AnalyzerFindsYieldUsage()
+        public void TestReportsYieldUsage()
         {
             const string test = @"
 using System.Threading;
@@ -226,13 +217,11 @@ namespace Test
                             new DiagnosticResultLocation("Test0.cs", 14, 17)
                         }
             };
-
             VerifyCSharpDiagnostic(test, expected);
-
         }
 
         [TestMethod]
-        public void AnalyzerFindsSpinLockUsageComplexCase()
+        public void TestReportsSpinLockUsageComplexCase()
         {
             const string test = @"
 using System;
@@ -334,42 +323,39 @@ class SpinLockDemo2
         }
     }";
             var expected = new [] {
-            new DiagnosticResult {
-                Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
-                Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[] {
-                            new DiagnosticResultLocation("Test0.cs", 13, 5)
-                        }
-            },
-                        new DiagnosticResult {
-                Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
-                Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[] {
-                            new DiagnosticResultLocation("Test0.cs", 38, 17)
-                        }
-            },
-                                    new DiagnosticResult {
-                Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
-                Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[] {
-                            new DiagnosticResultLocation("Test0.cs", 43, 32)
-                        }
-            }
-            }
-            ;
-
+                new DiagnosticResult {
+                    Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                    Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[] {
+                                new DiagnosticResultLocation("Test0.cs", 13, 5)
+                            }
+                },
+                            new DiagnosticResult {
+                    Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                    Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[] {
+                                new DiagnosticResultLocation("Test0.cs", 38, 17)
+                            }
+                },
+                                        new DiagnosticResult {
+                    Id = PrimitiveSynchronizationReporter.PrimitiveSynchronizationDiagnosticId,
+                    Message = PrimitiveSynchronizationReporter.MessageFormatPrimitiveSynchronization.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[] {
+                                new DiagnosticResultLocation("Test0.cs", 43, 32)
+                            }
+                }
+            };
             VerifyCSharpDiagnostic(test, expected);
-
         }
 
         [TestMethod]
-        public void AnalyzerFindsMemoryBarrier()
+        public void TestReportsMemoryBarrier()
         {
             const string test = @"
 using System;
@@ -438,12 +424,10 @@ namespace ParaSmeller.Test.TestCodeTester
                                 new DiagnosticResultLocation("Test0.cs", 25, 17)
                             }
                 }
-            }
-            ;
-
+            };
             VerifyCSharpDiagnostic(test, expected);
-
         }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new PrimitiveSynchronizationAnalyzer();

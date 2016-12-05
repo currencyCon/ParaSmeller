@@ -2,8 +2,10 @@
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParaSmeller.Test.Verifiers;
 using ParaSmellerAnalyzer.CodeFixProviders;
-using TestHelper;
+using ParaSmellerCore.Reporters;
+using CodeFixVerifier = ParaSmeller.Test.Verifiers.CodeFixVerifier;
 
 namespace ParaSmeller.Test.MonitorWaitOrSignal
 {
@@ -11,7 +13,7 @@ namespace ParaSmeller.Test.MonitorWaitOrSignal
     public class MonitorWaitOrSignalAnalyzerUnitTests : CodeFixVerifier
     {
         [TestMethod]
-        public void TestNoDiagnostics()
+        public void TestDoesntReportFalsePositives()
         {
             const string test = @"
 using System.Threading;
@@ -39,9 +41,8 @@ namespace MonitorWaitOrSignalSmell
             VerifyCSharpDiagnostic(test);
         }
 
-
         [TestMethod]
-        public void TestSimpleIfDiagnostics()
+        public void TestReportsSimpleWrongIfUsage()
         {
             const string test = @"
 using System.Threading;
@@ -80,35 +81,35 @@ namespace MonitorWaitOrSignalSmell
     }
 }";
 
-            var expected1 = new DiagnosticResult
-            {
-                Id = "MWS001",
-                Message = "if should be replaced with while",
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 14, 17)
-                    }
+            var expected = new[] {
+                new DiagnosticResult
+                {
+                    Id = MonitorOrWaitSignalReporter.MonitorIfConditionDiagnosticId,
+                    Message = MonitorOrWaitSignalReporter.MessageFormatIf.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[]
+                        {
+                            new DiagnosticResultLocation("Test0.cs", 14, 17)
+                        }
+                }, new DiagnosticResult
+                {
+                    Id = MonitorOrWaitSignalReporter.MonitorIfConditionDiagnosticId,
+                    Message = MonitorOrWaitSignalReporter.MessageFormatIf.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[]
+                        {
+                            new DiagnosticResultLocation("Test0.cs", 26, 17)
+                        }
+                }
             };
 
-            var expected2 = new DiagnosticResult
-            {
-                Id = "MWS001",
-                Message = "if should be replaced with while",
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 26, 17)
-                    }
-            };
-
-            VerifyCSharpDiagnostic(test, expected1, expected2);
+            VerifyCSharpDiagnostic(test, expected);
         }
 
         [TestMethod]
-        public void TestDoWhileNoDiagnostics()
+        public void TestReportsNoFalsePositivesOnCorrectDoWhile()
         {
             const string test = @"
 using System.Threading;
@@ -150,7 +151,7 @@ namespace MonitorWaitOrSignalSmell
         }
 
         [TestMethod]
-        public void TestSimplePulseDiagnostics()
+        public void TestReportsSimplePulseWrongUsage()
         {
             const string test = @"
 using System.Threading;
@@ -189,36 +190,34 @@ namespace MonitorWaitOrSignalSmell
     }
 }";
 
-            var expected1 = new DiagnosticResult
-            {
-                Id = "MWS002",
-                Message = "Pulse should be replaced with PulseAll",
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 19, 17)
-                    }
+            var expected = new [] {
+                new DiagnosticResult
+                {
+                    Id = MonitorOrWaitSignalReporter.MonitorPulseDiagnosticId,
+                    Message = MonitorOrWaitSignalReporter.MessageFormatPulse.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[]
+                        {
+                            new DiagnosticResultLocation("Test0.cs", 19, 17)
+                        }
+                }, new DiagnosticResult
+                {
+                    Id = MonitorOrWaitSignalReporter.MonitorPulseDiagnosticId,
+                    Message = MonitorOrWaitSignalReporter.MessageFormatPulse.ToString(),
+                    Severity = DiagnosticSeverity.Warning,
+                    Locations =
+                        new[]
+                        {
+                            new DiagnosticResultLocation("Test0.cs", 31, 17)
+                        }
+                }
             };
-
-            var expected2 = new DiagnosticResult
-            {
-                Id = "MWS002",
-                Message = "Pulse should be replaced with PulseAll",
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 31, 17)
-                    }
-            };
-
-            VerifyCSharpDiagnostic(test, expected1, expected2);
+            VerifyCSharpDiagnostic(test, expected);
         }
 
-
         [TestMethod]
-        public void TestPulseReplacement()
+        public void TestAppliesPulseReplacementFix()
         {
             const string test = @"
 using System.Threading;
@@ -296,9 +295,8 @@ namespace MonitorWaitOrSignalSmell
             VerifyCSharpFix(test, fixtest, allowNewCompilerDiagnostics: true);
         }
 
-
         [TestMethod]
-        public void TestIfReplacement()
+        public void TestAppliesIfReplacementFix()
         {
             const string test = @"
 using System.Threading;
@@ -377,7 +375,7 @@ namespace MonitorWaitOrSignalSmell
         }
 
         [TestMethod]
-        public void TestsReplacements()
+        public void TestsAppliesComplexReplacementsFixes()
         {
             const string test = @"
 using System.Threading;
@@ -456,9 +454,9 @@ namespace MonitorWaitOrSignalSmell
         }
 
         [TestMethod]
-        public void TestFunctionReferencesDiagnostics()
+        public void TestReportsFunctionReferencesWrongUsage()
         {
-            var test = @"
+            const string test = @"
 using System.Threading;
 
 namespace MonitorWaitOrSignalSmell
@@ -490,8 +488,8 @@ namespace MonitorWaitOrSignalSmell
 
             var expected = new DiagnosticResult
             {
-                Id = "MWS001",
-                Message = "if should be replaced with while",
+                Id = MonitorOrWaitSignalReporter.MonitorIfConditionDiagnosticId,
+                Message = MonitorOrWaitSignalReporter.MessageFormatIf.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[]

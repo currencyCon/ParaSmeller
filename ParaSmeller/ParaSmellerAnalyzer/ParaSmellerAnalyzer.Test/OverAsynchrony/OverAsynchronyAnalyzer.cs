@@ -12,7 +12,6 @@ namespace ParaSmeller.Test.OverAsynchrony
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rules.PrivateAsyncRule, Rules.NestedAsyncRule);
 
-
         protected override ICollection<Smell> SelectSmell()
         {
             return new List<Smell> { Smell.OverAsynchrony};
