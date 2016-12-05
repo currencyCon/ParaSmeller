@@ -14,7 +14,7 @@ namespace ParaSmeller.Test.WaitingConditionsThreads
         {
             const string test = @"using System.Threading.Tasks;
 
-namespace ConcurrencyChecker.Test.TestCodeTester
+namespace ParaSmeller.Test.TestCodeTester
     {
         public class SynchronizedThread
         {

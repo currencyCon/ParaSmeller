@@ -375,7 +375,7 @@ class SpinLockDemo2
 using System;
 using System.Threading;
 
-namespace ConcurrencyChecker.Test.TestCodeTester
+namespace ParaSmeller.Test.TestCodeTester
 {
     public class Foo
     {

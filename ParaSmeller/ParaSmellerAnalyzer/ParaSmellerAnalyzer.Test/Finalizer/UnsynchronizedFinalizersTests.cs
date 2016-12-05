@@ -13,7 +13,7 @@ namespace ParaSmeller.Test.Finalizer
         public void DoesNotReportFalsePositives()
         {
             const string test = @"
-namespace ConcurrencyChecker.Test.TestCodeTester
+namespace ParaSmeller.Test.TestCodeTester
 {
     public class SynchronizedFinalizer
     {
@@ -44,7 +44,7 @@ namespace ConcurrencyChecker.Test.TestCodeTester
             const string test = @"
 using ConcurrencyAnalyzer;
 
-namespace ConcurrencyChecker.Test.TestCodeTester
+namespace ParaSmeller.Test.TestCodeTester
 {
     public class SynchronizedFinalizer
     {
@@ -125,7 +125,7 @@ namespace log4net.Appender
         public void ReportsUnsynchronizedFieldAccess()
         {
             const string test = @"
-namespace ConcurrencyChecker.Test.TestCodeTester
+namespace ParaSmeller.Test.TestCodeTester
 {
     public class SynchronizedFinalizer
     {
@@ -171,7 +171,7 @@ namespace ConcurrencyChecker.Test.TestCodeTester
         public void ReportsUnsynchronizedFieldAccessNoFalsePositivesNoNStatic()
         {
             const string test = @"
-namespace ConcurrencyChecker.Test.TestCodeTester
+namespace ParaSmeller.Test.TestCodeTester
 {
     public class SynchronizedFinalizer
     {
@@ -194,7 +194,7 @@ namespace ConcurrencyChecker.Test.TestCodeTester
         public void DoesNotReportFalsePositivesOnProperties()
         {
             const string test = @"
-namespace ConcurrencyChecker.Test.TestCodeTester
+namespace ParaSmeller.Test.TestCodeTester
 {
     public class SynchronizedFinalizer
     {
@@ -241,7 +241,7 @@ namespace ConcurrencyChecker.Test.TestCodeTester
         public void ReportsNotSynchronizedProperty()
         {
             const string test = @"
-namespace ConcurrencyChecker.Test.TestCodeTester
+namespace ParaSmeller.Test.TestCodeTester
 {
     public class SynchronizedFinalizer
     {
@@ -278,7 +278,7 @@ namespace ConcurrencyChecker.Test.TestCodeTester
         public void ReportsUnsynchronizedPropertyAccess()
         {
             const string test = @"
-namespace ConcurrencyChecker.Test.TestCodeTester
+namespace ParaSmeller.Test.TestCodeTester
 {
     public class SynchronizedFinalizer
     {
@@ -324,7 +324,7 @@ namespace ConcurrencyChecker.Test.TestCodeTester
         public void DoesNoticeWrongUsageOfLockObjectsOnFields()
         {
             const string test = @"
-namespace ConcurrencyChecker.Test.TestCodeTester
+namespace ParaSmeller.Test.TestCodeTester
 {
     public class SynchronizedFinalizer
     {
@@ -374,7 +374,7 @@ namespace ConcurrencyChecker.Test.TestCodeTester
         public void DoesNoticeWrongUsageOfLockObjectsOnFieldsComplexCase()
         {
             const string test = @"
-namespace ConcurrencyChecker.Test.TestCodeTester
+namespace ParaSmeller.Test.TestCodeTester
 {
     public class SynchronizedFinalizer
     {
@@ -426,7 +426,7 @@ namespace ConcurrencyChecker.Test.TestCodeTester
         public void DoesNoticeWrongUsageOfLockObjectsOnFieldsComplexCaseTwo()
         {
             const string test = @"
-namespace ConcurrencyChecker.Test.TestCodeTester
+namespace ParaSmeller.Test.TestCodeTester
 {
     public class SynchronizedFinalizer
     {
