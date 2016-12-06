@@ -35,7 +35,7 @@ namespace ParaSmellerCore.Reporters
             }
             if (symbol?.OriginalDefinition?.ToString() == ThreadDefintion && !IsIgnoredThreadAccess(node, classRepresentation))
             {
-                Reports.Add(new Diagnostic(DiagnosticId, Title, MessageFormat, Description, DiagnosticCategory.ParallelCorrectness, node.Parent.GetLocation()));
+                Reports.Add(new Diagnostic(DiagnosticId, Title, MessageFormat, Description, DiagnosticCategory.Synchronization, node.Parent.GetLocation()));
             }
         }
 

@@ -23,7 +23,7 @@ namespace ParaSmellerCore.Reporters
         {
             if (clazz.Implementation.Identifier.Text == TapirClass)
             {
-                Reports.Add(new Diagnostic(DiagnosticId, Title, MessageFormat, Description, DiagnosticCategory.ParallelCorrectness,
+                Reports.Add(new Diagnostic(DiagnosticId, Title, MessageFormat, Description, DiagnosticCategory.Synchronization,
                     clazz.Implementation.Identifier.GetLocation()));
             }
         }
