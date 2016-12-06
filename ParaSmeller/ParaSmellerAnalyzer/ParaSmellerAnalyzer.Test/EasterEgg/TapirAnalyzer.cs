@@ -8,7 +8,7 @@ using ParaSmellerCore.Diagnostics;
 namespace ParaSmeller.Test.EasterEgg
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class TapirrAnalyzer : BaseAnalyzer
+    public class TapirAnalyzer : BaseAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rules.TapirRule);
         
