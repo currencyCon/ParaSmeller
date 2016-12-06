@@ -11,7 +11,7 @@ namespace ParaSmellerCore.Reporters
 {
     public class ExplicitThreadsReporter: BaseReporter
     {
-        public const string DiagnosticId = "ETC001";
+        public const string DiagnosticId = "ET001";
         private const string ThreadDefintion = "System.Threading.Thread";
         private readonly IReadOnlyList<string> _ignoredDefinitions = new List<string>(new[]
         {
