@@ -78,7 +78,7 @@ namespace ParaSmellerCore.RepresentationFactories
             var invocationTarget = invocationExpression;
             var invocation = CreateInvocationWithSymbolInfo(invocationExpressionSyntax, semanticModel, containingBody, invocationTarget);
             var membersInOwnClass = invocation.ContainingBody.ContainingMember.ContainingClass.Members;
-            invocation.InvokedImplementations.AddRange(membersInOwnClass.Where(e => e.OriginalDefinition == invocation.Defintion));
+            invocation.InvokedImplementations.AddRange(membersInOwnClass.Where(e => e.OriginalDefinition == invocation.OriginalDefinition));
             return invocation;
             
         }

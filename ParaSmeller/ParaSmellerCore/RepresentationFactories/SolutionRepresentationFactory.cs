@@ -43,10 +43,10 @@ namespace ParaSmellerCore.RepresentationFactories
             InvocationExpressionRepresentation invocationExpressionRepresentation, ref int counter, int total)
         {
             var calledClassOriginal = invocationExpressionRepresentation.CalledClassOriginal;
-            if (solution.Members.ContainsKey(invocationExpressionRepresentation.Defintion))
+            if (solution.Members.ContainsKey(invocationExpressionRepresentation.OriginalDefinition))
             {
                 invocationExpressionRepresentation.InvokedImplementations.AddRange(
-                    solution.Members[invocationExpressionRepresentation.Defintion]);
+                    solution.Members[invocationExpressionRepresentation.OriginalDefinition]);
             }
             else if (solution.ClassMap.ContainsKey(calledClassOriginal))
             {
@@ -79,7 +79,7 @@ namespace ParaSmellerCore.RepresentationFactories
 
         private static bool IsInvocatedTarget(InvocationExpressionRepresentation invocationExpressionRepresentation, Member memberWithBody)
         {
-            if (invocationExpressionRepresentation.Defintion == memberWithBody.OriginalDefinition)
+            if (invocationExpressionRepresentation.OriginalDefinition == memberWithBody.OriginalDefinition)
             {
                 return true;
             }

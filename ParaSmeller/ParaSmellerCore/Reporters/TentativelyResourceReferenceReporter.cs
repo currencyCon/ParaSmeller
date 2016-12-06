@@ -28,7 +28,7 @@ namespace ParaSmellerCore.Reporters
 
         private void CheckForNotAllowedApiUsages(Member member)
         {
-            var invocationsToReport = member.GetAllInvocations().Where(e => NotAllowedApis.Contains(e.OriginalDefinition));
+            var invocationsToReport = member.GetAllInvocations().Where(e => NotAllowedApis.Contains(e.MethodDefinitionWithoutParameters));
             foreach (var invocationToReport in invocationsToReport)
             {
                 var symbol = SymbolInspector.GetSpecializedSymbol<IMethodSymbol>(invocationToReport.Implementation, member.ContainingClass.SemanticModel);

@@ -20,7 +20,7 @@ namespace ParaSmellerCore.Reporters
         {
             foreach (var invocationExpressionRepresentation in member.GetAllInvocations())
             {
-                if (invocationExpressionRepresentation.OriginalDefinition == ThreadStartDefintion)
+                if (invocationExpressionRepresentation.MethodDefinitionWithoutParameters == ThreadStartDefintion)
                 {
                     CheckForSingleInvocation(invocationExpressionRepresentation);
                     CheckForLostAssignment(invocationExpressionRepresentation, member);

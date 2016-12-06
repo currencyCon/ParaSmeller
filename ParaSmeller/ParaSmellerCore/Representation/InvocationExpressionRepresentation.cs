@@ -17,22 +17,22 @@ namespace ParaSmellerCore.Representation
         public readonly Body ContainingBody;
         public readonly SymbolKind Type;
         public readonly ConcurrentBag<IdentifierNameSyntax> Arguments = new ConcurrentBag<IdentifierNameSyntax>();
+        public readonly string MethodDefinitionWithoutParameters;
         public readonly string OriginalDefinition;
-        public readonly string Defintion;
         public readonly bool IsInvokedInTask;
         public readonly ConcurrentBag<Member> InvokedImplementations = new ConcurrentBag<Member>();
         
         public InvocationExpressionRepresentation(bool isSynchronized, SymbolInformation symbolInfo, InvocationExpressionSyntax implementation, Body containingBody, SimpleNameSyntax invocationTarget, bool isInvokedInTask)
         {
             IsSynchronized = isSynchronized;
-            OriginalDefinition = symbolInfo.OriginalDefinition;
+            MethodDefinitionWithoutParameters = symbolInfo.MethodDefinitionWithoutParameters;
             Type = symbolInfo.Type;
             Implementation = implementation;
             ContainingBody = containingBody;
             InvocationTargetName = invocationTarget;
             IsInvokedInTask = isInvokedInTask;
-            Defintion = symbolInfo.Definition;
-            var splittedDefinition = OriginalDefinition.Split('.');
+            OriginalDefinition = symbolInfo.OriginalDefinition;
+            var splittedDefinition = MethodDefinitionWithoutParameters.Split('.');
             TopLevelNameSpace = splittedDefinition[0];
             var classParts = splittedDefinition.Take(splittedDefinition.Length - 1);
             var classDefinition = string.Join(".", classParts);
