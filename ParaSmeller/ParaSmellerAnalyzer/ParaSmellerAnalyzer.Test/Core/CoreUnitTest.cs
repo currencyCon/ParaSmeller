@@ -135,7 +135,7 @@ namespace ParaSmeller.Test.Core
             var invocationMethodB = method1.Blocks.ToArray()[0].InvocationExpressions.ToArray()[0];
             Assert.AreEqual("ParaSmeller.Test.Core.B", invocationMethodB.CalledClassOriginal);
             Assert.AreEqual("ParaSmeller.Test.Core.B.Method2()", invocationMethodB.OriginalDefinition);
-
+            Assert.AreEqual(1, invocationMethodB.InvokedImplementations.Count);
         }
 
 
@@ -205,6 +205,7 @@ namespace ParaSmeller.Test.Core
             var invocationMethodB = property1.Blocks.ToArray()[0].InvocationExpressions.ToArray()[0];
             Assert.AreEqual("ParaSmeller.Test.Core.B", invocationMethodB.CalledClassOriginal);
             Assert.AreEqual("ParaSmeller.Test.Core.B.Method2()", invocationMethodB.OriginalDefinition);
+            Assert.AreEqual(1, invocationMethodB.InvokedImplementations.Count);
         }
         
         [TestMethod]
@@ -260,6 +261,72 @@ namespace ParaSmeller.Test.Core
                 Assert.AreEqual("ParaSmeller.Test.Core.A2.Method1()", invocationMethod1.InvokedImplementations.ToArray()[1].OriginalDefinition);
             }
         }
+
+
+        [TestMethod]
+        public void TestInvocationGenericNameSyntax()
+        {
+            const string test = @"
+namespace ParaSmeller.Test.Core
+{
+    public class A 
+    {
+        public void Method1() 
+        {
+            var string1 = ""test"";
+            var string2 = ""test2"";
+            Swap<string>(ref string1, ref string2);
+        }
+
+        void Swap<T>(ref T lhs, ref T rhs)
+        {
+            T temp;
+            temp = lhs;
+            lhs = rhs;
+            rhs = temp;
+        }
+    }
+
+}";
+            var solution = TestSolutionBuilder.CreateSolution(test);
+            
+            var method1 = (solution.ClassMap["ParaSmeller.Test.Core.A"].ToArray()[0].Methods.First(s => s.OriginalDefinition == "ParaSmeller.Test.Core.A.Method1()"));
+            Assert.IsNotNull(method1);
+            var methodSwap = method1.Blocks.ToArray()[0].InvocationExpressions.ToArray()[0];
+            Assert.AreEqual(1, methodSwap.InvokedImplementations.Count);
+            Assert.AreEqual("ParaSmeller.Test.Core.A.Swap<T>(ref T, ref T)", methodSwap.OriginalDefinition);
+        }
+
+
+        [TestMethod]
+        public void TestConditionalAccessExpression()
+        {
+            const string test = @"
+namespace ParaSmeller.Test.Core
+{
+    public class A
+    {
+        public void Method1() 
+        {
+            B b = new B();
+            b?.Method2();
+        }
+    }
+
+    public class B
+    {
+        public void Method2() {}
+    }
+
+}";
+            var solution = TestSolutionBuilder.CreateSolution(test);
+            var method1 = (solution.ClassMap["ParaSmeller.Test.Core.A"].ToArray()[0].Methods.ToArray()[0]);
+            var invocationMethodB = method1.Blocks.ToArray()[0].InvocationExpressions.ToArray()[0];
+            Assert.AreEqual("ParaSmeller.Test.Core.B", invocationMethodB.CalledClassOriginal);
+            Assert.AreEqual("ParaSmeller.Test.Core.B.Method2()", invocationMethodB.OriginalDefinition);
+            Assert.AreEqual(1, invocationMethodB.InvokedImplementations.Count);
+        }
+
 
 
     }
