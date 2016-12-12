@@ -39,7 +39,7 @@ namespace ParaSmellerCore.Reporters
 
         private void CheckForNotAllowedApiUsages(Member member)
         {
-            var invocationsToReport = member.GetAllInvocations().Where(e => NotAllowedApIs.Contains(e.OriginalDefinition));
+            var invocationsToReport = member.GetAllInvocations().Where(e => NotAllowedApIs.Contains(e.MethodDefinitionWithoutParameters));
             foreach (var invocationToReport in invocationsToReport)
             {
                 Reports.Add(ReportPrimitiveSynchronizationDiagnostic(invocationToReport.Implementation));

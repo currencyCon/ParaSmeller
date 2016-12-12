@@ -59,15 +59,14 @@ namespace ParaSmellerCore.SyntaxNodeUtils
         {
             return field.DeclaresVariable(variableName) && !modifiers.Except(field.Modifiers.Select(e => e.Text)).Any();
         }
-
-
+        
         public static IEnumerable<FieldDeclarationSyntax> With(this IEnumerable<FieldDeclarationSyntax> fields,
             ICollection<string> modifiers)
         {
             return fields.Where(e => modifiers.All(b => e.Modifiers.Select(a => a.Text).Contains(b)));
         }
-        public static IEnumerable<FieldDeclarationSyntax> Without(this IEnumerable<FieldDeclarationSyntax> fields,
-    ICollection<string> modifiers)
+
+        public static IEnumerable<FieldDeclarationSyntax> Without(this IEnumerable<FieldDeclarationSyntax> fields, ICollection<string> modifiers)
         {
             return fields.Where(e => !modifiers.Any(b => e.Modifiers.Select(a => a.Text).Contains(b)));
         }

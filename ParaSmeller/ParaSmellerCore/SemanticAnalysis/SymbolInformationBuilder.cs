@@ -16,8 +16,8 @@ namespace ParaSmellerCore.SemanticAnalysis
                 return new SymbolInformation
                 {
                     ClassName = symbol == null ? DefaultSymbolValues.ClassName : GetClassName(symbol),
-                    OriginalDefinition = symbol == null ? DefaultSymbolValues.OriginalDefinition : GetOriginalDefinition(symbol),
-                    Definition = symbol == null ? DefaultSymbolValues.Definition : symbol.OriginalDefinition.ToString(),
+                    MethodDefinitionWithoutParameters = symbol == null ? DefaultSymbolValues.MethodDefinitionWithoutParameters : GetMethodDefinitionWithoutParameters(symbol),
+                    OriginalDefinition = symbol == null ? DefaultSymbolValues.OriginalDefinition : symbol.OriginalDefinition.ToString(),
                     Type = symbol == null ? DefaultSymbolValues.Type : GetType(symbol)
                 };
             }
@@ -26,8 +26,8 @@ namespace ParaSmellerCore.SemanticAnalysis
                 return new SymbolInformation
                 {
                     ClassName = DefaultSymbolValues.ClassName,
+                    MethodDefinitionWithoutParameters = DefaultSymbolValues.MethodDefinitionWithoutParameters,
                     OriginalDefinition = DefaultSymbolValues.OriginalDefinition,
-                    Definition = DefaultSymbolValues.Definition,
                     Type = DefaultSymbolValues.Type
                 };
             }
@@ -43,7 +43,7 @@ namespace ParaSmellerCore.SemanticAnalysis
             return symbol.ContainingType.Name;
         }
 
-        private static string GetOriginalDefinition(ISymbol symbol)
+        private static string GetMethodDefinitionWithoutParameters(ISymbol symbol)
         {
             return symbol.ContainingType.OriginalDefinition + NameSpaceSepatator + symbol.Name;
         }

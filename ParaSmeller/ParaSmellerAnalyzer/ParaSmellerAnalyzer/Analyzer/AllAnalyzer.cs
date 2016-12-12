@@ -19,7 +19,6 @@ namespace ParaSmellerAnalyzer.Analyzer
             Rules.PrimitiveSynchronizationUsageRule, 
             Rules.PrivateAsyncRule, 
             Rules.RuleFireAndForgetCallRule, 
-            Rules.TapirRule, 
             Rules.TentativelyResourceReferenceRule, 
             Rules.UnsynchronizedPropertyRule, 
             Rules.WaitingConditionsTasksRule);

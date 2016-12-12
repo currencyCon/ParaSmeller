@@ -19,8 +19,7 @@ namespace ParaSmellerCore.Reporters
             Smell.NestedSynchronization,
             Smell.OverAsynchrony,
             Smell.TenativelyRessource,
-            Smell.WaitingConditionsTasks,
-            Smell.Tapir
+            Smell.WaitingConditionsTasks
         };
 
         private readonly Dictionary<Smell, BaseReporter> _reporters = new Dictionary<Smell, BaseReporter>
@@ -34,8 +33,7 @@ namespace ParaSmellerCore.Reporters
             {Smell.NestedSynchronization, new NestedSynchronizedMethodClassReporter() },
             {Smell.OverAsynchrony, new OverAsynchronyReporter() },
             {Smell.TenativelyRessource, new TentativelyResourceReferenceReporter() },
-            {Smell.WaitingConditionsTasks, new WaitingConditionsTasksReporter() },
-            {Smell.Tapir, new TapirReporter() }
+            {Smell.WaitingConditionsTasks, new WaitingConditionsTasksReporter() }
         };
 
         public List<Diagnostic> Report(Compilation compilation, ICollection<Smell> smells)

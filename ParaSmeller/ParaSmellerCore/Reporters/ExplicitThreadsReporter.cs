@@ -11,7 +11,7 @@ namespace ParaSmellerCore.Reporters
 {
     public class ExplicitThreadsReporter: BaseReporter
     {
-        public const string DiagnosticId = "ETC001";
+        public const string DiagnosticId = "ET001";
         private const string ThreadDefintion = "System.Threading.Thread";
         private readonly IReadOnlyList<string> _ignoredDefinitions = new List<string>(new[]
         {
@@ -33,13 +33,13 @@ namespace ParaSmellerCore.Reporters
             {
                 symbol = info.Symbol as INamedTypeSymbol;
             }
-            if (symbol?.OriginalDefinition?.ToString() == ThreadDefintion && IsNotCurrentThreadAccess(node, classRepresentation))
+            if (symbol?.OriginalDefinition?.ToString() == ThreadDefintion && !IsIgnoredThreadAccess(node, classRepresentation))
             {
-                Reports.Add(new Diagnostic(DiagnosticId, Title, MessageFormat, Description, DiagnosticCategory.ParallelCorrectness, node.Parent.GetLocation()));
+                Reports.Add(new Diagnostic(DiagnosticId, Title, MessageFormat, Description, DiagnosticCategory.Synchronization, node.Parent.GetLocation()));
             }
         }
 
-        private bool IsNotCurrentThreadAccess(SyntaxNode node, ClassRepresentation classRepresentation)
+        private bool IsIgnoredThreadAccess(SyntaxNode node, ClassRepresentation classRepresentation)
         {
             var parent = node.Parent;
             do
@@ -47,13 +47,13 @@ namespace ParaSmellerCore.Reporters
                 var info = classRepresentation.SemanticModel.GetSymbolInfo(parent);
                 if (_ignoredDefinitions.Contains(info.Symbol?.OriginalDefinition.ToString()))
                 { 
-                    return false;
+                    return true;
                 }
 
                 parent = parent.Parent;
             } while (parent is MemberAccessExpressionSyntax);
            
-            return true;
+            return false;
         }
 
         private void ReportThreadUsage(ClassRepresentation classRepresentation)

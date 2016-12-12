@@ -6,7 +6,7 @@ namespace ParaSmellerCore.SemanticAnalysis
     {
         public const SymbolKind Type = SymbolKind.NetModule;
         public const string ClassName = "";
+        public const string MethodDefinitionWithoutParameters = "";
         public const string OriginalDefinition = "";
-        public const string Definition = "";
     }
 }

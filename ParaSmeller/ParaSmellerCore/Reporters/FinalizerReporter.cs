@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ParaSmellerCore.Diagnostics;
 using ParaSmellerCore.Representation;
 using ParaSmellerCore.SyntaxNodeUtils;
 using Diagnostic = ParaSmellerCore.Diagnostics.Diagnostic;
@@ -9,7 +10,6 @@ namespace ParaSmellerCore.Reporters
 {
     public class FinalizerReporter : BaseReporter
     {
-        public const string Category = "Synchronization";
         public const string FinalizerSynchronizationDiagnosticId = "FS001";
 
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.FSAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
@@ -97,7 +97,7 @@ namespace ParaSmellerCore.Reporters
 
         private static Diagnostic ReportUnsynchronizedField(SyntaxNode syntaxnode)
         {
-            return new Diagnostic(FinalizerSynchronizationDiagnosticId, Title, MessageFormatFinalizerSynchronization, Description, Category, syntaxnode.GetLocation());
+            return new Diagnostic(FinalizerSynchronizationDiagnosticId, Title, MessageFormatFinalizerSynchronization, Description, DiagnosticCategory.Synchronization, syntaxnode.GetLocation());
         }
 
         protected override void Register()

@@ -6,6 +6,7 @@ using CodeFixVerifier = ParaSmeller.Test.Verifiers.CodeFixVerifier;
 namespace ParaSmeller.Test
 {
 
+    //Necessary for MSBuild and Bamboo 
     [DeploymentItem("bin\\debug\\Microsoft.Build.dll")]
     [DeploymentItem("bin\\debug\\Microsoft.Build.Engine.dll")]
     [DeploymentItem("bin\\debug\\Microsoft.Build.Framework.dll")]

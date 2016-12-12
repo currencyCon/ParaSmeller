@@ -27,8 +27,7 @@ namespace ParaSmellerCore.Representation
         public ICollection<PropertyRepresentation> UnSynchronizedProperties { get; set; }
         public ICollection<MethodRepresentation> Methods => Members.OfType<MethodRepresentation>().ToList();
         public ICollection<PropertyRepresentation> Properties => Members.OfType<PropertyRepresentation>().ToList();
-
-
+        
         public ClassRepresentation(ClassDeclarationSyntax classDeclarationSyntax, SemanticModel semanticModel)
         {
             Name = classDeclarationSyntax.Identifier;
@@ -104,7 +103,7 @@ namespace ParaSmellerCore.Representation
                     if (baseClass == null) continue;
                     foreach (var member in baseClass.Members)
                     {
-                        if (member.OriginalDefinition == invocationExpressionRepresentation.Defintion)
+                        if (member.OriginalDefinition == invocationExpressionRepresentation.OriginalDefinition)
                         {
                             return true;
                         }
@@ -121,7 +120,7 @@ namespace ParaSmellerCore.Representation
                 if (interfacee == null) continue;
                 foreach (var member in interfacee.Members)
                 {
-                    if (member.OriginalDefinition == invocationExpressionRepresentation.Defintion)
+                    if (member.OriginalDefinition == invocationExpressionRepresentation.OriginalDefinition)
                     {
                         return true;
                     }
