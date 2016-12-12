@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParaSmellerCore.Representation;
 
 namespace ParaSmeller.Test.Core
 {
@@ -73,14 +74,9 @@ namespace ParaSmeller.Test.Core
             Assert.AreEqual(2, solution.ClassMap.Count);
             Assert.AreEqual(2, solution.InterfaceMap.Count);
 
+            Assert.AreEqual(1, solution.ClassMap["ParaSmeller.Test.Core.Sub"].ToArray()[0].ClassMap.Count);
             Assert.AreEqual(2, solution.InterfaceMap["ParaSmeller.Test.Core.IBase"].ImplementingClasses.Count);
             Assert.AreEqual(1, solution.InterfaceMap["ParaSmeller.Test.Core.ISub"].ImplementingClasses.Count);
-
-            Assert.AreEqual(1, solution.ClassMap["ParaSmeller.Test.Core.Sub"].ToArray()[0].ClassMap.Count);
-
-            //Assert.AreEqual(2, solution.Classes.ToArray()[0].ClassMap.Count);
-            //Assert.AreEqual(1, solution.Classes.ToArray()[1].ClassMap.Count);
-
         }
 
 
@@ -108,7 +104,7 @@ namespace ParaSmeller.Test.Core
         }
 
         [TestMethod]
-        public void TestInvocations()
+        public void TestMethodInvocations()
         {
             const string test = @"
 namespace ParaSmeller.Test.Core
@@ -140,6 +136,129 @@ namespace ParaSmeller.Test.Core
             Assert.AreEqual("ParaSmeller.Test.Core.B", invocationMethodB.CalledClassOriginal);
             Assert.AreEqual("ParaSmeller.Test.Core.B.Method2()", invocationMethodB.OriginalDefinition);
 
+        }
+
+
+        [TestMethod]
+        public void TestLockBLock()
+        {
+            const string test = @"
+namespace ParaSmeller.Test.Core
+{
+    public class A
+    {
+        public object lockObj = new object();
+        public void Method1() 
+        {
+            int i = 10;
+            lock(lockObj) 
+            {
+                i = 20;
+            }
+        }
+    }
+
+}";
+            var solution = TestSolutionBuilder.CreateSolution(test);
+            
+            var method1 = (solution.ClassMap["ParaSmeller.Test.Core.A"].ToArray()[0].Methods.ToArray()[0]);
+            Assert.IsNotNull(method1);
+            Assert.AreEqual(1, method1.Blocks.Count);
+            Assert.AreEqual(1, method1.Blocks.ToArray()[0].Blocks.Count);
+            Assert.IsInstanceOfType(method1.Blocks.ToArray()[0].Blocks.ToArray()[0], typeof(LockBlock));
+            Assert.IsInstanceOfType(method1.Blocks.ToArray()[0].Blocks.ToArray()[0].Blocks.ToArray()[0], typeof(NormalBlock));
+        }
+
+        [TestMethod]
+        public void TestPropertyInvocations()
+        {
+            const string test = @"
+namespace ParaSmeller.Test.Core
+{
+    public class A
+    {
+        public string Test 
+        {
+            get 
+            {
+                B b = new B();
+                b.Method2();
+                return ""Test"";
+            }
+        }
+    }
+
+    public class B
+    {
+        public void Method2() {}
+    }
+
+}";
+            var solution = TestSolutionBuilder.CreateSolution(test);
+            Assert.AreEqual(2, solution.Classes.Count);
+            Assert.AreEqual(2, solution.ClassMap.Count);
+
+            var property1 = (solution.ClassMap["ParaSmeller.Test.Core.A"].ToArray()[0].Properties.ToArray()[0]);
+            Assert.IsNotNull(property1);
+            Assert.AreEqual(1, property1.Blocks.Count);
+            Assert.AreEqual(1, property1.Blocks.ToArray()[0].InvocationExpressions.Count);
+            var invocationMethodB = property1.Blocks.ToArray()[0].InvocationExpressions.ToArray()[0];
+            Assert.AreEqual("ParaSmeller.Test.Core.B", invocationMethodB.CalledClassOriginal);
+            Assert.AreEqual("ParaSmeller.Test.Core.B.Method2()", invocationMethodB.OriginalDefinition);
+        }
+        
+        [TestMethod]
+        public void TestInterfaceInvocations()
+        {
+            const string test = @"
+namespace ParaSmeller.Test.Core
+{
+    public interface A
+    {
+        public void Method1();
+    }
+
+    public class A1 : A
+    {
+        public override void Method1() {}
+    }
+
+    public class A2 : A
+    {
+        public override void Method1() {}
+    }
+
+    public class B 
+    {
+        public void Method2(A a) 
+        {
+            a.Method1();
+        }
+    }
+
+}";
+            var solution = TestSolutionBuilder.CreateSolution(test);
+            Assert.AreEqual(3, solution.Classes.Count);
+            Assert.AreEqual(3, solution.ClassMap.Count);
+            Assert.AreEqual(1, solution.InterfaceMap.Count);
+
+            var method2 = (solution.ClassMap["ParaSmeller.Test.Core.B"].ToArray()[0].Methods.ToArray()[0]);
+            Assert.IsNotNull(method2);
+            Assert.AreEqual(1, method2.Blocks.Count);
+            Assert.AreEqual(1, method2.Blocks.ToArray()[0].InvocationExpressions.Count);
+            var invocationMethod1 = method2.Blocks.ToArray()[0].InvocationExpressions.ToArray()[0];
+            Assert.AreEqual(2, invocationMethod1.InvokedImplementations.Count);
+
+            if (invocationMethod1.InvokedImplementations.ToArray()[0].OriginalDefinition == "ParaSmeller.Test.Core.A2.Method1()")
+            {
+                Assert.AreEqual("ParaSmeller.Test.Core.A2.Method1()", invocationMethod1.InvokedImplementations.ToArray()[0].OriginalDefinition);
+                Assert.AreEqual("ParaSmeller.Test.Core.A1.Method1()", invocationMethod1.InvokedImplementations.ToArray()[1].OriginalDefinition);
+            }
+            else
+            {
+                Assert.AreEqual("ParaSmeller.Test.Core.A1.Method1()", invocationMethod1.InvokedImplementations.ToArray()[0].OriginalDefinition);
+                Assert.AreEqual("ParaSmeller.Test.Core.A2.Method1()", invocationMethod1.InvokedImplementations.ToArray()[1].OriginalDefinition);
+            }
         }
 
 
