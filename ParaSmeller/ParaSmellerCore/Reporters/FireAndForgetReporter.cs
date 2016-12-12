@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ParaSmellerCore.Diagnostics;
 using ParaSmellerCore.Representation;
+using ParaSmellerCore.SyntaxNodeUtils;
 using Diagnostic = ParaSmellerCore.Diagnostics.Diagnostic;
 
 namespace ParaSmellerCore.Reporters
@@ -13,12 +14,12 @@ namespace ParaSmellerCore.Reporters
         private const string ThreadStartDefintion = "System.Threading.Tasks.Task.Run";
         private const string TaskWaitMethodName = "Wait";
         public static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
-        public static readonly LocalizableString MessageFormatFireAndForghet = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
+        public static readonly LocalizableString MessageFormatFireAndForget = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         public static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.FireAndForgetAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 
         private void InspectMemberForUnawaitedTasks(Member member)
         {
-            foreach (var invocationExpressionRepresentation in member.GetAllInvocations())
+            foreach (var invocationExpressionRepresentation in member.GetAllInvocations().Where(e => !e.Implementation.GetParents<AwaitExpressionSyntax>().Any()))
             {
                 if (invocationExpressionRepresentation.OriginalDefinition == ThreadStartDefintion)
                 {
@@ -113,7 +114,7 @@ namespace ParaSmellerCore.Reporters
         
         private static Diagnostic ReportFireAndForget(SyntaxNode threadInvocation)
         {
-            return new Diagnostic(FireAndForgetCallId, Title, MessageFormatFireAndForghet, Description, DiagnosticCategory.Synchronization, threadInvocation.GetLocation());
+            return new Diagnostic(FireAndForgetCallId, Title, MessageFormatFireAndForget, Description, DiagnosticCategory.Synchronization, threadInvocation.GetLocation());
 
         }
 

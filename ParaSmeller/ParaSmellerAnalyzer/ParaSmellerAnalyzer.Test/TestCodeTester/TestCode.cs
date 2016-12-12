@@ -1,44 +1,22 @@
-﻿namespace bla
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace bla
 {
-    class Program
+    public class Program
     {
-        private int _z;
-
-        public int z
+        public static void X()
         {
-            get
-            {
-                var x = 3;
-                lock (this)
-                {
-                    if (_z > 4)
-                    {
-                        x = _z;
-                    }
-                }
-                return x;
-            }
-
-            set
-            {
-                lock (this)
-                {
-                    _z = value;
-                }
-            }
+            Thread.Sleep(5);
+            Console.WriteLine("Huhu");
         }
 
-        public void DoNothing()
+        public static async Task Main()
         {
-            
-        }
-        public void m()
-        {
-            lock (this)
-            {
-                z = 2;
-                DoNothing();
-            }
+            var z = 3;
+            await Task.Run(() => X());
+            Console.WriteLine("Lol");
         }
     }
 }

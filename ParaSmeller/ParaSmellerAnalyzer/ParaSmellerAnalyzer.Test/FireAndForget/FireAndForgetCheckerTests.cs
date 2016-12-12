@@ -40,13 +40,43 @@ namespace Test
             var expected = new DiagnosticResult
             {
                 Id = FireAndForgetReporter.FireAndForgetCallId,
-                Message = "The result of this Computation is potentially never awaited",
+                Message = FireAndForgetReporter.MessageFormatFireAndForget.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {
                     new DiagnosticResultLocation("Test0.cs", 19, 13)
                 }
             };
             VerifyCSharpDiagnostic(test, expected);
+        }
+
+        [TestMethod]
+        public void TestReportsNoFalsePositivesWithAwait()
+        {
+            const string test = @"
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace bla
+{
+    public class Program
+    {
+        public static void X()
+        {
+            Thread.Sleep(5);
+            Console.WriteLine(""Huhu"");
+        }
+
+        public static async Task Main()
+        {
+            var z = 3;
+            await Task.Run(() => X());
+            Console.WriteLine(""Lol"");
+        }
+    }
+}
+";
+            VerifyCSharpDiagnostic(test);
         }
 
         [TestMethod]
@@ -79,7 +109,7 @@ namespace Test
             var expected = new DiagnosticResult
             {
                 Id = FireAndForgetReporter.FireAndForgetCallId,
-                Message = "The result of this Computation is potentially never awaited",
+                Message = FireAndForgetReporter.MessageFormatFireAndForget.ToString(),
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {
                     new DiagnosticResultLocation("Test0.cs", 19, 21)
