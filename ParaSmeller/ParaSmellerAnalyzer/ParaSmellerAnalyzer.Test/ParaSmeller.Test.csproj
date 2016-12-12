@@ -97,6 +97,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\TestSolutionBuilder.cs" />
+    <Compile Include="Core\CoreUnitTest.cs" />
     <Compile Include="ExplicitThreads\ExplicitThreadsAnalyzer.cs" />
     <Compile Include="ExplicitThreads\ExplicitThreadsTests.cs" />
     <Compile Include="Finalizer\FinalizerSynchronizationAnalyzer.cs" />
