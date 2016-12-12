@@ -168,15 +168,6 @@
   <data name="MWSPulseAnalyzerMessageFormat" xml:space="preserve">
     <value>Pulse should be replaced with PulseAll</value>
   </data>
-  <data name="TapirAnalyzerDescription" xml:space="preserve">
-    <value>Tapirs shouldn't be alone</value>
-  </data>
-  <data name="TapirAnalyzerMessageFormat" xml:space="preserve">
-    <value>Tapir Class is lonely</value>
-  </data>
-  <data name="TapirAnalyzerTitle" xml:space="preserve">
-    <value>Tapir :)</value>
-  </data>
   <data name="OAAnalyzerDescription" xml:space="preserve">
     <value>Wrong or complicated usage of async</value>
   </data>

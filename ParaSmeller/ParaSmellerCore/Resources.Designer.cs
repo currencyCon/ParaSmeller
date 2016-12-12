@@ -296,33 +296,6 @@ namespace ParaSmellerCore {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tapirs shouldn&apos;t be alone.
-        /// </summary>
-        internal static string TapirAnalyzerDescription {
-            get {
-                return ResourceManager.GetString("TapirAnalyzerDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tapir Class is lonely.
-        /// </summary>
-        internal static string TapirAnalyzerMessageFormat {
-            get {
-                return ResourceManager.GetString("TapirAnalyzerMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tapir :).
-        /// </summary>
-        internal static string TapirAnalyzerTitle {
-            get {
-                return ResourceManager.GetString("TapirAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Timeouts can lead to starvation.
         /// </summary>
         internal static string TRRAnalyzerDescription {
