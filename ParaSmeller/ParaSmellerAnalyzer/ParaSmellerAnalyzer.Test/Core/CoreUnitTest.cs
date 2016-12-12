@@ -327,6 +327,31 @@ namespace ParaSmeller.Test.Core
             Assert.AreEqual(1, invocationMethodB.InvokedImplementations.Count);
         }
 
+        [TestMethod]
+        public void TestNestedInvocationExpressionSyntax()
+        {
+            const string test = @"
+namespace ParaSmeller.Test.Core
+{
+    public class A
+    {
+        public void Method1() 
+        {
+            Task.Run(() => { Method2(); });
+        }
+
+        private void Method2() {     }
+    }
+
+}";
+            var solution = TestSolutionBuilder.CreateSolution(test);
+            var method1 = (solution.ClassMap["ParaSmeller.Test.Core.A"].ToArray()[0].Methods.First(s => s.OriginalDefinition == "ParaSmeller.Test.Core.A.Method1()"));
+            var invocationMethodB = method1.Blocks.ToArray()[0].InvocationExpressions.ToArray()[0];
+            Assert.AreEqual(1, invocationMethodB.InvokedImplementations.Count);
+            Assert.AreEqual("ParaSmeller.Test.Core.A.Method2()", invocationMethodB.InvokedImplementations.ToArray()[0].OriginalDefinition);
+        }
+
+
 
 
     }
